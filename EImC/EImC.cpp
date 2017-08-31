@@ -10,6 +10,7 @@ int main()
 	std::cout << "Hello world." << std::endl;
 	std::cout << "Hello world!" << std::endl;
 	std::cout << "Hello world!" << std::endl;
+	std::cout << "PuSH" << std::endl;
     return 0;
 }
 

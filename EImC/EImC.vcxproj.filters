@@ -27,6 +27,12 @@
     <ClInclude Include="ModeTokenAnalysis.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="EImC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeRead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +42,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ModeTokenAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeRead.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

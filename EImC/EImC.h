@@ -19,7 +19,8 @@ enum Tag {
 	COMMA, SEMICO, DOLLA, HASH,              //特殊符号：逗号，分号，美元号，井号
 	ASSIGN,                                                      //赋值符号
 	KEY_IF, KEY_ELSE, KEY_WHILE,                     //if，else，while
-	KEY_BRK, KEY_RET, KEY_CON                       //break，return，continue
+	KEY_BRK, KEY_RET, KEY_CON    ,                   //break，return，continue
+	KEY_IN,KEY_OUT  // in ,out
 };
 
 class Token/*语素基类*/

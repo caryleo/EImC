@@ -1,7 +1,12 @@
+#include"stdafx.h"
 #include "ModeRead.h"
 
 ModeRead::ModeRead()//³õÊ¼»¯
 {
+	lineLen = 0;
+	readPos = -1;
+	lineNum = -1;
+	colNum = 0;
 	file = NULL;
 	lastch = '\0';
 	memset(filePathName, '\0', sizeof(filePathName));
@@ -10,7 +15,7 @@ ModeRead::ModeRead()//³õÊ¼»¯
 char ModeRead::scan() {      //¶ÁÈ¡×Ö·û
 	if (readType == 1)
 	{
-		if (readPos + 1<in_content.size())
+		if (readPos + 1 < in_content.size())
 		{
 			++readPos;
 			return in_content[readPos];
@@ -55,7 +60,7 @@ int ModeRead::readMode()
 	{
 		char in_char;
 		getchar();
-		while (scanf("%c", &in_char) != EOF)
+		while (cin >> in_char)
 		{
 			in_content.push_back(in_char);
 		}
@@ -99,13 +104,13 @@ m++;
 /*
 int main()
 {
-    ModeRead a;
-    int m=a.readMode();
-    for(int i=0;i<5;i++) cout<<a.scan()<<endl;
-    if(m==-1) {
-        cout<<"´íÎó"<<endl;
-        return -1;
-    }
-    return 0;
+ModeRead a;
+int m=a.readMode();
+for(int i=0;i<5;i++) cout<<a.scan()<<endl;
+if(m==-1) {
+cout<<"´íÎó"<<endl;
+return -1;
+}
+return 0;
 }
 */

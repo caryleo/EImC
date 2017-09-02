@@ -12,6 +12,7 @@ int main()
 {
 	ModeRead mRead;
 	mRead.readMode();
+	cout << "Start token analyzing..." << endl;
 	ModeTokenAnalysis::read(mRead);
 	return 0;
 }

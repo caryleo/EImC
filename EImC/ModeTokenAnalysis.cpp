@@ -154,5 +154,6 @@ Token* ModeTokenAnalysis::getToken(ModeRead mRead) {/*识别语素控制模块*/
 			}
 			return new SoString(str);
 		}
+
 	}
 }

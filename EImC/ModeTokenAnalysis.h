@@ -13,6 +13,7 @@ public:
 	string name;
 	Idt();
 	Idt(string n);
+	Token* t;
 	virtual string toString();
 };
 

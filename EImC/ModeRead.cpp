@@ -1,7 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include "stdafx.h"
-#include"ModeRead.h"
-using namespace std;
+#include "ModeRead.h"
 
 ModeRead::ModeRead()//≥ı ºªØ
 {
@@ -102,13 +99,13 @@ m++;
 /*
 int main()
 {
-ModeRead a;
-int m=a.readMode();
-for(int i=0;i<5;i++) cout<<a.scan()<<endl;
-if(m==-1) {
-cout<<"¥ÌŒÛ"<<endl;
-return -1;
-}
-return 0;
+    ModeRead a;
+    int m=a.readMode();
+    for(int i=0;i<5;i++) cout<<a.scan()<<endl;
+    if(m==-1) {
+        cout<<"¥ÌŒÛ"<<endl;
+        return -1;
+    }
+    return 0;
 }
 */

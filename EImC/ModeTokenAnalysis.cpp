@@ -187,6 +187,9 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 				return NULL;
 			}
 		}
-		if()
+		if (ch == '!')/*逻辑非*/ {
+			return new Token(NOT);
+		}
+		if(ch == >)
 	}
 }

@@ -19,9 +19,9 @@ enum Tag {
 	COMMA, SEMICO, DOLLA, HASH,              //特殊符号：逗号，分号，美元号，井号
 	ASSIGN,                                                      //赋值符号
 	KEY_IF, KEY_ELSE, KEY_WHILE,                     //if，else，while
-	KEY_BRK, KEY_RET, KEY_CON    ,                   //break，return，continue
-	KEY_IN,KEY_OUT , // in ,out
-	FUNC,WHILE,IF,ELSE //函数 循环 if-else
+	KEY_BRK, KEY_RET, KEY_CON,                      //break，return，continue
+	KEY_IN, KEY_OUT,                                       // in ,out
+	FUNC, WHILE, IF, ELSE                                //函数 循环 if-else
 };
 
 class Token/*语素基类*/
@@ -35,5 +35,3 @@ public:
 
 #endif // !1
 #pragma once
-
-std::vector<Token*>buffer;

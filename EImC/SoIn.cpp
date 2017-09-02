@@ -32,7 +32,7 @@ void SoIn::input(int top, int bottom)
 	{
 		judgeIdt(top + 1);
 	}
-	else if (bottom - top == 4 && buffer[top + 1]->tag == STRING&&buffer[top + 2]->tag == COMMA&&buffer[top + 3]->tag == IDT)//输出一个字符串和输入一个变量
+	else if (bottom - top == 4 && buffer[top + 1]->tag == STRING && buffer[top + 2]->tag == COMMA&&buffer[top + 3]->tag == IDT)//输出一个字符串和输入一个变量
 	{
 		SoString *q = (SoString*)buffer.at(top + 1);
 		cout << q->str << endl;

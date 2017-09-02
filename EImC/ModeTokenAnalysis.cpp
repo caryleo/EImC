@@ -294,7 +294,8 @@ Token * ModeTokenAnalysis::getNum(ModeRead & mRead, char & ch) {
 			ch = mRead.scan();
 		}
 		for (int i = tmp.size() - 1; i >= 0; i--) {
-			val2 += (tmp.at(i) - '0')*0.1;
+			val2 += tmp.at(i) - '0';
+			val2 *= 0.1;
 		}
 		val2 += val1;
 		return new SoReal(val2, l, c);

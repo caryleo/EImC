@@ -14,6 +14,9 @@ int main()
 	mRead.readMode();
 	cout << "Start token analyzing..." << endl;
 	ModeTokenAnalysis::read(mRead);
+	for (int i = 0; i < buffer.size(); i++) {
+		cout << buffer[i]->tag << endl;
+	}
 	return 0;
 }
 

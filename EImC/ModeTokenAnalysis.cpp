@@ -14,6 +14,8 @@ Keywords::Keywords()/*关键字列表初始化*/ {
 	keywords.insert(pair<string, Tag>("break", KEY_BRK));
 	keywords.insert(pair<string, Tag>("continue", KEY_CON));
 	keywords.insert(pair<string, Tag>("return", KEY_RET));
+	keywords.insert(pair<string, Tag>("in", KEY_IN));
+	keywords.insert(pair<string, Tag>("out", KEY_OUT));
 }
 
 Tag Keywords::getTag(string name)/*查询关键字*/ {
@@ -42,6 +44,7 @@ string Idt::toString() {
 }
 
 SoInt::SoInt(short n) {
+	tag = NUM;
 	val = n;
 }
 
@@ -70,16 +73,19 @@ string SoString::toString() {
 
 void ModeTokenAnalysis::read(ModeRead& mRead)/*词义分析主控*/ {
 	Token* t;
-	while (t = ModeTokenAnalysis::getToken(mRead), t != NULL)
+	char ch = ' ';
+	t = ModeTokenAnalysis::getToken(mRead, ch);
+	while (t != NULL)
 	{
 		buffer.push_back(t);
+		t = ModeTokenAnalysis::getToken(mRead, ch);
 	}
 	cout << "Token Analysis Completed." << endl;
 }
-Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
-	char ch;
-	while ((ch = mRead.scan()) != -1) {
-		if (ch = ' ' || ch == '\n' || ch == '\t') {/*缩进格式符*/
+Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模块*/
+	while (ch != -1) {
+		if (ch == ' ' || ch == '\n' || ch == '\t') {/*缩进格式符*/
+			ch = mRead.scan();
 			continue;
 		}
 		if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {/*标识符*/
@@ -124,7 +130,8 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 		}
 		if (ch == '"') {/*字符串常量*/
 			string str = "";
-			while (ch = mRead.scan(), ch != '"') {
+			ch = mRead.scan();
+			while (ch != '"') {
 				if (ch == '\\') {
 					ch = mRead.scan();
 					switch (ch)
@@ -151,26 +158,41 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 				else {
 					str.push_back(ch);
 				}
+				ch = mRead.scan();
 			}
+			ch = mRead.scan();
 			return new SoString(str);
 		}
 		if (ch == '+')/*加号*/ {
+			ch = mRead.scan();
 			return new Token(ADD);
 		}
 		if (ch == '-')/*减号*/ {
+			ch = mRead.scan();
 			return new Token(SUB);
 		}
 		if (ch == '*')/*乘号*/ {
+			ch = mRead.scan();
 			return new Token(MUL);
 		}
-		if (ch == '/')/*除号*/ {
+		if (ch == '/')/*除号或注释*/ {
+			ch = mRead.scan();
+			if (ch == '/') {
+				do {
+					ch = mRead.scan();
+				} while (ch != '\n');
+				return ModeTokenAnalysis::getToken(mRead, ch);
+			}
 			return new Token(DIV);
 		}
 		if (ch == '%')/*取余*/ {
+			ch = mRead.scan();
 			return new Token(MOD);
 		}
 		if (ch == '&')/*逻辑与*/ {
-			if (ch = mRead.scan(), ch == '&') {
+			ch = mRead.scan();
+			if (ch == '&') {
+				ch = mRead.scan();
 				return new Token(AND);
 			}
 			else {
@@ -179,7 +201,9 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 			}
 		}
 		if (ch == '|')/*逻辑或*/ {
-			if (ch = mRead.scan(), ch == '|') {
+			ch = mRead.scan();
+			if (ch == '|') {
+				ch = mRead.scan();
 				return new Token(OR);
 			}
 			else {
@@ -188,8 +212,83 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 			}
 		}
 		if (ch == '!')/*逻辑非*/ {
+			ch = mRead.scan();
 			return new Token(NOT);
 		}
-		if(ch == >)
+		if (ch == '>')/*大于或大于等于*/ {
+			ch = mRead.scan();
+			if (ch == '=') {
+				ch = mRead.scan();
+				return new Token(GE);
+			}
+			else {
+				return new Token(GT);
+			}
+		}
+		if (ch == '<')/*小于、小于等于或不等于*/ {
+			ch = mRead.scan();
+			if (ch == '=') {
+				ch = mRead.scan();
+				return new Token(LE);
+			}
+			else if (ch == '>') {
+				ch = mRead.scan();
+				return new Token(NEQU);
+			}
+			else {
+				return new Token(LT);
+			}
+		}
+		if (ch == '=')/*赋值或等于*/ {
+			ch = mRead.scan();
+			if (ch == '=') {
+				ch = mRead.scan();
+				return new Token(EQU);
+			}
+			else {
+				return new Token(ASSIGN);
+			}
+		}
+		if (ch == '(')/*左小括号*/ {
+			ch = mRead.scan();
+			return new Token(LPAR);
+		}
+		if (ch == ')')/*右小括号*/ {
+			ch = mRead.scan();
+			return new Token(RPAR);
+		}
+		if (ch == ']')/*左中括号*/ {
+			ch = mRead.scan();
+			return new Token(LBRACK);
+		}
+		if (ch == ']')/*右中括号*/ {
+			ch = mRead.scan();
+			return new Token(RBRACK);
+		}
+		if (ch == '{')/*左大括号*/ {
+			ch = mRead.scan();
+			return new Token(LBRACE);
+		}
+		if (ch == '}')/*右大括号*/ {
+			ch = mRead.scan();
+			return new Token(RBRACE);
+		}
+		if (ch == ',')/*逗号*/ {
+			ch = mRead.scan();
+			return new Token(COMMA);
+		}
+		if (ch == ';')/*分号*/ {
+			ch = mRead.scan();
+			return new Token(SEMICO);
+		}
+		if (ch == '$') /*美元号*/{
+			ch = mRead.scan();
+			return new Token(DOLLA);
+		}
+		if (ch == '#') /*井号*/{
+			ch = mRead.scan();
+			return new Token(HASH);
+		}
 	}
+	return NULL;
 }

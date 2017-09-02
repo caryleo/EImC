@@ -5,15 +5,14 @@
 #include"ModeRead.h"
 #include"ModeTokenAnalysis.h"
 
-std::vector<Token>buffer;
+std::vector<Token*>buffer;
 
 
 int main()
 {
-	//ModeRead modeRead;
-	//modeRead.readMode();
-	ModeTokenAnalysis::read();
-	cout << buffer[0].tooString() << buffer[0].tag<< endl;
-    return 0;
+	ModeRead mRead;
+	mRead.readMode();
+	ModeTokenAnalysis::read(mRead);
+	return 0;
 }
 

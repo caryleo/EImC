@@ -24,7 +24,7 @@ private:
 	char filePathName[1024];//文件路径
 public:
 	ModeRead();
-	void readMode();//运行模块入口
+	int readMode();//运行模块入口
 	char scan();//读取字符
 				//void output();
 };

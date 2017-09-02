@@ -3,6 +3,7 @@
 #include<string>
 #include<map>
 #include<vector>
+#include"EImC.h"
 #include"ModeRead.h"
 using namespace std;
 
@@ -41,6 +42,7 @@ public:
 
 class Keywords/*关键字管理类*/
 {
+public:
 	map<string, Tag> keywords;
 	Keywords();
 	Tag getTag(string name);
@@ -49,8 +51,8 @@ class Keywords/*关键字管理类*/
 class ModeTokenAnalysis
 {
 public:
-	static string getToken(ModeRead file);
-	static void read();
+	static Token* getToken(ModeRead mRead);
+	static void read(ModeRead mRead);
 };
 
 #endif // !MODETOKENANALYSIS_H_

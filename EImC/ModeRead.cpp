@@ -5,11 +5,21 @@ ModeRead::ModeRead()//初始化
 {
 	lineLen = 0;
 	readPos = -1;
-	lineNum = -1;
+	lineNum = 1;
 	colNum = 0;
 	file = NULL;
 	lastch = '\0';
 	memset(filePathName, '\0', sizeof(filePathName));
+}
+
+int ModeRead::getLine()
+{
+    return lineNum;
+}
+
+int ModeRead::getCol()
+{
+    return colNum;
 }
 
 char ModeRead::scan() {      //读取字符
@@ -18,7 +28,13 @@ char ModeRead::scan() {      //读取字符
 		if (readPos + 1 < in_content.size())
 		{
 			++readPos;
-			return in_content[readPos];
+            if(lastch=='\n'){   //新行
+                lineNum++;  //行号累加
+                colNum=0;//列号清空
+            }
+            else colNum++;
+            lastch=in_content[readPos];
+            return in_content[readPos];
 		}
 		else return -1;
 	}

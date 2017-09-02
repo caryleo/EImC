@@ -27,6 +27,8 @@ public:
 	int readMode();//运行模块入口
 	char scan();//读取字符
 	//void output();
+	int getLine();
+	int getCol();
 };
 
 #endif // !MODEREAD_H_

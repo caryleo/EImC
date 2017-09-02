@@ -12,33 +12,29 @@ class Idt :public Token/*标识符类*/
 public:
 	string name;
 	Idt();
-	Idt(string n);
+	Idt(string n, int l, int c);
 	Token* t;
-	virtual string toString();
 };
 
 class SoInt :public Token/*int型常量类*/
 {
 public:
 	short val;
-	SoInt(short n);
-	virtual string toString();
+	SoInt(short n, int l, int c);
 };
 
 class SoReal :public Token/*real型常量类*/
 {
 public:
 	float val;
-	SoReal(float n);
-	virtual string toString();
+	SoReal(float n, int l, int c);
 };
 
 class SoString :public Token/*string型常量类*/
 {
 public:
 	string str;
-	SoString(string s);
-	virtual string toString();
+	SoString(string s, int l, int c);
 };
 
 class Keywords/*关键字管理类*/
@@ -49,11 +45,14 @@ public:
 	Tag getTag(string name);
 };
 
-class ModeTokenAnalysis
+class ModeTokenAnalysis/*词义分析模块控制类*/
 {
 public:
-	static Token* getToken(ModeRead& mRead, char & ch);
 	static void read(ModeRead& mRead);
+	static Token * getToken(ModeRead & mRead, char & ch);
+	static Token * getIdt(ModeRead & mRead, char & ch);
+	static Token * getNum(ModeRead & mRead, char & ch); 
+	static Token * getString(ModeRead & mRead, char & ch);
 };
 
 #endif // !MODETOKENANALYSIS_H_

@@ -1,5 +1,5 @@
 #ifndef EIMC_H_
-#define RIMC_H_
+#define EIMC_H_
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -27,10 +27,11 @@ enum Tag {
 class Token/*语素基类*/
 {
 public:
-	Tag tag;
+	Tag tag;                 //语素类型
+	int line;                //行号
+	int col;                 //列号
 	Token();
-	Token(Tag t);
-	string tooString();
+	Token(Tag t, int l, int c);
 };
 
 #endif // !1

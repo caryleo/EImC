@@ -1,7 +1,30 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include "stdafx.h"
-#include"ModeRead.h"
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <fstream>
+#include <string>
+#define BUFLEN 80       //缓冲区大小
 using namespace std;
+class ModeRead
+{
+private:
+    int readType;           //输入方式：文件或直接输入
+    int lineLen=0;          //缓冲区内的数据长度
+    int readPos=-1;         //读取位置
+    char line[BUFLEN];      //缓冲区
+    int lineNum=-1;         //行号
+    int colNum=0;           //列号
+    char lastch;         //上一个字符
+    FILE *file;         //文件指针
+    vector <char> in_content;//直接输入内容
+    char filePathName[1024];//文件路径
+public:
+    ModeRead();
+    int readMode();//运行模块入口
+    char scan();//读取字符
+    //void output();
+};
 
 ModeRead::ModeRead()//初始化
 {
@@ -13,11 +36,12 @@ ModeRead::ModeRead()//初始化
 char ModeRead::scan(){      //读取字符
     if(readType==1)
     {
-        if((readPos+1)<in_content.size())
+        if(readPos+1<in_content.size())
         {
             ++readPos;
             return in_content[readPos];
         }
+        else return -1;
     }
     if(readType==2)
     {
@@ -48,10 +72,10 @@ char ModeRead::scan(){      //读取字符
     }
 }
 
-void ModeRead::readMode()
+int ModeRead::readMode()
 {
     cout<<"请选择文件输入方式："<<endl;
-    cout<<"1.直接输入，2.打开文件"<<endl;
+    cout<<"1.直接输入  2.打开文件"<<endl;
     cin>>readType;
     if(readType==1)//直接输入
     {
@@ -62,6 +86,7 @@ void ModeRead::readMode()
             in_content.push_back(in_char);
         }
         //output();
+        return 0;
     }
     else if(readType==2)//文件输入
     {
@@ -71,7 +96,7 @@ void ModeRead::readMode()
         if(!file)
         {
             cout<<"找不到该文件"<<endl;
-            return;
+            return -1;
         }
         else
         {
@@ -81,6 +106,7 @@ void ModeRead::readMode()
             {
                 cout<<line<<endl;
             }
+            return 0;
         }
     }
 }
@@ -100,8 +126,12 @@ void ModeRead::output()
 int main()
 {
     ModeRead a;
-    a.readMode();
-    //for(int i=0;i<5;i++) cout<<a.scan()<<endl;
+    int m=a.readMode();
+    for(int i=0;i<5;i++) cout<<a.scan()<<endl;
+    if(m==-1) {
+        cout<<"错误"<<endl;
+        return -1;
+    }
     return 0;
 }
 */

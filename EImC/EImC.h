@@ -20,7 +20,8 @@ enum Tag {
 	ASSIGN,                                                      //赋值符号
 	KEY_IF, KEY_ELSE, KEY_WHILE,                     //if，else，while
 	KEY_BRK, KEY_RET, KEY_CON    ,                   //break，return，continue
-	KEY_IN,KEY_OUT  // in ,out
+	KEY_IN,KEY_OUT , // in ,out
+	FUNC,WHILE,IF,ELSE //函数 循环 if-else
 };
 
 class Token/*语素基类*/

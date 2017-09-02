@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EImC.cpp" />
+    <ClCompile Include="ModeInPart.cpp" />
     <ClCompile Include="ModeRead.cpp" />
     <ClCompile Include="ModeTokenAnalysis.cpp" />
     <ClCompile Include="stdafx.cpp">

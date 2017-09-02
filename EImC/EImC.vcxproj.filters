@@ -47,5 +47,8 @@
     <ClCompile Include="ModeRead.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ModeInPart.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

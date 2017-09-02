@@ -5,6 +5,10 @@ using namespace std;
 
 ModeRead::ModeRead()//初始化
 {
+	lineLen = 0;
+	readPos = -1;
+	lineNum = -1;
+	colNum = 0;
 	file = NULL;
 	lastch = '\0';
 	memset(filePathName, '\0', sizeof(filePathName));
@@ -13,7 +17,7 @@ ModeRead::ModeRead()//初始化
 char ModeRead::scan() {      //读取字符
 	if (readType == 1)
 	{
-		if (readPos + 1<in_content.size())
+		if (readPos + 1 < in_content.size())
 		{
 			++readPos;
 			return in_content[readPos];
@@ -56,9 +60,10 @@ int ModeRead::readMode()
 	cin >> readType;
 	if (readType == 1)//直接输入
 	{
+		cout << "请输入代码内容" << endl;
 		char in_char;
 		getchar();
-		while (scanf("%c", &in_char) != EOF)
+		while (cin >> in_char)
 		{
 			in_content.push_back(in_char);
 		}
@@ -97,8 +102,8 @@ while(m<in_content.size())
 cout<<in_content[m];
 m++;
 }
-}
-*/
+}*/
+
 /*
 int main()
 {

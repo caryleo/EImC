@@ -112,7 +112,7 @@ Token* ModeTokenAnalysis::getToken(ModeRead mRead) {/*识别语素控制模块*/
 					tmp += ch;
 					ch = mRead.scan();
 				}
-				for (int i = tmp.size - 1; i >= 0; i--) {
+				for (int i = tmp.size() - 1; i >= 0; i--) {
 					val2 += (tmp.at(i) - '0')*0.1;
 				}
 				val2 += val1;
@@ -149,9 +149,10 @@ Token* ModeTokenAnalysis::getToken(ModeRead mRead) {/*识别语素控制模块*/
 					return NULL;
 				}
 				else {
-
+					str.push_back(ch);
 				}
 			}
+			return new SoString(str);
 		}
 	}
 }

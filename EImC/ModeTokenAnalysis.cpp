@@ -68,18 +68,18 @@ string SoString::toString() {
 	return "This string is " + str;
 }
 
-void ModeTokenAnalysis::read(ModeRead mRead)/*词义分析主控*/ {
+void ModeTokenAnalysis::read(ModeRead& mRead)/*词义分析主控*/ {
 	Token* t;
-	while ((t = ModeTokenAnalysis::getToken(mRead)))
+	while (t = ModeTokenAnalysis::getToken(mRead), t != NULL)
 	{
 		buffer.push_back(t);
 	}
 	cout << "Token Analysis Completed." << endl;
 }
-Token* ModeTokenAnalysis::getToken(ModeRead mRead) {/*识别语素控制模块*/
+Token* ModeTokenAnalysis::getToken(ModeRead& mRead) {/*识别语素控制模块*/
 	char ch;
 	while ((ch = mRead.scan()) != -1) {
-		if (ch = ' ' || ch == '\n' || ch == '\t') {
+		if (ch = ' ' || ch == '\n' || ch == '\t') {/*缩进格式符*/
 			continue;
 		}
 		if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {/*标识符*/
@@ -154,6 +154,39 @@ Token* ModeTokenAnalysis::getToken(ModeRead mRead) {/*识别语素控制模块*/
 			}
 			return new SoString(str);
 		}
-
+		if (ch == '+')/*加号*/ {
+			return new Token(ADD);
+		}
+		if (ch == '-')/*减号*/ {
+			return new Token(SUB);
+		}
+		if (ch == '*')/*乘号*/ {
+			return new Token(MUL);
+		}
+		if (ch == '/')/*除号*/ {
+			return new Token(DIV);
+		}
+		if (ch == '%')/*取余*/ {
+			return new Token(MOD);
+		}
+		if (ch == '&')/*逻辑与*/ {
+			if (ch = mRead.scan(), ch == '&') {
+				return new Token(AND);
+			}
+			else {
+				cout << "ERROR!!!" << endl;
+				return NULL;
+			}
+		}
+		if (ch == '|')/*逻辑或*/ {
+			if (ch = mRead.scan(), ch == '|') {
+				return new Token(OR);
+			}
+			else {
+				cout << "ERROR!!!" << endl;
+				return NULL;
+			}
+		}
+		if()
 	}
 }

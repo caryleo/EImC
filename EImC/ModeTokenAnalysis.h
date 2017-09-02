@@ -52,8 +52,8 @@ public:
 class ModeTokenAnalysis
 {
 public:
-	static Token* getToken(ModeRead mRead);
-	static void read(ModeRead mRead);
+	static Token* getToken(ModeRead& mRead);
+	static void read(ModeRead& mRead);
 };
 
 #endif // !MODETOKENANALYSIS_H_

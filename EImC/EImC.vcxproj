@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EImC.h" />
+    <ClInclude Include="Expression.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="VarType.h" />
     <ClInclude Include="ModeExecute.h" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EImC.cpp" />
+    <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="VarType.cpp" />
     <ClCompile Include="ModeExecute.cpp" />

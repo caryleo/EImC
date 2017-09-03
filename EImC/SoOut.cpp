@@ -22,15 +22,15 @@ bool SoOut::isValid(int top, int bottom)
 void SoOut::judgeIdt(int m)
 {
 	Idt *p = (Idt*)buffer.at(m);
-	/*测试用例*/
+	/*测试用例
 	Token qi(NUM,1,1);
 	p->t=&qi;
-	p->t->tag=NUM;
+	p->t->tag=NUM;*/
 	if (p->t->tag == NUM)//如果是个整型
 	{
 		SoInt *q = (SoInt*)buffer.at(m);
-		/*测试用例*/
-		q->val=3;
+		/*测试用例
+		q->val=3;*/
 		cout << q->val << endl;
 	}
 	else if (p->t->tag == RNUM)//如果是个实型
@@ -83,15 +83,15 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 			else if (buffer[top + 1]->tag == IDT)//第一部分输出标识符的情况
 			{
 				Idt *p = (Idt*)buffer.at(top + 1);
-				/*测试用例*/
+				/*测试用例
                 Token qi(NUM,1,1);
                 p->t=&qi;
-                p->t->tag=NUM;
+                p->t->tag=NUM;*/
 				if (p->t->tag == NUM)//如果是个整型
 				{
 					SoInt *s = (SoInt*)buffer.at(top + 1);
-					/*测试用例*/
-                    s->val=3;
+					/*测试用例
+                    s->val=3;*/
 					for (int i = 0; i < s->val; i++)
 					{
 						if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况

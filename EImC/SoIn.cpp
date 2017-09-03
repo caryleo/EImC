@@ -20,10 +20,10 @@ void SoIn::judgeIdt(int m)
     else
     {
         Idt *p = (Idt*)buffer.at(m);
-        /*测试用例*/
+        /*测试用例
         Token qi(NUM,1,1);//in a;中a的类型假如是整型
         p->t=&qi;
-        p->t->tag=NUM;
+        p->t->tag=NUM;*/
         if (p->t->tag == NUM)//如果是个整型
         {
             if(buffer[len]->tag==NUM)

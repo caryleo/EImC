@@ -51,3 +51,17 @@ bool Stack::empty() {/*判断栈是否为空*/
 Stack::~Stack() {/*销毁*/
 	free(base);
 }
+
+Token * Stack::query(string name) {/*查询指定的IDT*/
+	Token ** ans;
+	ans = top;
+	while (ans-- != base) {
+		if ((*ans)->tag == IDT) {
+			Idt * i = (Idt *)(*ans);
+			if (name.compare(i->name) == 0) {
+				return i->t;
+			}
+		}
+	}
+	return NULL;
+}

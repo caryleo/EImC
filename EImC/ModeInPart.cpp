@@ -1,6 +1,7 @@
 #include"stdafx.h"
-#include<iostream>
+#include"SoIn.h"
 #include"EImC.h"
+#include"ModeTokenAnalysis.h"
 //extern std::vector<Token*>buffer;
 //
 //class in
@@ -19,3 +20,6 @@
 //Token a(KEY_IN);//in
 //Token b(IDT);//a
 //Token c(SEMICO);//;·ÖºÅ
+
+extern vector<Token*>buffer;
+

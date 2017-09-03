@@ -289,17 +289,23 @@ Token * ModeTokenAnalysis::getNum(ModeRead & mRead, char & ch) {
 	} while (ch >= '0'&&ch <= '9');
 	if (ch == '.') {
 		ch = mRead.scan();
-		string tmp = "";
-		while (ch >= '0' && ch <= '9') {
-			tmp += ch;
-			ch = mRead.scan();
+		if (ch >= '0' && ch <= '9') {
+			string tmp = "";
+			while (ch >= '0' && ch <= '9') {
+				tmp += ch;
+				ch = mRead.scan();
+			}
+			for (int i = tmp.size() - 1; i >= 0; i--) {
+				val2 += tmp.at(i) - '0';
+				val2 *= 0.1;
+			}
+			val2 += val1;
+			return new SoReal(val2, l, c);
 		}
-		for (int i = tmp.size() - 1; i >= 0; i--) {
-			val2 += tmp.at(i) - '0';
-			val2 *= 0.1;
+		else {
+			cout << "ERROR!!!" << endl;
+			return NULL;
 		}
-		val2 += val1;
-		return new SoReal(val2, l, c);
 	}
 	else {
 		return new SoInt(val1, l, c);

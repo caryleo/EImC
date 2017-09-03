@@ -7,26 +7,58 @@ extern vector<Token*>buffer;
 
 void SoIn::judgeIdt(int m)
 {
-	Idt *p = (Idt*)buffer.at(m);
-	/*测试用例*/
-	Token qi(NUM,1,1);
-	p->t=&qi;
-	p->t->tag=NUM;
-	if (p->t->tag == NUM)//如果是个整型
-	{
-		SoInt *q = (SoInt*)buffer.at(m);
-		cin >> q->val;
+    int len= buffer.size();
+	ModeRead in;
+	in.readMode();
+	ModeTokenAnalysis::read(in);
+	int len2=buffer.size();
+	for (int i = 0; i < buffer.size(); i++) {
+		cout << buffer[i]->tag << endl;
 	}
-	else if (p->t->tag == RNUM)//如果是个实型
-	{
-		SoReal *q = (SoReal*)buffer.at(m);
-		cin >> q->val;
-	}
-	else if (p->t->tag == STRING)//如果是个字符串
-	{
-		SoString *q = (SoString*)buffer.at(m);
-		cin >> q->str;
-	}
+	if(len2-len!=1)//只支持输入一个
+        cout << "ERROR!!!" << endl;
+    else
+    {
+        Idt *p = (Idt*)buffer.at(m);
+        /*测试用例*/
+        Token qi(NUM,1,1);//in a;中a的类型假如是整型
+        p->t=&qi;
+        p->t->tag=NUM;
+        if (p->t->tag == NUM)//如果是个整型
+        {
+            if(buffer[len]->tag==NUM)
+            {
+                SoInt *q = (SoInt*)buffer.at(m);
+                SoInt *s = (SoInt*)buffer.at(len);
+                q->val=s->val;
+                cout<<q->val<<endl;
+            }
+            else cout << "ERROR!!!" << endl;
+        }
+        else if (p->t->tag == RNUM)//如果是个实型
+        {
+            if(buffer[len]->tag==RNUM)
+            {
+                SoReal *q = (SoReal*)buffer.at(m);
+                SoReal *s = (SoReal*)buffer.at(len);
+                q->val=s->val;
+                cout<<q->val<<endl;
+            }
+            else cout << "ERROR!!!" << endl;
+        }
+        else if (p->t->tag == STRING)//如果是个字符串
+        {
+            if(buffer[len]->tag==STRING)
+            {
+                SoString *q = (SoString*)buffer.at(m);
+                SoString *s = (SoString*)buffer.at(len);
+                q->str=s->str;
+                cout<<q->str<<endl;
+            }
+            else cout << "ERROR!!!" << endl;
+        }
+    }
+
 }
 
 void SoIn::input(int top, int bottom)

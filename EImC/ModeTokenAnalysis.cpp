@@ -34,6 +34,7 @@ Idt::Idt() {}
 
 Idt::Idt(string s, int l, int c) {
 	tag = IDT;
+	assType = ERR;
 	name = s;
 	line = l;
 	col = c;

@@ -11,6 +11,7 @@ class Idt :public Token/*±êÊ¶·ûÀà*/
 {
 public:
 	string name;
+	Tag assType;
 	Idt();
 	Idt(string n, int l, int c);
 	Token* t;

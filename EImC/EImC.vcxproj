@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="EImC.h" />
     <ClInclude Include="ModeExecute.h" />
+    <ClInclude Include="ModeSyntexAnalysis.h" />
     <ClInclude Include="ModeTokenAnalysis.h" />
     <ClInclude Include="SoIn.h" />
     <ClInclude Include="SoOut.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="ModeExecute.cpp" />
     <ClCompile Include="ModeInPart.cpp" />
     <ClCompile Include="ModeRead.cpp" />
+    <ClCompile Include="ModeSyntexAnalysis.cpp" />
     <ClCompile Include="ModeTokenAnalysis.cpp" />
     <ClCompile Include="SoIn.cpp" />
     <ClCompile Include="SoOut.cpp" />

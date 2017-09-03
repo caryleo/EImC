@@ -74,6 +74,7 @@ int ModeRead::readMode()
 	cin >> readType;
 	if (readType == 1)//直接输入
 	{
+		cout << "请输入代码内容" << endl;
 		char in_char;
 		getchar();
 		while (cin >> in_char)

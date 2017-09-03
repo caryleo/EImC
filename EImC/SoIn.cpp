@@ -1,4 +1,3 @@
-#include"stdafx.h"
 #include"SoIn.h"
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"
@@ -9,6 +8,10 @@ extern vector<Token*>buffer;
 void SoIn::judgeIdt(int m)
 {
 	Idt *p = (Idt*)buffer.at(m);
+	/*测试用例*/
+	Token qi(NUM,1,1);
+	p->t=&qi;
+	p->t->tag=NUM;
 	if (p->t->tag == NUM)//如果是个整型
 	{
 		SoInt *q = (SoInt*)buffer.at(m);
@@ -32,7 +35,7 @@ void SoIn::input(int top, int bottom)
 	{
 		judgeIdt(top + 1);
 	}
-	else if (bottom - top == 4 && buffer[top + 1]->tag == STRING && buffer[top + 2]->tag == COMMA&&buffer[top + 3]->tag == IDT)//输出一个字符串和输入一个变量
+	else if (bottom - top == 4 && buffer[top + 1]->tag == STRING&&buffer[top + 2]->tag == COMMA&&buffer[top + 3]->tag == IDT)//输出一个字符串和输入一个变量
 	{
 		SoString *q = (SoString*)buffer.at(top + 1);
 		cout << q->str << endl;

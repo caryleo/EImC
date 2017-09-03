@@ -286,3 +286,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/EImC/ModeIn.cpp
+/EImC/EImC.zip
+/EImC/SoInt.cpp

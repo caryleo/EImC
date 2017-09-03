@@ -24,12 +24,54 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ModeTokenAnalysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EImC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeRead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SoOut.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeExecute.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SoIn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeSyntexAnalysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="EImC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeTokenAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeRead.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeInPart.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SoOut.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeExecute.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SoIn.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeSyntexAnalysis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

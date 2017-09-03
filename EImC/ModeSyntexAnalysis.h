@@ -11,7 +11,7 @@ public:
 	int top;            //不包括大括号的语句块开始位置
 	int bottom;         //不包括大括号的语句块结束位置
 	Block();
-	Block(Tag tag);
+	Block(Tag t);
 };
 
 class SoWhile: public Block {/*while语句块类*/
@@ -25,20 +25,20 @@ class SoIf: public Block {/*if语句块类*/
 public:
 	int judgeExprTop;			//判断表达式开始位置
 	int judgeExprBottom;		//判断表达式结束位置
-	SoIf(int top, int bottom, int jETop, int jEBottom);
+	SoIf(int t, int b, int jETop, int jEBottom);
 };
 
 class SoElse: public Block {/*else语句块类*/
 public:
-	SoElse(int top, int bottom);
+	SoElse(int t, int b);
 };
 
 class SoFunc : public Block {/*函数语句块类*/
 public:
 	string name;
-	Tag retType;
-	vector <Token*> paralist;
-	SoFunc(int top, int bottom, )
+	Tag retType;				//返回值类型
+	vector <Token*> paralist;	//参数列表
+	SoFunc(string n, Tag r);
 };
 
 

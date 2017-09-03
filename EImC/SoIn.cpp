@@ -1,3 +1,4 @@
+#include"stdafx.h"
 #include"SoIn.h"
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"

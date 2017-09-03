@@ -45,6 +45,12 @@
     <ClInclude Include="ModeSyntexAnalysis.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="VarType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +78,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ModeSyntexAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VarType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Stack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

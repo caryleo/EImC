@@ -9,6 +9,7 @@ class ModeExecute {
 public:
 	static void init();
 	static bool queryMain(SoFunc * corner);
+	static void commence(int top, int bottom);
 };
 #endif // !MODEEXECUTE_H_
 #pragma once

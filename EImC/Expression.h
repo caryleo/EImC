@@ -1,11 +1,12 @@
 #include "ModeTokenAnalysis.h"
+#include "Stack.h"
 
 class ExprIR
 {
 private:
     Stack num;
     Stack opr;
-    Token *pos
+	Token *pos;
 public:
     //Èë¿Ú
     Idt exprEnter(Token *head,Token *tail);

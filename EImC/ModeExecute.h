@@ -7,7 +7,9 @@ using namespace std;
 
 class ModeExecute {
 public:
-	static int change(Token * t);
+	static void init();
+	static bool queryMain(SoFunc * corner);
+	static void commence(int top, int bottom);
 };
 #endif // !MODEEXECUTE_H_
 #pragma once

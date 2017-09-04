@@ -12,7 +12,7 @@ VarType::VarType(int a, int b)
 	bottom = b;
 }
 
-void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎª½áÊøµÄÒ»¶Î»° 
+void VarType::input()  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎª½áÊøµÄÒ»¶Î»° 
 {
 	
 	switch (buffer[top]->tag)  //¶ÁÈ¡µÚÒ»¸öµ¥´Ê ÅĞ¶ÏÊÇ int real string ;
@@ -30,7 +30,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = NUM;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
+				idt->assType = KEY_INT;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;
 				continue;
 			}
@@ -65,7 +65,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = RNUM;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
+				idt->assType = KEY_REAL;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;
 				continue;
 			}
@@ -98,7 +98,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = STRING;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
+				idt->assType = KEY_STRING;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;
 				continue;
 			}

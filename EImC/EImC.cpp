@@ -10,8 +10,9 @@ std::vector<Token*>buffer;
 
 int main()
 {
-	std::cout << "Hello world." << std::endl;
-	std::cout << "Hello world!" << std::endl;
+	ModeRead mRead;
+	mRead.readMode();
+	ModeTokenAnalysis::read(mRead);
     return 0;
 }
 

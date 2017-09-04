@@ -35,7 +35,7 @@ public:
 	Token(Tag t, int l, int c);
 };
 
-#endif // !1
+#endif // !EIMC_H_
 
 
 #pragma once

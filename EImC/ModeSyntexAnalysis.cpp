@@ -58,54 +58,55 @@ Expr::Expr(Token * t, Token * b)
 	top = t;
 	bottom = b;
 }
-
+void ModeSyntexAnalysis::getHeadAndTail(Token *h,Token *t)
+{
+    subStart=h;
+    subEnd=t+1;
+}
 void ModeSyntexAnalysis::statement()
 {
-    if(look==subEnd)
-        return ;
-    switch(look->tag)
+    while(look!=(*subEnd))
     {
-        case KEY_WHILE:
-            whileStat();
-            statement();
-            break;
-        case KEY_IF:
-             ifStat();
-             statement();
-             break;
-        case KEY_ELSE:
-             elseStat();
-             statement();
-             break;
-        case KEY_BRK:
-             brkStat();
-             statement();
-             break;
-        case KEY_CON:
-             conStat();
-             statement();
-        case KEY_RET:
-             retStat();
-             statement();
-             break;
-        case IDT:
-             exprStat();
-             statement();
-             break;
-        default:
-             altExprStat();
+        switch(look->tag)
+        {
+            case KEY_WHILE:
+                whileStat();
+                break;
+            case KEY_IF:
+                 ifStat();
+                 break;
+            case KEY_ELSE:
+                 elseStat();
+                 break;
+            case KEY_BRK:
+                 brkStat();
+                 break;
+            case KEY_CON:
+                 conStat();
+            case KEY_RET:
+                 retStat();
+                 break;
+            case IDT:
+                 exprStat();
+                 break;
+            default:
+                 altExprStat();
+        }
     }
+
 }
 void ModeSyntexAnalysis::brkStat()
 {
     AltExpr now(subStart,subEnd);
     now.tag=KEY_BRK;
+    CodeStore.push_back(now);
     return ;
 }
 void ModeSyntexAnalysis::retStat()
 {
     AltExpr now(subSart,subEnd);
     now.tag=KEY_RET;
+    CodeStore.push_back(now);
     return ;
 }
 
@@ -148,7 +149,11 @@ void ModeSyntexAnalysis::whileStat()//while语义分析
             sMove();
     }
     if(it!=subEnd||cnt!=0)
+    {
         cout<<"Error"<<endl;
+        return ;
+    }
+    CodeStore.push_back(now);
     return ;
 }
 void ModeSyntexAnalysis::ifStat()
@@ -175,7 +180,12 @@ void ModeSyntexAnalysis::ifStat()
             sMove();
     }
     if(it!=subEnd||cnt!=0)
+    {
         cout<<"Error!!!"<<endl;//报错模块
+        return ;
+    }
+    CodeStore.push_back(now);
+    return ;
 }
 void ModeSyntexAnalysis::elseStat()
 {
@@ -194,7 +204,12 @@ void ModeSyntexAnalysis::elseStat()
             sMove();
     }
     if(it!=subEnd||cnt!=0)
+    {
         cout<<"Error"<<endl; //报错模块
+        return ;
+    }
+    CodeStore.push_back(now);
+    return ;
 }
 void ModeSyntexAnalysis::altExprStat()
 {
@@ -204,12 +219,16 @@ void ModeSyntexAnalysis::altExprStat()
     if(!match(KEY_INT))
         if(!match(KEY_REAL))
             if(!match(KEY_STRING))
+            {
                 cout<<"Error"<<endl;
+                return ;
+            }
     while(!match(SEMICO)&&it!=subEnd)
     {
         now.bottom=it;
         sMove();
     }
+    CodeStore.push_back(now);
     return ;
 }
 void ModeSyntexAnalysis::exprStat()
@@ -223,6 +242,7 @@ void ModeSyntexAnalysis::exprStat()
         now.bottom=it;
         sMove();
     }
+    CodeStore.push_back(now);
     return ;
 }
 

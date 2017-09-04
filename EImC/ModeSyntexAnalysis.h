@@ -60,6 +60,10 @@ public:
     void elseStat();
     void exprStat();
     void altExprStat();
+    void brtStat();
+    void conStat();
+    void retStat();
+    void getHeadAndTail(Token *h,Token *t);
     vector<Token*>::iterator it=subStart;
     Token *look,*subEnd,*subStart;
 };

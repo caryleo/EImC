@@ -1,3 +1,4 @@
+#include"stdafx.h"
 #include "Expression.h"
 //KEY_INT, KEY_REAL, KEY_STRING,
 Tag ExprIR::getValType(Idt IDT){

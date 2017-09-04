@@ -44,3 +44,17 @@ SoFunc::SoFunc(string n, Tag r)
 	retType = r;
 	name = n;
 }
+
+AltExpr::AltExpr(int t, int b)
+{
+	tag = STATE;
+	top = t;
+	bottom = b;
+}
+
+Expr::Expr(int t, int b)
+{
+	tag = EXPR;
+	top = t;
+	bottom = b;
+}

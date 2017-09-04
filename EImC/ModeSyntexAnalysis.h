@@ -14,6 +14,16 @@ public:
 	Block(Tag t);
 };
 
+class AltExpr: public Block	{/*单行语句*/
+public:
+	AltExpr(int t, int b);
+};
+
+class Expr :public Block {/*表达式*/
+public:
+	Expr(int t, int b);
+};
+
 class SoWhile: public Block {/*while语句块类*/
 public:
 	int conditionExprTop;       //条件表达式开始位置

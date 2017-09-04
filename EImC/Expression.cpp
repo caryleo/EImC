@@ -1,6 +1,6 @@
 #include"stdafx.h"
 #include "Expression.h"
-
+#include "Stack.h"
 Idt ExprIR::changeToken(Token *t){
     Idt IDT= *(Idt *) t;
     return IDT;
@@ -367,7 +367,7 @@ Idt ExprIR::calculate(Idt op)
             }
         case MOD:
             {
-                result=mod_opr(changeToken(num1),changeToken(num2));
+                result= mod_opr(changeToken(num1),changeToken(num2));
                 break;
             }
         }

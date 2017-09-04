@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EImC.h" />
+    <ClInclude Include="ExprJudge.h" />
     <ClInclude Include="VarType.h" />
     <ClInclude Include="ModeExecute.h" />
     <ClInclude Include="ModeSyntexAnalysis.h" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EImC.cpp" />
+    <ClCompile Include="ExprJudge.cpp" />
     <ClCompile Include="VarType.cpp" />
     <ClCompile Include="ModeExecute.cpp" />
     <ClCompile Include="ModeInPart.cpp" />

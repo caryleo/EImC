@@ -26,7 +26,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		int temp = top + 1;
 		while (temp<=bottom&&buffer[temp]->tag!=SEMICO) // ÅĞ¶Ïµ½²»µ½·ÖºÅ µ½·ÖºÅÎª½áÊø
 		{
-			if (buffer[top]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
+			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
 				Token* token = buffer[top];
 				Idt* idt = (Idt*)token;
@@ -61,7 +61,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		int temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // ÅĞ¶Ïµ½²»µ½·ÖºÅ µ½·ÖºÅÎª½áÊø
 		{
-			if (buffer[top]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
+			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
 				Token* token = buffer[top];
 				Idt* idt = (Idt*)token;
@@ -94,7 +94,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		int temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // ÅĞ¶Ïµ½²»µ½·ÖºÅ µ½·ÖºÅÎª½áÊø
 		{
-			if (buffer[top]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
+			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
 				Token* token = buffer[top];
 				Idt* idt = (Idt*)token;

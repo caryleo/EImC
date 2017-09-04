@@ -52,22 +52,22 @@ public:
 };
 class ModeSyntexAnalysis {
 public:
-    void sMove();
-    bool match(Tag need);
-    void statement();
-    void whileStat();
-    void ifStat();
-    void elseStat();
-    void exprStat();
-    void altExprStat();
-    void brkStat();
-    void conStat();
-    void retStat();
+	void sMove();
+	bool match(Tag need);
+	void statement();
+	void whileStat();
+	void ifStat();
+	void elseStat();
+	void exprStat();
+	void altExprStat();
+	void brkStat();
+	void conStat();
+	void retStat();
 	void inStat();
 	void outStat();
-	static void getHeadAndTail(Token *h,Token *t);
-    vector<Token*>::iterator it= subStart;
-    Token *look,*subEnd,*subStart;
+	void getHeadAndTail(Token *h, Token *t);
+	vector<Token*>::iterator it = subStart;
+	Token *look, *subEnd, *subStart;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_

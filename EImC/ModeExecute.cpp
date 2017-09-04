@@ -19,18 +19,22 @@ int ModeExecute::change(Token * t)
 	return -1;
 }
 
-void ModeExecute::init(string name)
+void ModeExecute::init()
 {
 	for (int i = 0; i < CodeStore.size(); i++) {
 		if (CodeStore[i]->tag == FUNC) {
 			SoFunc * func = (SoFunc *)CodeStore[i];
-			if(query(func))
+			if (queryMain(func)) {
+				ModeSyntexAnalysis mSA;
+				mSA.getHeadAndTail(func->top, func->bottom);
+			}
 		}
 	}
 }
 
-Block * ModeExecute::query(SoFunc * corner, string name)
+bool ModeExecute::queryMain(SoFunc * corner)
 {
-
-	return nullptr;
+	return corner->name == "main" && corner->paralist.size() == 0 ? true : false;
 }
+
+

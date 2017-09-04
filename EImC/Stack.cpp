@@ -11,6 +11,7 @@ Stack::Stack() {
 	}
 	stacksize = STACK_INIT_SIZE;
 	top = base;
+	cnt = 0;
 }
 
 void Stack::push(Token * t) {/*将元素压入栈中*/
@@ -23,6 +24,7 @@ void Stack::push(Token * t) {/*将元素压入栈中*/
 	else {
 		*top++ = t;
 	}
+	cnt++;
 	return;
 }
 
@@ -31,6 +33,7 @@ void Stack::pop() {/*删除栈顶元素*/
 		Token *tmp = *top--;
 		delete tmp;
 	}
+	cnt--;
 	return;
 }
 

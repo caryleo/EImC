@@ -7,6 +7,7 @@
 using namespace std;
 
 extern vector<Token*>buffer;
+extern vector<Block*>CodeStore;
 
 int ModeExecute::change(Token * t)
 {
@@ -16,4 +17,20 @@ int ModeExecute::change(Token * t)
 		}
 	}
 	return -1;
+}
+
+void ModeExecute::init(string name)
+{
+	for (int i = 0; i < CodeStore.size(); i++) {
+		if (CodeStore[i]->tag == FUNC) {
+			SoFunc * func = (SoFunc *)CodeStore[i];
+			if(query(func))
+		}
+	}
+}
+
+Block * ModeExecute::query(SoFunc * corner, string name)
+{
+
+	return nullptr;
 }

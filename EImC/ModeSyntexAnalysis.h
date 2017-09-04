@@ -63,8 +63,10 @@ public:
     void brkStat();
     void conStat();
     void retStat();
-    void getHeadAndTail(Token *h,Token *t);
-    vector<Token*>::iterator it=subStart;
+	void inStat();
+	void outStat();
+	static void getHeadAndTail(Token *h,Token *t);
+    vector<Token*>::iterator it= subStart;
     Token *look,*subEnd,*subStart;
 };
 

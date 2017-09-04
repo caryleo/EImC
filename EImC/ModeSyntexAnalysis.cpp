@@ -111,7 +111,7 @@ void ModeSyntexAnalysis::retStat()
 
 void ModeSyntexAnalysis::sMove()
 {
-    look=*it//读入下一个词法记号
+	look = *it;//读入下一个词法记号
     it++;
 }
 bool ModeSyntexAnalysis::match(Tag need)
@@ -180,7 +180,7 @@ void ModeSyntexAnalysis::ifStat()
 void ModeSyntexAnalysis::elseStat()
 {
     match(KEY_ELSE);
-    soElse now;
+    SoElse now;
     now.tag=KEY_ELSE;
     now.top=it;
     while(it!=subEnd&&cnt!=0)

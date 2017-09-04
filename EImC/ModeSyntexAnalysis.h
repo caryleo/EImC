@@ -14,7 +14,7 @@ public:
 	Block(Tag t);
 };
 
-class AltExpr: public Block	{/*单行语句*/
+class AltExpr : public Block {/*单行语句*/
 public:
 	AltExpr(Token * t, Token * b);
 };
@@ -24,21 +24,21 @@ public:
 	Expr(Token * t, Token * b);
 };
 
-class SoWhile: public Block {/*while语句块类*/
+class SoWhile : public Block {/*while语句块类*/
 public:
 	Token * conditionExprTop;       //条件表达式开始位置
 	Token * conditionExprBottom;	//条件表达式结束位置
 	SoWhile(Token * top, Token * bottom, Token * cETop, Token * cEBottom);
 };
 
-class SoIf: public Block {/*if语句块类*/
+class SoIf : public Block {/*if语句块类*/
 public:
 	Token * judgeExprTop;			//判断表达式开始位置
 	Token * judgeExprBottom;		//判断表达式结束位置
 	SoIf(Token * t, Token * b, Token * jETop, Token * jEBottom);
 };
 
-class SoElse: public Block {/*else语句块类*/
+class SoElse : public Block {/*else语句块类*/
 public:
 	SoElse(Token * t, Token * b);
 };
@@ -50,18 +50,18 @@ public:
 	vector <Token*> paralist;	//参数列表
 	SoFunc(string n, Tag r);
 };
-class ModeSyntexAnalysis{
+class ModeSyntexAnalysis {
 public:
-    void sMove();
-    void match(Tag need);
-    void statement();
-    void whileStat();
-    void ifStat();
-    void elseStat();
-    void exprStat();
-    void altExprStat();
-    vector<Token*>::iterator it=subStart;
-    Token *look,*subEnd,*subStart;
+	void sMove();
+	bool match(Tag need);
+	void statement();
+	void whileStat();
+	void ifStat();
+	void elseStat();
+	void exprStat();
+	void altExprStat();
+	vector<Token*>::iterator it = subStart;
+	Token *look, *subEnd, *subStart;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_

@@ -28,7 +28,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		{
 			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
-				Token* token = buffer[top];
+				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = NUM;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;
@@ -63,7 +63,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		{
 			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
-				Token* token = buffer[top];
+				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = RNUM;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;
@@ -96,7 +96,7 @@ void VarType::input(int top,int bottom)  //¸øÎÒµÄÊÇ int/real/string ¿ªÍ· ÒÔ·ÖºÅÎ
 		{
 			if (buffer[temp]->tag == IDT)  //idt ÊÇ±êÊ¶·û ±ÈÈç a
 			{
-				Token* token = buffer[top];
+				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = STRING;  // ÔÚidtÀàÀïµÄasstype ±ê×¢Õâ¸ö±äÁ¿ ÊôÓÚµÄÀàĞÍ
 				temp++;

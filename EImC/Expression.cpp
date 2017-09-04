@@ -371,6 +371,16 @@ Idt ExprIR::calculate(Idt op)
                 break;
             }
         }
+        case DOLLA:
+            {
+                result=connect_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case HASH:
+            {
+                result=delspecial_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
         opr.pop();
         return result;
     //}

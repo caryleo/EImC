@@ -9,16 +9,6 @@ using namespace std;
 extern vector<Token*>buffer;
 extern vector<Block*>CodeStore;
 
-int ModeExecute::change(Token * t)
-{
-	for (int i = 0; i < buffer.size(); i++) {
-		if (buffer[i] == t) {
-			return i;
-		}
-	}
-	return -1;
-}
-
 void ModeExecute::init()
 {
 	for (int i = 0; i < CodeStore.size(); i++) {

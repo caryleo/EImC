@@ -14,9 +14,8 @@ int main()
 	ModeRead mRead;
 	mRead.readMode();
 	ModeTokenAnalysis::read(mRead);
-	int i = buffer.size();
 	ModeSyntexAnalysis mSA;
-	mSA.getHeadAndTail(buffer[0], buffer[i - 1]);
+	mSA.getHeadAndTail(0, buffer.size() - 1);
     return 0;
 }
 

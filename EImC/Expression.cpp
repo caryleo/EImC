@@ -1,5 +1,11 @@
 #include"stdafx.h"
 #include "Expression.h"
+
+Idt ExprIR::changeToken(Token *t){
+    Idt IDT= *(Idt *) t;
+    return IDT;
+}
+
 //KEY_INT, KEY_REAL, KEY_STRING,
 Tag ExprIR::getValType(Idt IDT){
     return IDT.assType;
@@ -275,7 +281,142 @@ Idt ExprIR::connect_opr(Idt s1,Idt s2){
     }
     return s;
 };
+
+//删除特定位置的字符
+Idt ExprIR::delspecial_opr(Idt s,Idt pos){
+    Idt s1;
+    if(getIntVal(pos)>=getStrVal(s).length())
+    {
+        s1.assType=ERR;
+        return s1;
+    }
+    if(s.assType==KEY_STRING)
+    {
+        s1.assType=KEY_STRING;
+        SoString *ip=new SoString(getStrVal(s),0,0);
+        s1.t=ip;
+        getStrVal(s1).erase(getIntVal(pos),1);
+    }
+    else
+    {
+        s1.assType=ERR;
+    }
+    return s1;
+};
+
 //#删除尾部
 Idt ExprIR::deltail_opr(Idt s){
+    Idt s1;
+    Idt pos;
+    SoInt *ip=new SoInt(getStrVal(s).length()-1,0,0);
+    pos.t=ip;
+    s1=delspecial_opr(s,pos);
+    return s1;
+};
 
+Idt ExprIR::calculate(Idt op)
+{
+    Idt result;
+    //#,正负号特殊考虑一下。
+    //if(isspecial_pos(op))
+    //{
+
+    //}
+    //else if(isspecial_neg(op))
+    //{
+
+    //}
+    //else if(isspecial_del(op))
+    //else
+    //{
+        if(num.empty()==0)
+        {
+            result.assType=ERR;
+            return result;
+        };
+        Token * num1=num.front();
+        num.pop();
+        if(num.empty()==0)
+        {
+            result.assType=ERR;
+            return result;
+        };
+        Token * num2=num.front();
+        num.pop();
+        switch(op.assType)
+        {
+        case ADD:
+            {
+                result= add_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case SUB:
+            {
+                result= sub_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case MUL:
+            {
+                result= mul_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case DIV:
+            {
+                result= div_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case MOD:
+            {
+                result=mod_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        }
+        opr.pop();
+        return result;
+    //}
+}
+
+Idt ExprIR::exprEnter(Token *head,Token *tail){
+    pos=head;
+    while(pos<=tail){
+        if(getValType(changeToken(pos))==KEY_INT)
+            num.push(pos);
+        else if(getValType(changeToken(pos))==KEY_REAL)
+            num.push(pos);
+        else if(getValType(changeToken(pos))==KEY_STRING)
+            num.push(pos);
+        else
+        {
+            if(opr.empty()==0) opr.push(pos);
+            else
+            {
+                if(judge_priority(changeToken(pos),changeToken(opr.front()))==1)
+                    opr.push(pos);
+                else
+                {
+                    Idt *newnum=new Idt;
+                    *(newnum)=calculate(changeToken(pos));
+                    if(newnum->assType==ERR)
+                    {
+                        Idt err;
+                        err.assType=ERR;
+                        return err;
+                    }
+                    num.push((Token*) newnum );
+                    opr.push(pos);
+                }
+            }
+        }
+        pos++;
+    }
+    if(opr.empty()&&num.cnt==1)
+    {
+        return changeToken(num.front());
+    }
+    else
+    {
+        Idt err;
+        err.assType=ERR;
+        return err;
+    }
 };

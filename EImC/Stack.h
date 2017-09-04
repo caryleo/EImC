@@ -9,6 +9,7 @@ const int STACK_INCREMENT = 10;		//增量大小
 
 class Stack {
 public:
+	int cnt;
 	Stack();
 	void push(Token * t);	//插入元素
 	void pop();				//删除栈顶元素

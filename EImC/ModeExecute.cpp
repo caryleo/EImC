@@ -7,13 +7,24 @@
 using namespace std;
 
 extern vector<Token*>buffer;
+extern vector<Block*>CodeStore;
 
-int ModeExecute::change(Token * t)
+void ModeExecute::init()
 {
-	for (int i = 0; i < buffer.size(); i++) {
-		if (buffer[i] == t) {
-			return i;
+	for (int i = 0; i < CodeStore.size(); i++) {
+		if (CodeStore[i]->tag == FUNC) {
+			SoFunc * func = (SoFunc *)CodeStore[i];
+			if (queryMain(func)) {
+				ModeSyntexAnalysis mSA;
+				mSA.getHeadAndTail(func->top, func->bottom);
+			}
 		}
 	}
-	return -1;
 }
+
+bool ModeExecute::queryMain(SoFunc * corner)
+{
+	return corner->name == "main" && corner->paralist.size() == 0 ? true : false;
+}
+
+

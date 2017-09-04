@@ -13,7 +13,7 @@ Block::Block(Tag t)
 	tag = t;
 }
 
-SoWhile::SoWhile(Token * t, Token * b, Token * cETop, Token * cEBottom)
+SoWhile::SoWhile(int t, int b, int cETop, int cEBottom)
 {
 	tag = WHILE;
 	top = t;
@@ -22,7 +22,7 @@ SoWhile::SoWhile(Token * t, Token * b, Token * cETop, Token * cEBottom)
 	conditionExprBottom = cEBottom;
 }
 
-SoIf::SoIf(Token * t, Token * b, Token * jETop, Token * jEBottom)
+SoIf::SoIf(int t, int b, int jETop, int jEBottom)
 {
 	tag = IF;
 	top = t;
@@ -31,7 +31,7 @@ SoIf::SoIf(Token * t, Token * b, Token * jETop, Token * jEBottom)
 	judgeExprBottom = jEBottom;
 }
 
-SoElse::SoElse(Token * t, Token * b)
+SoElse::SoElse(int t, int b)
 {
 	tag = ELSE;
 	top = t;
@@ -45,20 +45,20 @@ SoFunc::SoFunc(string n, Tag r)
 	name = n;
 }
 
-AltExpr::AltExpr(Token * t, Token * b)
+AltExpr::AltExpr(int t, int b)
 {
 	tag = STATE;
 	top = t;
 	bottom = b;
 }
 
-Expr::Expr(Token * t, Token * b)
+Expr::Expr(int t, int b)
 {
 	tag = EXPR;
 	top = t;
 	bottom = b;
 }
-void ModeSyntexAnalysis::getHeadAndTail(Token *h,Token *t)
+void ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
     subStart=h;
     subEnd=t+1;
@@ -87,12 +87,23 @@ void ModeSyntexAnalysis::statement()
                  retStat();
                  break;
             case IDT:
-                 exprStat();
+                 distinguish();
                  break;
             default:
                  altExprStat();
         }
     }
+
+}
+void ModeSyntexAnalysis::distinguish()
+{
+    if()
+
+    Idt *tmp=(*Idt)look;
+    string tmpName=tmp1->name;
+
+
+
 
 }
 void ModeSyntexAnalysis::brkStat()
@@ -112,8 +123,7 @@ void ModeSyntexAnalysis::retStat()
 
 void ModeSyntexAnalysis::sMove()
 {
-	look = *it;//读入下一个词法记号
-    it++;
+	look = buffer[it++];//读入下一个词法记号
 }
 bool ModeSyntexAnalysis::match(Tag need)
 {
@@ -216,13 +226,87 @@ void ModeSyntexAnalysis::altExprStat()
     AltExpr now;
     now.tag=STATE;
     now.top=it;
+    Tag tmp;
     if(!match(KEY_INT))
+    {
         if(!match(KEY_REAL))
+        {
             if(!match(KEY_STRING))
             {
                 cout<<"Error"<<endl;
                 return ;
             }
+
+            else
+                tmp=KEY_STRING;
+        }
+        else
+            tmp=KEY_REAL;
+    }
+    else
+        tmp=KEY_INT;
+    if(look->tag==IDT)
+    {
+        Idt s1=(*Idt)look;
+        s1->name=look->name;
+        sMove();
+        if(match(ASSIGN))
+        {
+            Expr now = new Expr;
+            now->top=it-2;
+            while(!match(SEMICO)&&it<=subEnd)
+            {
+                sMove();
+                now->bottom=it;
+            }
+            if(it>subEnd)
+            {
+                cout<<"Error"<<endl;
+                return ;
+            }
+            CodeStore.push_back(now);
+            return ;
+        }
+        else if(match(LPAR))
+        {
+            SoFunc now=new Expr;
+            now->retType=tmp;
+            now->name=s1->name;
+            while(!match(RPAR))
+            {
+                if(match(IDT))
+                {
+
+                }
+                else
+                {
+                   Idt s=new Idt;
+
+                }
+            }
+            now->
+
+        }
+        else
+        {
+            cout<<"Error"<<endl;
+            return ;
+        }
+
+    }
+    else
+    {
+        cout<<"Error"<<endl;
+        return ;
+    }
+
+
+
+            {
+                cout<<"Error"<<endl;
+                return ;
+            }
+    else Tag=KEY_INT;
     while(!match(SEMICO)&&it!=subEnd)
     {
         now.bottom=it;

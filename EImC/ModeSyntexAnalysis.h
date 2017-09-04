@@ -50,7 +50,19 @@ public:
 	vector <Token*> paralist;	//参数列表
 	SoFunc(string n, Tag r);
 };
-
+class ModeSyntexAnalysis{
+public:
+    void sMove();
+    void match(Tag need);
+    void statement();
+    void whileStat();
+    void ifStat();
+    void elseStat();
+    void exprStat();
+    void altExprStat();
+    vector<Token*>::iterator it=subStart;
+    Token *look,*subEnd,*subStart;
+};
 
 #endif // !MODESYNTEXANALYSIS_H_
 #pragma once

@@ -7,7 +7,7 @@
 #include<string>
 #include<utility>
 using namespace std;
-// 使用方法
+// 判断算术表达式是否合法类：使用方法 
 // ExprJudge a(top,bottom)
 // a.ExprTest()   if return 1 right return 0 error
 class ExprJudge

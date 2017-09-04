@@ -5,12 +5,17 @@
 #include<vector>
 #include"EImC.h"
 using namespace std;
+//变量定义函数 使用方法
+// VarType test(top,bottom);
+// test.input();
+// 即可处理
+// 识别定义 int a; real b;
 class VarType
 {
 public:
 	VarType(int a, int b);
-	static void input(int top, int bottom); //top is the start and bottom is the end
-	static bool match(int m,Tag a);//match buffer数组里应该比较的那个元素的标签和想要匹配的标签
+	void input(); //top is the start and bottom is the end
+	//static bool match(int m,Tag a);//match buffer数组里应该比较的那个元素的标签和想要匹配的标签
 private:
 	int top;
 	int bottom;

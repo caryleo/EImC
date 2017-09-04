@@ -2,7 +2,17 @@
 
 class ExprIR
 {
+private:
+    Stack num;
+    Stack opr;
+    Token *pos
 public:
+    //入口
+    Idt exprEnter(Token *head,Token *tail);
+    //运算符计算
+    Idt calculate(Idt);
+    //Token->Idt
+    Idt changeToken(Token *);
     //获取变量值
     Tag getValType(Idt);
     string getStrVal(Idt);
@@ -26,7 +36,7 @@ public:
     //串操作：$连接 | #删一个字符
     Idt connect_opr(Idt,Idt);
     Idt deltail_opr(Idt);
-    //Idt delspecial_opr(Idt,Idt);
+    Idt delspecial_opr(Idt,Idt);
     //关系运算：>大于 | <小于 | >=大于等于 | <=小于等于 | ==恒等 | <>不等
     //int Greater(Idt,Idt);
     //int Greater_equal(Idt,Idt);

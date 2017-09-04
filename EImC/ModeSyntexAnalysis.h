@@ -53,14 +53,14 @@ public:
 class ModeSyntexAnalysis {
 public:
     void sMove();
-    void match(Tag need);
+    bool match(Tag need);
     void statement();
     void whileStat();
     void ifStat();
     void elseStat();
     void exprStat();
     void altExprStat();
-    void brtStat();
+    void brkStat();
     void conStat();
     void retStat();
     void getHeadAndTail(Token *h,Token *t);

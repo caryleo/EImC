@@ -65,7 +65,7 @@ void ModeSyntexAnalysis::getHeadAndTail(Token *h,Token *t)
 }
 void ModeSyntexAnalysis::statement()
 {
-    while(look!=(*subEnd))
+    while(look != subEnd)
     {
         switch(look->tag)
         {
@@ -97,7 +97,7 @@ void ModeSyntexAnalysis::statement()
 }
 void ModeSyntexAnalysis::brkStat()
 {
-    AltExpr now(subStart,subEnd);
+    AltExpr * now(subStart,subEnd);
     now.tag=KEY_BRK;
     CodeStore.push_back(now);
     return ;

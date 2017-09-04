@@ -13,7 +13,7 @@ Block::Block(Tag t)
 	tag = t;
 }
 
-SoWhile::SoWhile(int t, int b, int cETop, int cEBottom)
+SoWhile::SoWhile(Token * t, Token * b, Token * cETop, Token * cEBottom)
 {
 	tag = WHILE;
 	top = t;
@@ -22,7 +22,7 @@ SoWhile::SoWhile(int t, int b, int cETop, int cEBottom)
 	conditionExprBottom = cEBottom;
 }
 
-SoIf::SoIf(int t, int b, int jETop, int jEBottom)
+SoIf::SoIf(Token * t, Token * b, Token * jETop, Token * jEBottom)
 {
 	tag = IF;
 	top = t;
@@ -31,7 +31,7 @@ SoIf::SoIf(int t, int b, int jETop, int jEBottom)
 	judgeExprBottom = jEBottom;
 }
 
-SoElse::SoElse(int t, int b)
+SoElse::SoElse(Token * t, Token * b)
 {
 	tag = ELSE;
 	top = t;
@@ -45,14 +45,14 @@ SoFunc::SoFunc(string n, Tag r)
 	name = n;
 }
 
-AltExpr::AltExpr(int t, int b)
+AltExpr::AltExpr(Token * t, Token * b)
 {
 	tag = STATE;
 	top = t;
 	bottom = b;
 }
 
-Expr::Expr(int t, int b)
+Expr::Expr(Token * t, Token * b)
 {
 	tag = EXPR;
 	top = t;

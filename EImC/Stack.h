@@ -16,8 +16,8 @@ public:
 	bool empty();			//检查栈是否为空
 	~Stack();				//销毁整个栈
 private:
-	(Token*) * base;		//栈底
-	(Token*) * top;			//栈顶
+	Token ** base;		//栈底
+	Token ** top;			//栈顶
 	int stacksize;			//当前栈大小
 };
 

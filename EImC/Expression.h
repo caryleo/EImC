@@ -43,7 +43,23 @@ public:
     Token * neg_op(Token *);
 
     //字符串处理DOLLA, HASH
+    //定义$不改变原字符串的值，#删除字符对原字符串进行更改
     Token * connect_op(Token *,Token *);
     Token * delete_spec(Token *,Token *);
     Token * delete_tail(Token *);
+
+    //关系运算:>,< ,>=,<=,==,<>
+    //GT, GE, LT, LE, EQU, NEQU
+    Token * is_greater(Token *,Token *);
+    Token * not_less(Token *,Token *);
+    Token * is_less(Token *,Token *);
+    Token * not_greater(Token *,Token *);
+    Token * is_equal(Token *,Token *);
+    Token * not_equal(Token *,Token *);
+
+    //逻辑运算：&&与 | ||或 | !非
+    //AND, OR, NOT
+    Token * and_lop(Token *,Token *);
+    Token * or_lop(Token *,Token *);
+    Token * not_lop(Token *);
 };

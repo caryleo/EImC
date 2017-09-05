@@ -5,6 +5,8 @@
 #include <cstdlib>
 using namespace std;
 
+extern Stack RunTime;
+
 Stack::Stack() {
 	if (!(base = (Token **)malloc(STACK_INIT_SIZE * sizeof(Token *)))) {
 		exit(1);
@@ -70,6 +72,12 @@ Idt * Stack::query(string n)
 		p--;
 	}
 	return nullptr;
+}
+
+void Stack::sync(Token **& esp)
+{
+	esp == top;
+	return;
 }
 
 Stack::~Stack() {/*Ïú»Ù*/

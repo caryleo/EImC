@@ -99,3 +99,240 @@ bool ExprIR::judge_priority(Token* op_1,Token* op_2)
     else return 0;
 }
 
+//加法
+Token * ExprIR::add_op(Token * a,Token * b)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==STRING||getAsstype(b)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=getIntVal(a)+getIntVal(b);
+        }
+        else if(getAsstype(a)==RNUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)+getIntVal(b);
+        }
+        else if(getAsstype(a)==NUM&&getAsstype(b)==RNUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getIntVal(a)+getRealVal(b);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)+getRealVal(b);
+        }
+    }
+    return res;
+}
+
+//减法
+Token * ExprIR::sub_op(Token * a,Token * b)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==STRING||getAsstype(b)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=getIntVal(a)-getIntVal(b);
+        }
+        else if(getAsstype(a)==RNUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)-getIntVal(b);
+        }
+        else if(getAsstype(a)==NUM&&getAsstype(b)==RNUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getIntVal(a)-getRealVal(b);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)-getRealVal(b);
+        }
+    }
+    return res;
+}
+
+//乘法
+Token * ExprIR::mul_op(Token * a,Token * b)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==STRING||getAsstype(b)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=getIntVal(a)*getIntVal(b);
+        }
+        else if(getAsstype(a)==RNUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)*getIntVal(b);
+        }
+        else if(getAsstype(a)==NUM&&getAsstype(b)==RNUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getIntVal(a)*getRealVal(b);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)*getRealVal(b);
+        }
+    }
+    return res;
+}
+
+//除法
+Token * ExprIR::div_op(Token * a,Token * b)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(b)==NUM&&getIntVal(b)==0||getAsstype(b)==RNUM&&getRealVal(b)==0.0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
+    if(getAsstype(a)==STRING||getAsstype(b)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=getIntVal(a)/getIntVal(b);
+        }
+        else if(getAsstype(a)==RNUM&&getAsstype(b)==NUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)/getIntVal(b);
+        }
+        else if(getAsstype(a)==NUM&&getAsstype(b)==RNUM)
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getIntVal(a)/getRealVal(b);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a)/getRealVal(b);
+        }
+    }
+    return res;
+}
+
+//余
+Token * ExprIR::mod_op(Token *a,Token *b)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==NUM&&getAsstype(b)==NUM&&getIntVal(b)!=0)
+    {
+        TransIDT(res)->assType=NUM;
+        TransInt(res)->val=getIntVal(a)%getIntVal(b);
+    }
+    else
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    return res;
+}
+//正号
+Token * ExprIR::pos_op(Token * a)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=getIntVal(a);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=getRealVal(a);
+        }
+    }
+    return res;
+}
+
+//负号
+Token * ExprIR::neg_op(Token * a)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(a)==STRING)
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    else
+    {
+        if(getAsstype(a)==NUM)
+        {
+            TransIDT(res)->assType=NUM;
+            TransInt(res)->val=0-getIntVal(a);
+        }
+        else
+        {
+            TransIDT(res)->assType=RNUM;
+            TransReal(res)->val=0-getRealVal(a);
+        }
+    }
+    return res;
+}
+
+//字符串连接
+Token * ExprIR::connect_op(Token * s1,Token *s2)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(s1)==STRING&&getAsstype(s2)==STRING)
+    {
+        TransIDT(res)->assType=STRING;
+        TransStr(res)->str=getStrVal(s1)+getStrVal(s2);
+    }
+    else
+    {
+        TransIDT(res)->assType=ERR;
+    }
+    return res;
+}
+
+Token * delete_spec(Token *s,Token *pos)
+{
+    Token *res;
+    res->tag=IDT;
+    if(getAsstype(s)==STRING&&getAsstype(pos)==NUM)
+    {
+        TransIDT(res)->assType=STRING;
+    }
+}

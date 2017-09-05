@@ -55,13 +55,35 @@ void ModeExecute::commence(int top, int bottom)
 			break;
 		}
 		case IF: {//IfÊ½
-			Mode
+			ModeIf mIf(CodeStore[i]->top, CodeStore[i]->bottom);
+			mIf.runIf();
+			break;
 		}
-		case ELSE:
-		case WHILE:
-		case KEY_BRK:
-		case KEY_CON:
-		case KEY_RET:
+		case ELSE: {//ElseÊ½
+			ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
+			mElse.runElse();
+			break;
+		}
+		case WHILE: {//WhileÊ½
+			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom);
+			mWhile.runWhile();
+			break;
+		}
+		case KEY_BRK: {//breakÓï¾ä
+			BreakType bType(CodeStore[i]->top, CodeStore[i]->bottom);
+			bType.startBreak();
+			break;
+		}
+		case KEY_CON: {//continueÓï¾ä
+			ContinueType cType(CodeStore[i]->top, CodeStore[i]->bottom);
+			cType.startContinue();
+			break;
+		}
+		case KEY_RET: {//returnÓï¾ä
+			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
+			rType.startReturn();
+			break;
+		}
 		default:
 			break;
 		}

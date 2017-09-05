@@ -12,7 +12,8 @@ using namespace std;
 
 extern vector<Token*>buffer;
 extern vector<Block*>CodeStore;
-vector <Token *> ConstStore;
+vector <Token *> ConstStore;	//常量存储区
+vector <SoFunc *> FuncStore;	//函数语句块存储区
 Stack RunTime;					//运行栈
 Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
@@ -64,15 +65,39 @@ void ModeExecute::commence(int top, int bottom)
 				break;
 			}
 		}
+		case IF:
+		case Else:
+		case WHILE:
 		default:
 			break;
 		}
 	}
 }
 
-void ModeExecute::caller(SoFunc * func)
+void ModeExecute::caller(Caller * func)/*寻找对应的函数*/
 {
-
+	string name = func->name;
+	int cnt = func->paralist.size();
+	int ans = 0;
+	for (int i = 0; i < FuncStore.size(); i++) {
+		if ((FuncStore[i]->paralist.size() == cnt) && (name.compare(FuncStore[i]->name) == 0))
+		{
+			bool flag = true;
+			for (int j = 0; j < func->paralist.size(); j++) {
+				Idt * a = (Idt *)FuncStore[i]->paralist[j];
+				if (a->assType != func->paralist[j]->tag) {
+					flag = false;
+					break;
+				}
+			}
+			if (flag) {
+				ans = i;
+				break;
+			}
+		}
+	}
+	commence(FuncStore[ans]->top, FuncStore[ans]->bottom);
+	return;
 }
 
 

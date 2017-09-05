@@ -2,6 +2,7 @@
 #define MODEEXECUTE
 
 #include"EImC.h"
+#include "ModeSyntexAnalysis.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ public:
 	static void init();
 	static bool queryMain(SoFunc * corner);
 	static void commence(int top, int bottom);
-	static void caller(SoFunc * func);
+	static void caller(Caller * func);
 };
 #endif // !MODEEXECUTE_H_
 #pragma once

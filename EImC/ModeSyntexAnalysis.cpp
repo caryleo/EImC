@@ -1,8 +1,10 @@
-#include "stdafx.h"
+
+//#include "stdafx.h"
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
-
-vector <Block*> CodeStore;
+#include "ModeTokenAnalysis.h"
+std::vector<Token*>buffer;
+//vector <Block*> CodeStore;
 
 Block::Block()
 {
@@ -58,19 +60,15 @@ Expr::Expr(int t, int b)
 	top = t;
 	bottom = b;
 }
-<<<<<<< HEAD
 void ModeSyntexAnalysis::getHeadAndTail(int h,int t)
-=======
-void ModeSyntexAnalysis::getHeadAndTail(Token *h, Token *t)
->>>>>>> dd3093159baf3c545940eb3e518ffd0513ed3f22
 {
 	subStart = h;
 	subEnd = t;
+	it=h;
 }
 void ModeSyntexAnalysis::statement()
 {
-<<<<<<< HEAD
-    while(look != subEnd)
+    while(it != subEnd+1)
     {
         switch(look->tag)
         {
@@ -98,47 +96,33 @@ void ModeSyntexAnalysis::statement()
                  altExprStat();
         }
     }
-=======
-	while (look != subEnd)
-	{
-		switch (look->tag)
-		{
-		case KEY_WHILE:
-			whileStat();
-			break;
-		case KEY_IF:
-			ifStat();
-			break;
-		case KEY_ELSE:
-			elseStat();
-			break;
-		case KEY_BRK:
-			brkStat();
-			break;
-		case KEY_CON:
-			conStat();
-		case KEY_RET:
-			retStat();
-			break;
-		case IDT:
-			exprStat();
-			break;
-		default:
-			altExprStat();
-		}
-	}
->>>>>>> dd3093159baf3c545940eb3e518ffd0513ed3f22
-
 }
-void ModeSyntexAnalysis::distinguish()
+
+void ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
 {
+    /*
+    string nowName=((*Idt)look)->name;
+    if(match(LPAR))
+    {
+        SoFunc now=new
+        while(!match(RPAR))
+        {
+            if(look->tag==NUM||look->tag==IDT)
+
+        }
+    }
+    else
+    {
+        cout<<"Error"<<endl;
+        return ;
+    }
     if()
 
     Idt *tmp=(*Idt)look;
     string tmpName=tmp1->name;
 
 
-
+*/
 
 }
 void ModeSyntexAnalysis::brkStat()
@@ -178,15 +162,20 @@ void ModeSyntexAnalysis::outStat()
 }
 void ModeSyntexAnalysis::sMove()
 {
-<<<<<<< HEAD
 	look = buffer[it++];//读入下一个词法记号
-=======
-	look = *it;//读入下一个词法记号
-	it++;
->>>>>>> dd3093159baf3c545940eb3e518ffd0513ed3f22
 }
 bool ModeSyntexAnalysis::match(Tag need)
 {
+    if(need==TYPE)
+    {
+        if(match(KEY_REAL))
+            return 1;
+        if(match(KEY_STRING))
+            return 1;
+        if(match(KEY_INT))
+            return 1;
+        return 0;
+    }
 	if (look->tag == need)
 	{
 		sMove();
@@ -199,17 +188,17 @@ void ModeSyntexAnalysis::whileStat()//while语义分析
 {
 	match(KEY_WHILE);
 	SoWhile * now = new SoWhile(NULL, NULL, NULL, NULL);
-	now->conditionExprTop = *it;
+	now->conditionExprTop = it;
 	while (!match(LBRACE))
 	{
-		now->conditionExprBottom = *it;
+		now->conditionExprBottom = it;
 		sMove();
 	}
-	now->top = *it;
+	now->top = it;
 	int cnt = 1;
-	while (*it != subEnd || cnt != 0)
+	while (it != subEnd || cnt != 0)
 	{
-		now->bottom = *it;
+		now->bottom = it;
 		if (match(LBRACE))
 			cnt++;
 		else if (match(RBRACE))
@@ -217,7 +206,7 @@ void ModeSyntexAnalysis::whileStat()//while语义分析
 		else
 			sMove();
 	}
-	if (*it != subEnd || cnt != 0)
+	if (cnt != 0)
 	{
 		cout << "Error" << endl;
 		return;
@@ -229,17 +218,17 @@ void ModeSyntexAnalysis::ifStat()
 {
 	match(KEY_IF);
 	SoIf * now = new SoIf(NULL, NULL, NULL, NULL);
-	now->judgeExprTop = *it;
+	now->judgeExprTop = it;
 	while (!match(LBRACE))
 	{
-		now->judgeExprBottom = *it;
+		now->judgeExprBottom = it;
 		sMove();
 	}
-	now->top = *it;
+	now->top = it;
 	int cnt = 1;
-	while (*it != subEnd&&cnt != 0)
+	while (it != subEnd&&cnt != 0)
 	{
-		now->bottom = *it;
+		now->bottom = it;
 		if (match(LBRACE))
 			cnt++;
 		else if (match(RBRACE))
@@ -247,7 +236,7 @@ void ModeSyntexAnalysis::ifStat()
 		else
 			sMove();
 	}
-	if (*it != subEnd || cnt != 0)
+	if ( cnt != 0)
 	{
 		cout << "Error!!!" << endl;//报错模块
 		return;
@@ -260,12 +249,12 @@ void ModeSyntexAnalysis::elseStat()
 	match(KEY_ELSE);
 	SoElse * now = new SoElse(NULL, NULL);
 	now->tag = KEY_ELSE;
-	now->top = *it;
+	now->top = it;
 	match(LBRACE);
 	int cnt = 1;
-	while (*it != subEnd&&cnt != 0)
+	while (it != subEnd&&cnt != 0)
 	{
-		now->bottom = *it;
+		now->bottom = it;
 		if (match(LBRACE))
 			cnt++;
 		else if (match(RBRACE))
@@ -273,7 +262,7 @@ void ModeSyntexAnalysis::elseStat()
 		else
 			sMove();
 	}
-	if (*it != subEnd || cnt != 0)
+	if ( cnt != 0)
 	{
 		cout << "Error" << endl; //报错模块
 		return;
@@ -283,69 +272,39 @@ void ModeSyntexAnalysis::elseStat()
 }
 void ModeSyntexAnalysis::altExprStat()
 {
-<<<<<<< HEAD
-    AltExpr now;
-    now.tag=STATE;
-    now.top=it;
-    Tag tmp;
-    if(!match(KEY_INT))
+    string nowName;
+    Tag nowTag;
+    if(look->tag==KEY_INT||look->tag==KEY_STRING||look->tag==KEY_REAL)
     {
-        if(!match(KEY_REAL))
-        {
-            if(!match(KEY_STRING))
-            {
-                cout<<"Error"<<endl;
-                return ;
-            }
-
-            else
-                tmp=KEY_STRING;
-        }
-        else
-            tmp=KEY_REAL;
-    }
-    else
-        tmp=KEY_INT;
-    if(look->tag==IDT)
-    {
-        Idt s1=(*Idt)look;
-        s1->name=look->name;
+        nowTag=look->tag;
         sMove();
-        if(match(ASSIGN))
+        if(look->tag==IDT)
         {
-            Expr now = new Expr;
-            now->top=it-2;
-            while(!match(SEMICO)&&it<=subEnd)
+            nowName=((Idt*)look)->name;
+            sMove();
+            if(look->tag==LPAR)
             {
                 sMove();
-                now->bottom=it;
+                funStat(nowTag,nowName);
             }
-            if(it>subEnd)
+            else if(look->tag==ASSIGN)
             {
-                cout<<"Error"<<endl;
-                return ;
-            }
-            CodeStore.push_back(now);
-            return ;
-        }
-        else if(match(LPAR))
-        {
-            SoFunc now=new Expr;
-            now->retType=tmp;
-            now->name=s1->name;
-            while(!match(RPAR))
-            {
-                if(match(IDT))
+                int st=it-2;
+                sMove();
+                int en=-1;
+                while(!match(SEMICO)&&(it!=subEnd+1))
                 {
-
+                    en=it;
+                    sMove();
                 }
-                else
+                if(it==subEnd+1)
                 {
-                   Idt s=new Idt;
-
+                    cout<<"Error"<<endl;
+                    return ;
                 }
+                AltExpr *now=new AltExpr(st,en);
+                CodeStore.push_back(now);
             }
-            now->
 
         }
         else
@@ -353,57 +312,95 @@ void ModeSyntexAnalysis::altExprStat()
             cout<<"Error"<<endl;
             return ;
         }
-
     }
     else
     {
         cout<<"Error"<<endl;
         return ;
     }
+}
 
 
-
+void ModeSyntexAnalysis::funStat(Tag retType,string name)
+{
+    SoFunc *now =new SoFunc(name,retType);
+    now->tag=FUNC;
+    Idt *q;
+    while(it!=(subEnd+1))
+    {
+        if(look->tag==KEY_INT||look->tag==KEY_REAL||look->tag==KEY_STRING)
+        {
+            q=new Idt;
+            q->assType=look->tag;
+            sMove();
+            if(look->tag==IDT)
+            {
+                q->name=((Idt*)look)->name;
+                now->paralist.push_back(q);
+                now->bottom=it;
+                sMove();
+                if(look->tag==COMMA)
+                {
+                    sMove();
+                    continue;
+                }
+                if(look->tag==RPAR)
+                    break;
+                cout<<"Error"<<endl;
+                return ;
+            }
+            else
             {
                 cout<<"Error"<<endl;
                 return ;
             }
-    else Tag=KEY_INT;
-    while(!match(SEMICO)&&it!=subEnd)
+        }
+        else
+        {
+            cout<<"Error"<<endl;
+            return ;
+        }
+    }
+    if(it==subEnd+1)
     {
-        now.bottom=it;
-        sMove();
+        cout<<"Error"<<endl;
+        return;
+    }
+    match(RPAR);
+    if(!match(LBRACE))
+    {
+        cout<<"Error"<<endl;
+        return ;
+    }
+    now->top=it;
+    int cnt=1;
+    while(cnt!=0&&(it!=subEnd+1))
+    {
+        now->bottom=it;
+        if(match(LBRACE))
+            cnt++;
+        else if(match(RBRACE))
+            cnt--;
+        else
+            sMove();
+    }
+    if(cnt)
+    {
+        cout<<"Error"<<endl;
+        return ;
     }
     CodeStore.push_back(now);
-    return ;
-=======
-	AltExpr * now = new AltExpr(NULL, NULL);
-	now->tag = STATE;
-	now->top = *it;
-	if (!match(KEY_INT))
-		if (!match(KEY_REAL))
-			if (!match(KEY_STRING))
-			{
-				cout << "Error" << endl;
-				return;
-			}
-	while (!match(SEMICO) && *it != subEnd)
-	{
-		now->bottom = *it;
-		sMove();
-	}
-	CodeStore.push_back(now);
-	return;
->>>>>>> dd3093159baf3c545940eb3e518ffd0513ed3f22
 }
+
 void ModeSyntexAnalysis::exprStat()
 {
 	match(IDT);
 	Expr * now = new Expr(NULL, NULL);
 	now->tag = EXPR;
-	now->top = *it;
-	while (!match(SEMICO) && *it != subEnd)
+	now->top = it;
+	while (!match(SEMICO) && it != subEnd)
 	{
-		now->bottom = *it;
+		now->bottom = it;
 		sMove();
 	}
 	CodeStore.push_back(now);

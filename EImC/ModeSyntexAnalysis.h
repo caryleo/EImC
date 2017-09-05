@@ -52,23 +52,6 @@ public:
 };
 class ModeSyntexAnalysis {
 public:
-<<<<<<< HEAD
-    void sMove();
-    bool match(Tag need);
-    void statement();
-    void whileStat();
-    void ifStat();
-    void elseStat();
-    void exprStat();
-    void altExprStat();
-    void brkStat();
-    void conStat();
-    void retStat();
-    void distinguish();
-    void getHeadAndTail(Token *h,Token *t);
-    vector<Token*>::iterator it=subStart;
-    Token *look,*subEnd,*subStart;
-=======
 	void sMove();
 	bool match(Tag need);
 	void statement();
@@ -82,10 +65,13 @@ public:
 	void retStat();
 	void inStat();
 	void outStat();
+	void distinguish();
+	void funStat(Tag retType,string name);
 	void getHeadAndTail(int h, int t);
-	int look, subEnd, subStart, it;
->>>>>>> dd3093159baf3c545940eb3e518ffd0513ed3f22
+	int subEnd, subStart, it;
+	Token *look;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_
 #pragma once
+

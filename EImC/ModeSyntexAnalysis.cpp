@@ -46,7 +46,7 @@ SoFunc::SoFunc(string n, Tag r)
 	retType = r;
 	name = n;
 }
-Caller :: Caller {
+Caller :: Caller(string n, vector<Token *> t) {
     tag = CALL;
 	string name=n;
 	paralist=t;

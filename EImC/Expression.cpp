@@ -1,7 +1,7 @@
 #include"stdafx.h"
 #include "Expression.h"
-
-Idt changeToken(Token *t){
+#include "Stack.h"
+Idt ExprIR::changeToken(Token *t){
     Idt IDT= *(Idt *) t;
     return IDT;
 }
@@ -312,4 +312,121 @@ Idt ExprIR::deltail_opr(Idt s){
     pos.t=ip;
     s1=delspecial_opr(s,pos);
     return s1;
+};
+
+Idt ExprIR::calculate(Idt op)
+{
+    Idt result;
+    //#,正负号特殊考虑一下。
+    //if(isspecial_pos(op))
+    //{
+
+    //}
+    //else if(isspecial_neg(op))
+    //{
+
+    //}
+    //else if(isspecial_del(op))
+    //else
+    //{
+        if(num.empty()==0)
+        {
+            result.assType=ERR;
+            return result;
+        };
+        Token * num1=num.front();
+        num.pop();
+        if(num.empty()==0)
+        {
+            result.assType=ERR;
+            return result;
+        };
+        Token * num2=num.front();
+        num.pop();
+        switch(op.assType)
+        {
+        case ADD:
+            {
+                result= add_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case SUB:
+            {
+                result= sub_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case MUL:
+            {
+                result= mul_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case DIV:
+            {
+                result= div_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case MOD:
+            {
+                result= mod_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        }
+        case DOLLA:
+            {
+                result=connect_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        case HASH:
+            {
+                result=delspecial_opr(changeToken(num1),changeToken(num2));
+                break;
+            }
+        opr.pop();
+        return result;
+    //}
+}
+
+Idt ExprIR::exprEnter(Token *head,Token *tail){
+    pos=head;
+    while(pos<=tail){
+        if(getValType(changeToken(pos))==KEY_INT)
+            num.push(pos);
+        else if(getValType(changeToken(pos))==KEY_REAL)
+            num.push(pos);
+        else if(getValType(changeToken(pos))==KEY_STRING)
+            num.push(pos);
+        else
+        {
+            if(opr.empty()==0) opr.push(pos);
+            else
+            {
+                if(judge_priority(changeToken(pos),changeToken(opr.front()))==1)
+                    opr.push(pos);
+                else
+                {
+                    Idt *newnum=new Idt;
+                    *(newnum)=calculate(changeToken(pos));
+                    if(newnum->assType==ERR)
+                    {
+                        Idt err;
+                        err.assType=ERR;
+                        return err;
+                    }
+                    num.push((Token*) newnum );
+                    opr.push(pos);
+                }
+            }
+        }
+        pos++;
+    }
+    if(opr.empty()&&num.cnt==1)
+    {
+        return changeToken(num.front());
+    }
+    else
+    {
+        Idt err;
+        err.assType=ERR;
+        return err;
+    }
 };

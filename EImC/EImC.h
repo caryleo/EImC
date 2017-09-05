@@ -8,7 +8,7 @@ enum Tag {
 	ERR,									//错误、异常
 	END,									//文件结束标记
 	IDT,									//标识符
-	KEY_INT, KEY_REAL, KEY_STRING,			//数据类型关键字：int、real、string
+	TYPE,KEY_INT, KEY_REAL, KEY_STRING,			//数据类型关键字：int、real、string
 	NUM, RNUM, STRING,						//数据常量
 	AND, OR, NOT,							//逻辑运算符
 	ADD, SUB, MUL, DIV, MOD,				//算数运算符

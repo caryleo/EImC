@@ -65,9 +65,13 @@ public:
 	void retStat();
 	void inStat();
 	void outStat();
+	void distinguish();
+	void funStat(Tag retType,string name);
 	void getHeadAndTail(int h, int t);
-	int look, subEnd, subStart, it;
+	int subEnd, subStart, it;
+	Token *look;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_
 #pragma once
+

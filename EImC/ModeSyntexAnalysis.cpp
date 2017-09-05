@@ -410,5 +410,5 @@ void ModeSyntexAnalysis::exprStat()
 Caller::Caller(string n, vector<Token*> t)
 {
 	name = n;
-
+	paralist = t;
 }

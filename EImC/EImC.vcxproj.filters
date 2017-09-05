@@ -63,6 +63,24 @@
     <ClInclude Include="FuncType.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ModeIf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeElse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeWhile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ContinueType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -108,6 +126,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="FuncType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeWhile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeIf.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeElse.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ContinueType.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

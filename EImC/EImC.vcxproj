@@ -146,11 +146,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BreakType.h" />
+    <ClInclude Include="ContinueType.h" />
     <ClInclude Include="EImC.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExprJudge.h" />
     <ClInclude Include="FuncType.h" />
     <ClInclude Include="ModeAssign.h" />
+    <ClInclude Include="ModeElse.h" />
+    <ClInclude Include="ModeIf.h" />
+    <ClInclude Include="ModeWhile.h" />
+    <ClInclude Include="ReturnType.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="VarType.h" />
     <ClInclude Include="ModeExecute.h" />
@@ -163,11 +169,17 @@
     <ClInclude Include="ModeRead.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BreakType.cpp" />
+    <ClCompile Include="ContinueType.cpp" />
     <ClCompile Include="EImC.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="ExprJudge.cpp" />
     <ClCompile Include="FuncType.cpp" />
     <ClCompile Include="ModeAssign.cpp" />
+    <ClCompile Include="ModeElse.cpp" />
+    <ClCompile Include="ModeIf.cpp" />
+    <ClCompile Include="ModeWhile.cpp" />
+    <ClCompile Include="ReturnType.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="VarType.cpp" />
     <ClCompile Include="ModeExecute.cpp" />

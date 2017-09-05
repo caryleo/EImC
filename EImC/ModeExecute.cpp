@@ -30,11 +30,6 @@ void ModeExecute::init()
 	}
 }
 
-bool ModeExecute::queryMain(SoFunc * corner)
-{
-	return corner->name == "main" && corner->paralist.size() == 0 ? true : false;
-}
-
 void ModeExecute::commence(int top, int bottom)
 {
 	for (int i = top; i <= bottom; i++) {
@@ -66,7 +61,7 @@ void ModeExecute::commence(int top, int bottom)
 			}
 		}
 		case IF:
-		case Else:
+		case ELSE:
 		case WHILE:
 		default:
 			break;
@@ -96,10 +91,10 @@ void ModeExecute::caller(Caller * func)/*寻找对应的函数*/
 			}
 		}
 	}
+	ModeSyntexAnalysis mSA;
+	mSA.getHeadAndTail(0, buffer.size() - 1);
 	commence(FuncStore[ans]->top, FuncStore[ans]->bottom);
 	return;
 }
-
-
 
 

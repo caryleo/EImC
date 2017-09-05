@@ -51,6 +51,27 @@ bool Stack::empty() {/*ÅÐ¶ÏÕ»ÊÇ·ñÎª¿Õ*/
 	return top == base ? true : false;
 }
 
+int Stack::size()
+{
+	return cnt;
+}
+
+Idt * Stack::query(string n)
+{
+	Token ** p = top;
+	while (p != base) {
+		if ((*p)->tag == IDT) {
+			Idt * q = (Idt*)(*p);
+			string name = q->name;
+			if (n.compare(name) == 0) {
+				return q;
+			}
+		}
+		p--;
+	}
+	return nullptr;
+}
+
 Stack::~Stack() {/*Ïú»Ù*/
 	free(base);
 }

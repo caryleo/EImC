@@ -7,10 +7,14 @@
 #include "SoIn.h"
 #include "SoOut.h"
 #include "ModeAssign.h"
+#include "Stack.h"
 using namespace std;
 
 extern vector<Token*>buffer;
 extern vector<Block*>CodeStore;
+vector <Token *> ConstStore;
+Stack RunTime;					//运行栈
+Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
 void ModeExecute::init()
 {
@@ -44,14 +48,17 @@ void ModeExecute::commence(int top, int bottom)
 			case KEY_OUT: SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom); break;
 			case KEY_INT:
 			case KEY_REAL:
-			case KEY_STRING: {
+			case KEY_STRING: {//默认是定义式
 				VarType test(CodeStore[i]->top, CodeStore[i]->bottom);
 				test.input();
 				break;
 			}
-			case IDT: {
+			case IDT: {//默认是赋值式
 				ModeAssign test(CodeStore[i]->top, CodeStore[i]->bottom);
 				test.Fuzhi();
+			}
+			case CALL: {
+
 			}
 			default:
 				break;
@@ -62,5 +69,12 @@ void ModeExecute::commence(int top, int bottom)
 		}
 	}
 }
+
+void ModeExecute::caller(SoFunc * func)
+{
+
+}
+
+
 
 

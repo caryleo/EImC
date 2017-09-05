@@ -47,9 +47,20 @@ class SoFunc : public Block {/*函数语句块类*/
 public:
 	string name;
 	Tag retType;				//返回值类型
+	bool isImple;
 	vector <Token*> paralist;	//参数列表
 	SoFunc(string n, Tag r);
 };
+
+class Caller : public Block {
+public:
+	string name;
+	vector <Token *> paralist;
+	Caller(string n, vector<Token *> t);
+};
+
+//fun(a, 6);
+
 class ModeSyntexAnalysis {
 public:
 	void sMove();

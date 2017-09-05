@@ -1,10 +1,10 @@
 
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
 #include "ModeTokenAnalysis.h"
 std::vector<Token*>buffer;
-//vector <Block*> CodeStore;
+vector <Block*> CodeStore;
 
 Block::Block()
 {
@@ -407,3 +407,8 @@ void ModeSyntexAnalysis::exprStat()
 	return;
 }
 
+Caller::Caller(string n, vector<Token*> t)
+{
+	name = n;
+
+}

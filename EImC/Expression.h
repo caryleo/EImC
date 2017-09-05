@@ -37,4 +37,13 @@ public:
     Token * mul_op(Token *,Token *);
     Token * div_op(Token *,Token *);
     Token * mod_op(Token *,Token *);
+
+    //单目算数运算符：正负号规定正负号要带括号例如（-a）
+    Token * pos_op(Token *);
+    Token * neg_op(Token *);
+
+    //字符串处理DOLLA, HASH
+    Token * connect_op(Token *,Token *);
+    Token * delete_spec(Token *,Token *);
+    Token * delete_tail(Token *);
 };

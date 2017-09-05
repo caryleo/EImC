@@ -46,6 +46,11 @@ SoFunc::SoFunc(string n, Tag r)
 	retType = r;
 	name = n;
 }
+Caller :: Caller {
+    tag = CALL;
+	string name=n;
+	paralist=t;
+};
 
 AltExpr::AltExpr(int t, int b)
 {
@@ -131,7 +136,7 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
         now->top=it-1;
         match(LPAR);
         int cnt=1;
-        while((it!=subEnd+1)&&!match(RPAR))
+        while((it!=subEnd+1)&&(!match(RPAR)))
         {
             now->bottom=it;
             sMove();
@@ -245,12 +250,13 @@ bool ModeSyntexAnalysis::match(Tag need)
 	else
 		return 0;
 }
-bool ModeSyntexAnalysis::whileStat()//while语义分析,
+bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 {
 	SoWhile * now = new SoWhile(0, 0, 0, 0);
+	now->tag=KEY_WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
-	while ((it!=subEnd+1)&&!match(LBRACE))
+	while ((it!=subEnd+1)&&(!match(LBRACE)))
 	{
 		now->conditionExprBottom = it;
 		sMove();
@@ -258,7 +264,7 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,
 	if(it==subEnd+1)   return 0;
 	now->top = it;
 	int cnt = 1;
-	while (it != subEnd+1 || cnt != 0)
+	while (it != subEnd+1 && cnt != 0)
 	{
 		now->bottom = it;
 		if (match(LBRACE))
@@ -268,23 +274,26 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,
 		else
 			sMove();
 	}
+	(now->bottom)=(now->bottom)-1;
 	if(it==subEnd+1) return 0;
 	CodeStore.push_back(now);
-	return;
+	return 1;
 }
-bool ModeSyntexAnalysis::ifStat()//if语句分析
+bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 {
-	match(KEY_IF);
 	SoIf * now = new SoIf(0, 0, 0, 0);
+	now->tag=KEY_IF;
+    match(KEY_IF);
 	now->judgeExprTop = it;
-	while (!match(LBRACE))
+	while ((it!=subEnd+1)&&(!match(LBRACE)))
 	{
 		now->judgeExprBottom = it;
 		sMove();
 	}
+	if(it==subEnd+1) return 0;
 	now->top = it;
 	int cnt = 1;
-	while (it != subEnd&&cnt != 0)
+	while (it != subEnd+1&&cnt != 0)
 	{
 		now->bottom = it;
 		if (match(LBRACE))
@@ -294,23 +303,20 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析
 		else
 			sMove();
 	}
-	if ( cnt != 0)
-	{
-		cout << "Error!!!" << endl;//报错模块
-		return;
-	}
+	(now->bottom)=(now->bottom)-1;
+	if (it==subEnd+1)
+        return 0;
 	CodeStore.push_back(now);
-	return;
+	return 1;
 }
-void ModeSyntexAnalysis::elseStat()
+bool ModeSyntexAnalysis::elseStat()
 {
 	match(KEY_ELSE);
-	SoElse * now = new SoElse(NULL, NULL);
+	if(!match(LBRACE)) return 0;
+	SoElse * now = new SoElse(it, 0);
 	now->tag = KEY_ELSE;
-	now->top = it;
-	match(LBRACE);
 	int cnt = 1;
-	while (it != subEnd&&cnt != 0)
+	while ((it != subEnd+1)&&cnt != 0)
 	{
 		now->bottom = it;
 		if (match(LBRACE))
@@ -320,15 +326,12 @@ void ModeSyntexAnalysis::elseStat()
 		else
 			sMove();
 	}
-	if ( cnt != 0)
-	{
-		cout << "Error" << endl; //报错模块
-		return;
-	}
+	(now->bottom)=(now->bottom)-1;
+	if ( it==subEnd+1) return 0;
 	CodeStore.push_back(now);
-	return;
+	return 1;
 }
-void ModeSyntexAnalysis::altExprStat()
+bool ModeSyntexAnalysis::altExprStat() //区分函数定义与声明、变量声明与定义语句块
 {
     string nowName;
     Tag nowTag;
@@ -340,12 +343,12 @@ void ModeSyntexAnalysis::altExprStat()
         {
             nowName=((Idt*)look)->name;
             sMove();
-            if(look->tag==LPAR)
+            if(look->tag==LPAR)    //函数定义与声明
             {
                 sMove();
-                funStat(nowTag,nowName);
+                if(!funStat(nowTag,nowName)) return 0;
             }
-            else if(look->tag==ASSIGN)
+            else if(look->tag==ASSIGN)  //变量声明与定义
             {
                 int st=it-2;
                 sMove();
@@ -355,31 +358,24 @@ void ModeSyntexAnalysis::altExprStat()
                     en=it;
                     sMove();
                 }
-                if(it==subEnd+1)
-                {
-                    cout<<"Error"<<endl;
-                    return ;
-                }
+                if(it==subEnd+1) return 0;
                 AltExpr *now=new AltExpr(st,en);
                 CodeStore.push_back(now);
+                return 1;
             }
+            else
+                return 0;
 
         }
         else
-        {
-            cout<<"Error"<<endl;
-            return ;
-        }
+            return 0;
     }
     else
-    {
-        cout<<"Error"<<endl;
-        return ;
-    }
+        return 0;
 }
 
 
-void ModeSyntexAnalysis::funStat(Tag retType,string name)
+bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
 {
     SoFunc *now =new SoFunc(name,retType);
     now->tag=FUNC;
@@ -403,33 +399,18 @@ void ModeSyntexAnalysis::funStat(Tag retType,string name)
                     continue;
                 }
                 if(look->tag==RPAR)
+                {
+                    sMove();
                     break;
-                cout<<"Error"<<endl;
-                return ;
+                }
+                return 0;
             }
-            else
-            {
-                cout<<"Error"<<endl;
-                return ;
-            }
+            else return 0;
         }
-        else
-        {
-            cout<<"Error"<<endl;
-            return ;
-        }
+        else   return 0;
     }
-    if(it==subEnd+1)
-    {
-        cout<<"Error"<<endl;
-        return;
-    }
-    match(RPAR);
-    if(!match(LBRACE))
-    {
-        cout<<"Error"<<endl;
-        return ;
-    }
+    if(it==subEnd+1)   return 0;
+    if(!match(LBRACE))  return 0;
     now->top=it;
     int cnt=1;
     while(cnt!=0&&(it!=subEnd+1))
@@ -442,26 +423,9 @@ void ModeSyntexAnalysis::funStat(Tag retType,string name)
         else
             sMove();
     }
-    if(cnt)
-    {
-        cout<<"Error"<<endl;
-        return ;
-    }
+    if(it!=subEnd+1) return 0;
     CodeStore.push_back(now);
+    return 1;
 }
 
-void ModeSyntexAnalysis::exprStat()
-{
-	match(IDT);
-	Expr * now = new Expr(NULL, NULL);
-	now->tag = EXPR;
-	now->top = it;
-	while (!match(SEMICO) && it != subEnd)
-	{
-		now->bottom = it;
-		sMove();
-	}
-	CodeStore.push_back(now);
-	return;
-}
 

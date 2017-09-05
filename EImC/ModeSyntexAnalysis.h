@@ -69,7 +69,6 @@ public:
 	bool whileStat();
 	bool ifStat();
 	bool elseStat();
-	bool exprStat();
 	bool altExprStat();
 	bool brkStat();
 	bool conStat();

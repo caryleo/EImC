@@ -3,9 +3,12 @@
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"
 #include"ModeAssign.h"
+#include"ModeExecute.h"
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
+
+extern vector<Token*>ConstStore;
 
 VarType::VarType(int a, int b)
 {
@@ -31,7 +34,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = KEY_INT;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 
 				temp++;
 				continue;
@@ -69,7 +72,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = KEY_REAL;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				temp++;
 				continue;
 			}
@@ -104,7 +107,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
-				idt->assType = KEY_STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
 				temp++;
 				continue;
 			}
@@ -134,13 +137,6 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 	}
 	
 }
-// bool VarType::match(int m, Tag a)
-//{
-//	Idt *p = (Idt*)buffer.at(m);
-//	if (p->t->tag == a)
-//		return true;
-//	else
-//		return false;
-//}
+
 
 

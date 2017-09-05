@@ -4,8 +4,9 @@
 #include"ModeTokenAnalysis.h"
 #include"ModeAssign.h"
 #include"Expression.h"
+#include"ModeExecute.h"
 extern vector<Token*>buffer;
-
+// 问题：表达式计算如何调用 ？？？
 ModeAssign::ModeAssign(int a, int b)
 {
 	top = a;
@@ -42,7 +43,7 @@ void ModeAssign::Fuzhi()
 	}
 	else
 	{
-		// 调用算术表达式 ？？？？ 到底如何调用
+		// 调用算术表达式的值 ？？？？ 到底如何调用
 		// 算术表达式的开始和结束时 expr_top & expr_bottom
 		// 将算术表达式的值赋值给等式右边的 buffer[idt]
 		// question： 表达式的返回值 以及 类型
@@ -51,19 +52,20 @@ void ModeAssign::Fuzhi()
 		ExprIR a;
 		Idt result = a.exprEnter(head, tail);
 		temp = expr_top;
-		while (temp>=top)
+		// 考虑连等的情况
+		switch (result.assType)
 		{
-			if (buffer[temp]->tag == IDT)
+		case NUM:
+		{
+			int num = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
+			temp = expr_top-1;
+			while (temp>=top)
 			{
-				switch (result.assType)
+				if (buffer[temp]->tag==IDT)
 				{
-				case KEY_INT:
-				{
-					// 等式左右类型不一样怎么处理 如何报错
-					int num = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
-					Token* token = buffer[idt];
-					Idt* idt = (Idt*)token; //被赋值的对象
-					if (idt->assType == KEY_INT)
+					Token* token = buffer[temp];
+					Idt* idt = (Idt*)token; 
+					if (idt->assType == NUM)
 					{
 						SoInt*hu = (SoInt*)idt->t;
 						hu->val = num;
@@ -73,14 +75,22 @@ void ModeAssign::Fuzhi()
 						cout << "Error!!!(expression assignment matching error)" << endl;
 					}
 				}
-				case KEY_REAL:
+				temp--;
+			}
+		}
+		case RNUM:
+		{
+			float num = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
+			temp = expr_top - 1;
+			while (temp >= top)
+			{
+				if (buffer[temp]->tag == IDT)
 				{
-					float num = a.getRealVal(result);
-					Token* token = buffer[idt];
-					Idt* idt = (Idt*)token; //被赋值的对象
-					if (idt->assType == KEY_REAL)
+					Token* token = buffer[temp];
+					Idt* idt = (Idt*)token;
+					if (idt->assType == RNUM)
 					{
-						SoReal*hu = (SoReal*)idt->t;
+						SoInt*hu = (SoInt*)idt->t;
 						hu->val = num;
 
 					}
@@ -88,80 +98,40 @@ void ModeAssign::Fuzhi()
 						cout << "Error!!!(expression assignment matching error)" << endl;
 					}
 				}
-				case KEY_STRING:
+				temp--;
+			}
+		}
+		case STRING:
+		{
+			string numm = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
+			temp = expr_top - 1;
+			while (temp >= top)
+			{
+				if (buffer[temp]->tag == IDT)
 				{
-
-					string strs = a.getStrVal(result);
-					Token* token = buffer[idt];
-					Idt* idt = (Idt*)token; //被赋值的对象
-					if (idt->tag == KEY_STRING)
+					Token* token = buffer[temp];
+					Idt* idt = (Idt*)token;
+					if (idt->assType == STRING)
 					{
 						SoString*hu = (SoString*)idt->t;
-						hu->str = strs;
+						hu->str = numm;
 
 					}
 					else {
 						cout << "Error!!!(expression assignment matching error)" << endl;
 					}
 				}
-				default:
-					break;
-				}
+				temp--;
 			}
-			temp--;
 		}
-	}
+
+		default:
+			break;
+		}
+
 	//// 调用算术表达式 ？？？？ 到底如何调用
 	//// 算术表达式的开始和结束时 expr_top & expr_bottom
 	//// 将算术表达式的值赋值给等式右边的 buffer[idt]
 	//// question： 表达式的返回值 以及 类型
-	//Token*head = buffer[expr_top];
-	//Token*tail = buffer[expr_bottom];
-	//ExprIR a;
-	//Idt result=a.exprEnter(head, tail);
-	//switch (result.assType)
-	//{
-	//case KEY_INT:
-	//{
-	//	// 等式左右类型不一样怎么处理 如何报错
-	//	int num = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
-	//	Token* token = buffer[idt];
-	//	Idt* idt = (Idt*)token; //被赋值的对象
-	//	if (idt->assType==KEY_INT)
-	//	{
-	//		SoInt*hu = (SoInt*)idt->t;
-	//		hu->val = num;
-
-	//	}
-	//}
-	//case KEY_REAL:
-	//{
-	//	float num = a.getRealVal(result);
-	//	Token* token = buffer[idt];
-	//	Idt* idt = (Idt*)token; //被赋值的对象
-	//	if (idt->assType == KEY_REAL)
-	//	{
-	//		SoReal*hu = (SoReal*)idt->t;
-	//		hu->val = num;
-
-	//	}
-	//}
-	//case KEY_STRING:
-	//{
-
-	//	string strs= a.getStrVal(result);
-	//	Token* token = buffer[idt];
-	//	Idt* idt = (Idt*)token; //被赋值的对象
-	//	if (idt->tag == KEY_STRING)
-	//	{
-	//		SoString*hu = (SoString*)idt->t;
-	//		hu->str = strs;
-
-	//	}
-	//}
-	//default:
-	//	break;
-	//}
-
 
 }

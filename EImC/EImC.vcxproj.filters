@@ -57,6 +57,12 @@
     <ClInclude Include="ExprJudge.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ModeAssign.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FuncType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -96,6 +102,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ExprJudge.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeAssign.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FuncType.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

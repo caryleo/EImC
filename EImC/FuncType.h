@@ -16,7 +16,6 @@ class FuncType
 public:
 	FuncType(int a,int b);
 	void Func();
-	vector <Token*>paralist;
 private:
 	int top;
 	int bottom;

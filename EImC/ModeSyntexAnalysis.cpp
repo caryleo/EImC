@@ -3,7 +3,7 @@
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
 #include "ModeTokenAnalysis.h"
-std::vector<Token*>buffer;
+extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//Óï¾ä¿é´æ´¢Çø
 
 Block::Block()
@@ -71,7 +71,17 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 	subStart = h;
 	subEnd = t;
 	it=h;
-	return statement();
+	look=buffer[h];
+	if(statement())
+    {
+        cout<<"Syntex Analysis sucess!"<<endl;
+        return 1;
+    }
+    else
+    {
+        cout<<"Error"<<endl;
+        return 0;
+    }
 }
 
 bool ModeSyntexAnalysis::statement()
@@ -82,41 +92,50 @@ bool ModeSyntexAnalysis::statement()
         {
             case KEY_WHILE:  //whileÓï¾ä¿é
                 {
+                    cout<<"while"<<endl;
                     if(whileStat()) break;
                     else return 0;
+
                 }
             case KEY_IF:    //ifÓï¾ä¿é
                 {
+                    cout<<"if"<<endl;
                     if(ifStat()) break;
                     else return 0;
                 }
             case KEY_ELSE:      //elseÓï¾ä¿é
                 {
+                    cout<<"else"<<endl;
                     if(elseStat()) break;
                     else return 0;
                 }
             case KEY_BRK:       //breakÓï¾ä¿é
                 {
+                    cout<<"break"<<endl;
                     if(brkStat()) break;
                     else return 0;
                 }
             case KEY_CON:       //continueÓï¾ä¿é
                 {
+                    cout<<"continue"<<endl;
                     if(conStat()) break;
                     else return 0;
                 }
             case KEY_RET:       //returnÓï¾ä¿é
                 {
+                    cout<<"return"<<endl;
                     if(retStat()) break;
                     else return 0;
                 }
             case IDT:       //º¯Êýµ÷ÓÃ¡¢±í´ïÊ½Óï¾ä¿é
                 {
+                    cout<<"idt"<<endl;
                     if(distinguish()) break;
                     else return 0;
                 }
             default:    //º¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿é
                 {
+                    cout<<"altExpr"<<endl;
                     if(altExprStat()) break;
                     else return 0;
                 }
@@ -228,7 +247,9 @@ bool ModeSyntexAnalysis::outStat()//outÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_OU
 }
 void ModeSyntexAnalysis::sMove()
 {
-	look = buffer[it++];//¶ÁÈëÏÂÒ»¸ö´Ê·¨¼ÇºÅ
+    it++;
+	look = buffer[it];//¶ÁÈëÏÂÒ»¸ö´Ê·¨¼ÇºÅ
+
 }
 bool ModeSyntexAnalysis::match(Tag need)
 {
@@ -250,10 +271,11 @@ bool ModeSyntexAnalysis::match(Tag need)
 	else
 		return 0;
 }
+
 bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎÞ´óÀ¨ºÅ
 {
 	SoWhile * now = new SoWhile(0, 0, 0, 0);
-	now->tag=KEY_WHILE;
+	now->tag=WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
 	while ((it!=subEnd+1)&&(!match(LBRACE)))
@@ -282,7 +304,7 @@ bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎÞ´óÀ¨ºÅ
 bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎÞ´óÀ¨ºÅ
 {
 	SoIf * now = new SoIf(0, 0, 0, 0);
-	now->tag=KEY_IF;
+	now->tag=IF;
     match(KEY_IF);
 	now->judgeExprTop = it;
 	while ((it!=subEnd+1)&&(!match(LBRACE)))
@@ -293,7 +315,7 @@ bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎÞ´óÀ¨ºÅ
 	if(it==subEnd+1) return 0;
 	now->top = it;
 	int cnt = 1;
-	while (it != subEnd+1&&cnt != 0)
+	while ((it != subEnd+1)&&cnt != 0)
 	{
 		now->bottom = it;
 		if (match(LBRACE))
@@ -314,7 +336,7 @@ bool ModeSyntexAnalysis::elseStat()
 	match(KEY_ELSE);
 	if(!match(LBRACE)) return 0;
 	SoElse * now = new SoElse(it, 0);
-	now->tag = KEY_ELSE;
+	now->tag = ELSE;
 	int cnt = 1;
 	while ((it != subEnd+1)&&cnt != 0)
 	{
@@ -347,6 +369,7 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
             {
                 sMove();
                 if(!funStat(nowTag,nowName)) return 0;
+                else return 1;
             }
             else if(look->tag==ASSIGN)  //±äÁ¿ÉùÃ÷Óë¶¨Òå
             {
@@ -360,6 +383,7 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
                 }
                 if(it==subEnd+1) return 0;
                 AltExpr *now=new AltExpr(st,en);
+                now->tag=STATE;
                 CodeStore.push_back(now);
                 return 1;
             }
@@ -370,8 +394,7 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
         else
             return 0;
     }
-    else
-        return 0;
+    else return 0;
 }
 
 
@@ -407,6 +430,11 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êý¶¨ÒåÓëÉùÃ÷
             }
             else return 0;
         }
+        else if(look->tag==RPAR)
+        {
+            sMove();
+            break;
+        }
         else   return 0;
     }
     if(it==subEnd+1)   return 0;
@@ -423,7 +451,7 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êý¶¨ÒåÓëÉùÃ÷
         else
             sMove();
     }
-    if(it!=subEnd+1) return 0;
+    if(it==subEnd+1) return 0;
     CodeStore.push_back(now);
     return 1;
 }

@@ -63,6 +63,7 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag==IDT)
 				{
+					// a=b ,b->a
 					Token* token = buffer[temp];
 					Idt* idt = (Idt*)token; 
 					if (idt->assType == NUM)

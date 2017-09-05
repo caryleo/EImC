@@ -4,10 +4,13 @@
 #include"ModeTokenAnalysis.h"
 #include"ModeAssign.h"
 #include"ModeExecute.h"
+#include"Expression.h"
+#include"Stack.h"
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
-
+extern Stack RunTime;					//运行栈
+extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 extern vector<Token*>ConstStore;
 
 VarType::VarType(int a, int b)
@@ -35,7 +38,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
-
+				RunTime.push(idt);   // 放入栈中
 				temp++;
 				continue;
 			}
@@ -73,6 +76,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
+				RunTime.push(idt);   // 放入栈中
 				temp++;
 				continue;
 			}
@@ -108,6 +112,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
+				RunTime.push(idt);		// 放入栈中
 				temp++;
 				continue;
 			}

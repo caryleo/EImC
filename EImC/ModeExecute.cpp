@@ -60,6 +60,7 @@ void ModeExecute::commence(int top, int bottom)
 				break;
 			}
 		}
+		case CALL:
 		case IF:
 		case ELSE:
 		case WHILE:
@@ -69,7 +70,8 @@ void ModeExecute::commence(int top, int bottom)
 	}
 }
 
-void ModeExecute::caller(Caller * func)/*寻找对应的函数*/
+
+void ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 {
 	string name = func->name;
 	int cnt = func->paralist.size();
@@ -91,9 +93,15 @@ void ModeExecute::caller(Caller * func)/*寻找对应的函数*/
 			}
 		}
 	}
+	SoFunc * a = FuncStore[ans];				//调用函数
+	vector<Token *> tmp = a->paralist;
+	for (int i = 0; i < tmp.size(); i++) {
+		Idt * idt = (Idt *)tmp[i];
+		idt->t = s[i];
+		RunTime.push(idt);
+		RunTime.sync(esp);						//同步运行栈栈顶
+	}
 	ModeSyntexAnalysis mSA;
-	mSA.getHeadAndTail(0, buffer.size() - 1);
-	commence(FuncStore[ans]->top, FuncStore[ans]->bottom);
 	return;
 }
 

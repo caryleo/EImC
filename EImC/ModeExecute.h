@@ -11,7 +11,7 @@ public:
 	static void init();
 	static bool queryMain(SoFunc * corner);
 	static void commence(int top, int bottom);
-	static void caller(Caller * func);
+	static void caller(Caller * func, vector <Token *> s);
 };
 #endif // !MODEEXECUTE_H_
 #pragma once

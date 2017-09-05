@@ -39,6 +39,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Idt* idt = (Idt*)token;
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				RunTime.push(idt);   // 放入栈中
+				RunTime.sync(esp);	 // 修改ESP
 				temp++;
 				continue;
 			}
@@ -77,6 +78,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Idt* idt = (Idt*)token;
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				RunTime.push(idt);   // 放入栈中
+				RunTime.sync(esp);	 // 修改ESP
 				temp++;
 				continue;
 			}
@@ -113,6 +115,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Idt* idt = (Idt*)token;
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
 				RunTime.push(idt);		// 放入栈中
+				RunTime.sync(esp);	 // 修改ESP
 				temp++;
 				continue;
 			}

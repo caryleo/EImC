@@ -3,6 +3,8 @@
 #include"EImC.h"
 #include"VarType.h"
 using namespace std; 
+// 赋值表达式处理 
+// 未解决的有 连等 逻辑表达式
 // 赋值语句实现 使用方法
 // ModeAssign test(top,bottom);
 // sent.Fuzhi();

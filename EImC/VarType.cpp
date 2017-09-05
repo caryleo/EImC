@@ -2,6 +2,7 @@
 #include"VarType.h"
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"
+#include"ModeAssign.h"
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
@@ -31,6 +32,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = KEY_INT;  // 在idt类里的asstype 标注这个变量 属于的类型
+
 				temp++;
 				continue;
 			}
@@ -49,6 +51,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				int end = temp-1;		// 这个赋值语句的结束
 				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
+				ModeAssign test(start, end);
+				test.Fuzhi();
 			}
 		}
 
@@ -84,6 +88,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				int end = temp - 1;		// 这个赋值语句的结束
 										//调用赋值语句 （start，end） 暂定调用方法
+				ModeAssign test(start, end);
+				test.Fuzhi();
 			}
 		}
 
@@ -117,6 +123,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				int end = temp - 1;		// 这个赋值语句的结束
 										//调用赋值语句 （start，end） 暂定调用方法
+				ModeAssign test(start, end);
+				test.Fuzhi();
 			}
 		}
 

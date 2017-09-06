@@ -170,14 +170,21 @@ bool ModeSyntexAnalysis::distinguish()//Çø·Ö¸Ã±í´ïÊ½ÊÇº¯Êıµ÷ÓÃ»¹ÊÇ±äÁ¿±í´ïÊ½
         now->tag=EXPR;
         now->top=it;
         sMove();
-        while((it!=subEnd-1)&&(!match(SEMICO)))
+        while(it!=subEnd+1)
         {
-            now->bottom=it;
-            sMove();
+            if(!match(SEMICO))
+            {
+                now->bottom=it;
+                sMove();
+            }
+            else
+            {
+                CodeStore.push_back(now);
+                return 1;
+            }
         }
-        if(it==subEnd+1)
-            return 0;
-        CodeStore.push_back(now);
+        return 0;
+
     }
     return 1;
 
@@ -197,17 +204,24 @@ bool ModeSyntexAnalysis::retStat()     //returnÓï¾ä,bottomÊÇ·ÖºÅÇ°µÄµÚÒ»¸öÎ»ÖÃ£¬
 {
 	AltExpr * now = new AltExpr(it, it);
 	match(KEY_RET);
-	while((it!=subEnd+1)&&!match(SEMICO))
+	while(it!=subEnd+1)
     {
-        now->bottom=it;
-        sMove();
+        if(!match(SEMICO))
+        {
+            now->bottom=it;
+            sMove();
+        }
+        else
+        {
+            now->tag=KEY_RET;
+            CodeStore.push_back(now);
+            return 1;
+        }
+
     }
-	now->tag = KEY_RET;
-	if(it==subEnd+1)
-        return 0;
-	CodeStore.push_back(now);
-	return 1;
+    return 0;
 }
+
 bool ModeSyntexAnalysis::conStat() //continueÓï¾ä£¬bottomÎªcontinue¹Ø¼ü×ÖµÄÎ»ÖÃ,tagÎªKEY_CON
 {
 	AltExpr *now = new AltExpr(it,it);
@@ -222,37 +236,52 @@ bool ModeSyntexAnalysis::inStat() //inÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_IN
     AltExpr *now = new AltExpr(it,it);
     now->tag=KEY_IN;
     match(KEY_IN);
-	while ((it!=subEnd+1)&&(!match(SEMICO)))
+	while (it!=subEnd+1)
     {
-        now->bottom=it;
-        sMove();
+        if(!match(SEMICO))
+        {
+            now->bottom=it;
+            sMove();
+        }
+        else
+        {
+            CodeStore.push_back(now);
+            return 1;
+        }
+
     }
-    if(it==subEnd+1) return 0;
-    CodeStore.push_back(now);
-	return 1;
+    return 0;
 }
 bool ModeSyntexAnalysis::outStat()//outÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_OUT
 {
 	AltExpr *now = new AltExpr(it,it);
     now->tag=KEY_OUT;
     match(KEY_OUT);
-	while ((it!=subEnd+1)&&(!match(SEMICO)))
+	while (it!=subEnd+1)
     {
-        now->bottom=it;
-        sMove();
+        if(!match(SEMICO))
+        {
+            now->bottom=it;
+            sMove();
+        }
+        else
+        {
+            CodeStore.push_back(now);
+            return 1;
+        }
     }
-    if(it==subEnd+1) return 0;
-    CodeStore.push_back(now);
-	return 1;
 }
 void ModeSyntexAnalysis::sMove()
 {
-    it++;
-	look = buffer[it];//¶ÁÈëÏÂÒ»¸ö´Ê·¨¼ÇºÅ
-
+    if(it<=subEnd)
+        it++;
+    if(it<=subEnd)
+        look = buffer[it];//¶ÁÈëÏÂÒ»¸ö´Ê·¨¼ÇºÅ
 }
 bool ModeSyntexAnalysis::match(Tag need)
 {
+    if(it==subEnd+1)
+        return 0;
     if(need==TYPE)
     {
         if(match(KEY_REAL))
@@ -265,7 +294,7 @@ bool ModeSyntexAnalysis::match(Tag need)
     }
 	if (look->tag == need)
 	{
-		sMove();
+        sMove();
 		return 1;
 	}
 	else
@@ -278,28 +307,35 @@ bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎŞ´óÀ¨ºÅ
 	now->tag=WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
-	while ((it!=subEnd+1)&&(!match(LBRACE)))
+	while (it!=subEnd+1)
 	{
-		now->conditionExprBottom = it;
-		sMove();
+	    if(!match(LBRACE))
+        {
+            now->conditionExprBottom = it;
+            sMove();
+        }
+        else
+        {
+            now->top = it;
+            int cnt = 1;
+            while ((it != subEnd+1 )&& cnt != 0)
+            {
+                now->bottom = it;
+                if (match(LBRACE))
+                    cnt++;
+                else if (match(RBRACE))
+                    cnt--;
+                else
+                    sMove();
+            }
+            (now->bottom)=(now->bottom)-1;
+            if(cnt!=0) return 0;
+            CodeStore.push_back(now);
+            return 1;
+        }
+
 	}
-	if(it==subEnd+1)   return 0;
-	now->top = it;
-	int cnt = 1;
-	while (it != subEnd+1 && cnt != 0)
-	{
-		now->bottom = it;
-		if (match(LBRACE))
-			cnt++;
-		else if (match(RBRACE))
-			cnt--;
-		else
-			sMove();
-	}
-	(now->bottom)=(now->bottom)-1;
-	if(cnt!=0) return 0;
-	CodeStore.push_back(now);
-	return 1;
+	return 0;
 }
 bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎŞ´óÀ¨ºÅ
 {
@@ -307,30 +343,40 @@ bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎŞ´óÀ¨ºÅ
 	now->tag=IF;
     match(KEY_IF);
 	now->judgeExprTop = it;
-	while ((it!=subEnd+1)&&(!match(LBRACE)))
+	while (it!=subEnd+1)
 	{
-		now->judgeExprBottom = it;
-		sMove();
+	    if(!match(LBRACE))
+        {
+            now->judgeExprBottom = it;
+            sMove();
+        }
+        else
+        {
+            now->top = it;
+            int cnt = 1;
+            while ((it != subEnd+1)&&cnt != 0)
+            {
+                now->bottom = it;
+                if (match(LBRACE))
+                    cnt++;
+                else if (match(RBRACE))
+                    cnt--;
+                else
+                    sMove();
+            }
+            (now->bottom)=(now->bottom)-1;
+            if (cnt!=0)
+                return 0;
+            CodeStore.push_back(now);
+            return 1;
+        }
+
 	}
-	if(it==subEnd+1) return 0;
-	now->top = it;
-	int cnt = 1;
-	while ((it != subEnd+1)&&cnt != 0)
-	{
-		now->bottom = it;
-		if (match(LBRACE))
-			cnt++;
-		else if (match(RBRACE))
-			cnt--;
-		else
-			sMove();
-	}
-	(now->bottom)=(now->bottom)-1;
-	if (cnt!=0)
-        return 0;
-	CodeStore.push_back(now);
-	return 1;
+
+	return 0;
+
 }
+
 bool ModeSyntexAnalysis::elseStat()
 {
 	match(KEY_ELSE);
@@ -376,16 +422,24 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êı¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
                 int st=it-2;
                 sMove();
                 int en=-1;
-                while(!match(SEMICO)&&(it!=subEnd+1))
+                while(it!=subEnd+1)
                 {
-                    en=it;
-                    sMove();
+                    if(!match(SEMICO))
+                    {
+                        en=it;
+                        sMove();
+                    }
+                    else
+                    {
+                        AltExpr *now=new AltExpr(st,en);
+                        now->tag=STATE;
+                        CodeStore.push_back(now);
+                        return 1;
+                    }
+
                 }
-                if(it==subEnd+1) return 0;
-                AltExpr *now=new AltExpr(st,en);
-                now->tag=STATE;
-                CodeStore.push_back(now);
-                return 1;
+
+                return 0;
             }
             else
                 return 0;
@@ -396,6 +450,7 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êı¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
     }
     else return 0;
 }
+
 
 
 bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êı¶¨ÒåÓëÉùÃ÷

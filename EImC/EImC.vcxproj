@@ -150,7 +150,6 @@
     <ClInclude Include="ContinueType.h" />
     <ClInclude Include="EImC.h" />
     <ClInclude Include="Expression.h" />
-    <ClInclude Include="ExprJudge.h" />
     <ClInclude Include="FuncType.h" />
     <ClInclude Include="ModeAssign.h" />
     <ClInclude Include="ModeElse.h" />
@@ -173,7 +172,6 @@
     <ClCompile Include="ContinueType.cpp" />
     <ClCompile Include="EImC.cpp" />
     <ClCompile Include="Expression.cpp" />
-    <ClCompile Include="ExprJudge.cpp" />
     <ClCompile Include="FuncType.cpp" />
     <ClCompile Include="ModeAssign.cpp" />
     <ClCompile Include="ModeElse.cpp" />

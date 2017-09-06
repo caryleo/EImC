@@ -777,6 +777,8 @@ Token * ExprIR::calculate_expr(int head,int tail)
 
 void ExprIR::solve_op(Token * op)
 {
+    //如果是右括号，不入栈，对之前的操作符进行处理
+    //直到遇到左括号，将左括号出栈
     if(getValType(op)==RPAR)
     {
         while(getValType(operator_s.front())!=LPAR&&operator_s.size()>0)
@@ -788,13 +790,16 @@ void ExprIR::solve_op(Token * op)
     }
     else
     {
-        //优先级比较高
+        //操作符栈中为空，直接入栈
+        //当前运算符优先级比栈顶运算符高，入栈
         if(judge_priority(op,operator_s.front()))
             operator_s.push(op);
         else
         {
+            //对前面优先级不低于当前运算符的进行处理
             while(operator_s.size()>0&&judge_priority(op,operator_s.front())==0)
             {
+                //遇到左括号结束
                 if(getValType(operator_s.front())==LPAR) break;
                 find_op(operator_s.front());
                 operator_s.pop();
@@ -813,6 +818,8 @@ void ExprIR::find_op(Token *op)
 {
     switch(getValType(op))
     {
+    //正号或者加号
+    //位于表达式首位或者位于（后边或者只剩下一个操作数为正号
     case ADD:
         {
             if(pos==start||getValType(operator_s.front())==LPAR||operand_s.size()==1)
@@ -1000,6 +1007,7 @@ void ExprIR::find_op(Token *op)
             else return;
             break;
         }
+    //非！必须在操作数或者左括号前边
     case NOT:
         {
             if(pos<term&&getValType(buffer[pos+1])==IDT)

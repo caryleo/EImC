@@ -2,6 +2,16 @@
 
 class ExprIR
 {
+private:
+    //当前扫描到表达式的位置
+    int pos;
+    //表达式头指针和尾指针
+    int start;
+    int term;
+    //操作符栈
+    Stack operator_s;
+    //操作数栈
+    Stack operand_s;
 public:
     //查询类型
     Tag getValType(Token *);
@@ -63,7 +73,10 @@ public:
     Token * or_lop(Token *,Token *);
     Token * not_lop(Token *);
 
+    //表达式处理入口
     Token * calculate_expr(int ,int );
+    //查找对应的运算符处理模块
     void find_op(Token *);
+    //当扫描到运算符时执行
     void solve_op(Token *);
 };

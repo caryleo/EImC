@@ -86,6 +86,7 @@ void Stack::desync(Token **& ebp, Token **& esp)
 		if ((*tmp)->tag == PRT) {
 			PRTR * tt = (PRTR *)(*tmp);
 			ebp = tt->prt;//将上一层运行栈的栈底指针赋给ebp
+			break;
 		}
 	}
 	while (esp != tmp) {
@@ -94,6 +95,16 @@ void Stack::desync(Token **& ebp, Token **& esp)
 	}
 	this->pop();
 	esp--;//重置esp；
+}
+
+void Stack::ret(Token * s, Token ** ebp) {
+	Token ** tmp = top;
+	while (tmp != ebp) {
+		tmp--;
+	}
+	tmp--;
+	Token * tmpp = *tmp;
+	tmpp = s;
 }
 
 Stack::~Stack() {/*销毁*/

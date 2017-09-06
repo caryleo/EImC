@@ -10,6 +10,8 @@
 #include "Stack.h"
 #include "FuncType.h"
 #include "Expression.h"
+#include "ModeWhile.h"
+#include "ReturnType.h"
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -38,7 +40,7 @@ void ModeExecute::commence(int top, int bottom)
 				SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
 				break;
 			}
-				
+
 			case KEY_OUT: {
 				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 				SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom);
@@ -169,16 +171,16 @@ void ModeExecute::commence(int top, int bottom)
 			mWhile.runWhile();
 			break;
 		}
-		case KEY_BRK: {//break语句
-			BreakType bType(CodeStore[i]->top, CodeStore[i]->bottom);
-			bType.startBreak();
-			break;
-		}
-		case KEY_CON: {//continue语句
-			ContinueType cType(CodeStore[i]->top, CodeStore[i]->bottom);
-			cType.startContinue();
-			break;
-		}
+					//case KEY_BRK: {//break语句
+					//	BreakType bType(CodeStore[i]->top, CodeStore[i]->bottom);
+					//	bType.startBreak();
+					//	break;
+					//}
+					//case KEY_CON: {//continue语句
+					//	ContinueType cType(CodeStore[i]->top, CodeStore[i]->bottom);
+					//	cType.startContinue();
+					//	break;
+					//}
 		case KEY_RET: {//return语句
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();
@@ -232,6 +234,7 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	PRTR * prt = new PRTR(ebp);					//将当前层运行栈指针保存
 	RunTime.push(prt);
 	RunTime.sync(ebp);
+	RunTime.sync(esp);
 	esp = ebp;
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);

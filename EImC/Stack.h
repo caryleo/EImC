@@ -20,6 +20,7 @@ public:
 	Idt * query(string n);		//查询指定的标识符
 	void sync(Token ** & esp);	//同步栈顶指针
 	void desync(Token ** & ebp, Token **& esp);//重置运行栈
+	void ret(Token * s, Token ** ebp);			//控制返回值的赋值
 	~Stack();					//销毁整个栈
 private:
 	Token ** base;				//栈底

@@ -146,8 +146,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BreakType.h" />
-    <ClInclude Include="ContinueType.h" />
     <ClInclude Include="EImC.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="FuncType.h" />
@@ -166,8 +164,6 @@
     <ClInclude Include="ModeRead.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BreakType.cpp" />
-    <ClCompile Include="ContinueType.cpp" />
     <ClCompile Include="EImC.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="FuncType.cpp" />

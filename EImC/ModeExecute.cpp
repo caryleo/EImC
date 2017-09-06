@@ -23,6 +23,58 @@ Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
 void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 {
+	for (int i = top; i <= bottom; i++) {
+		switch (CodeStore[i]->tag)
+		{
+		case STATE: {
+			int st = CodeStore[i]->top;
+			int ed = CodeStore[i]->bottom;
+			switch (buffer[st]->tag)
+			{
+			case KEY_IN: {//输入式
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+				SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
+				break;
+			}
+
+			case KEY_OUT: {
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+				SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom);
+				break;
+			}
+			case KEY_INT:																//三种类型关键字，默认是定义式
+			case KEY_REAL:
+			case KEY_STRING: {//默认是定义式
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+				VarType test(CodeStore[i]->top, CodeStore[i]->bottom);
+				test.input();
+				break;
+			}
+			case IDT: {//默认是赋值式
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+				ModeAssign test(CodeStore[i]->top, CodeStore[i]->bottom);
+				test.Fuzhi();
+			}
+			default:
+				break;
+			}
+		}
+		case CALL:
+		case IF:
+		case ELSE:
+		case WHILE:
+		case KEY_RET: {//return语句
+			cout << "ERROR!!!" << endl;
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	vector <Token *> tmp;
+	tmp.clear();
+	Caller * main = new Caller("main", tmp);
+	ModeExecute::caller(main, tmp);
 }
 
 void ModeExecute::commence(int top, int bottom)
@@ -158,11 +210,10 @@ void ModeExecute::commence(int top, int bottom)
 			}
 			break;
 		}
-				 //case ELSE: {//Else式
-				 //	ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
-				 //	mElse.runElse();
-				 //	break;
-				 //}
+		case ELSE: {//没有关联if的else式
+			cout << "ERROR!!!" << endl;
+			break;
+		}
 		case WHILE: {//While式
 			Block * tmp = CodeStore[i];
 			SoWhile * baba = (SoWhile *)tmp;
@@ -171,16 +222,6 @@ void ModeExecute::commence(int top, int bottom)
 			mWhile.runWhile();
 			break;
 		}
-					//case KEY_BRK: {//break语句
-					//	BreakType bType(CodeStore[i]->top, CodeStore[i]->bottom);
-					//	bType.startBreak();
-					//	break;
-					//}
-					//case KEY_CON: {//continue语句
-					//	ContinueType cType(CodeStore[i]->top, CodeStore[i]->bottom);
-					//	cType.startContinue();
-					//	break;
-					//}
 		case KEY_RET: {//return语句
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();

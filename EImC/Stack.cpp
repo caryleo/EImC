@@ -42,7 +42,9 @@ Token * Stack::front() {/*È¡³öÕ»¶¥ÔªËØ*/
 		return NULL;
 	}
 	else {
-		Token * t = *top--;
+		top--;
+		Token * t = *top;
+		top++;
 		return t;
 	}
 }

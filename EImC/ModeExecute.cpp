@@ -9,6 +9,7 @@
 #include "ModeAssign.h"
 #include "Stack.h"
 #include "FuncType.h"
+#include "Expression.h"
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -32,7 +33,12 @@ void ModeExecute::commence(int top, int bottom)
 			int ed = CodeStore[i]->bottom;
 			switch (buffer[st]->tag)
 			{
-			case KEY_IN: SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom); break;
+			case KEY_IN: {//输入式
+
+				SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
+				break;
+			}
+				
 			case KEY_OUT: SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom); break;
 			case KEY_INT:																//三种类型关键字，默认是定义式
 			case KEY_REAL:
@@ -55,15 +61,30 @@ void ModeExecute::commence(int top, int bottom)
 			break;
 		}
 		case IF: {//If式
-			ModeIf mIf(CodeStore[i]->top, CodeStore[i]->bottom);
-			mIf.runIf();
+			Block * tmp = CodeStore[i];
+			SoIf * i = (SoIf *)tmp;
+			ExprIR eIR;
+			ModeExecute::assign(i->judgeExprTop, i->judgeExprBottom);
+			Token * ans = eIR.calculate_expr(i->judgeExprTop, i->judgeExprBottom); //获得条件表达式的结果
+			switch (ans->tag)
+			{
+			case NUM:
+			{
+				if (((SoInt *)ans)->val == 0) {//if不可执行，或跳过，或无条件执行紧邻的else
+
+				}
+			}
+			case RNUM:
+			default:
+				break;
+			}
 			break;
 		}
-		case ELSE: {//Else式
-			ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
-			mElse.runElse();
-			break;
-		}
+				 //case ELSE: {//Else式
+				 //	ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
+				 //	mElse.runElse();
+				 //	break;
+				 //}
 		case WHILE: {//While式
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom);
 			mWhile.runWhile();
@@ -136,6 +157,45 @@ void ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);
 	return;
+}
+
+void ModeExecute::assign(int top, int bottom)
+{
+	for (int i = top; i <= bottom; i++)
+	{
+		if (buffer[i]->tag == IDT) {//为表达式赋初值
+			Idt * tmp = (Idt *)buffer[i];
+			Idt * ret = RunTime.query(tmp->name);
+			tmp->assType = ret->assType;
+			switch (tmp->assType)
+			{
+			case NUM: {
+				SoInt * comecome = (SoInt *)(ret->t);
+				SoInt * gogo = new SoInt(comecome->val, 0, 0);
+				ConstStore.push_back(gogo);
+				tmp->t = gogo;
+				break;
+			}
+			case RNUM: {
+				SoReal * comecome = (SoReal *)(ret->t);
+				SoReal * gogo = new SoReal(comecome->val, 0, 0);
+				ConstStore.push_back(gogo);
+				tmp->t = gogo;
+				break;
+			}
+			case STRING: {
+				SoString * comecome = (SoString *)(ret->t);
+				SoString * gogo = new SoString(comecome->str, 0, 0);
+				ConstStore.push_back(gogo);
+				tmp->t = gogo;
+				break;
+			}
+			default:
+				tmp->t = NULL;
+				break;
+			}
+		}
+	}
 }
 
 PRTR::PRTR(Token ** s)

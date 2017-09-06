@@ -62,4 +62,6 @@ public:
     Token * and_lop(Token *,Token *);
     Token * or_lop(Token *,Token *);
     Token * not_lop(Token *);
+
+    Token * calculate_expr(int ,int );
 };

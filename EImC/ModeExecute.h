@@ -11,6 +11,7 @@ public:
 	static void init(int top, int bottom);
 	static void commence(int top, int bottom);
 	static void caller(Caller * func, vector <Token *> s);
+	static void assign(int top, int bottom);
 };
 
 class PRTR : public Token {/*用来存放Token**的类*/

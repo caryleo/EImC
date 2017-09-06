@@ -60,12 +60,6 @@
     <ClInclude Include="FuncType.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ModeIf.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ModeElse.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ModeWhile.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -123,12 +117,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ModeWhile.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ModeIf.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ModeElse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BreakType.cpp">

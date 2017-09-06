@@ -152,8 +152,6 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="FuncType.h" />
     <ClInclude Include="ModeAssign.h" />
-    <ClInclude Include="ModeElse.h" />
-    <ClInclude Include="ModeIf.h" />
     <ClInclude Include="ModeWhile.h" />
     <ClInclude Include="ReturnType.h" />
     <ClInclude Include="Stack.h" />
@@ -174,8 +172,6 @@
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="FuncType.cpp" />
     <ClCompile Include="ModeAssign.cpp" />
-    <ClCompile Include="ModeElse.cpp" />
-    <ClCompile Include="ModeIf.cpp" />
     <ClCompile Include="ModeWhile.cpp" />
     <ClCompile Include="ReturnType.cpp" />
     <ClCompile Include="Stack.cpp" />

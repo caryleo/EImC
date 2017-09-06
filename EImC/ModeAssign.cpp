@@ -5,7 +5,13 @@
 #include"ModeAssign.h"
 #include"Expression.h"
 #include"ModeExecute.h"
+#include"Stack.h"
+using namespace std;
+
+extern Stack RunTime;
 extern vector<Token*>buffer;
+extern vector<Token*> ConstStore;
+
 // 问题：表达式计算如何调用 ？？？
 ModeAssign::ModeAssign(int a, int b)
 {
@@ -58,19 +64,31 @@ void ModeAssign::Fuzhi()
 		case NUM:
 		{
 			int num = a.getIntVal(result);//通过表达式计算模块计算 要赋的数值
+
 			temp = expr_top-1;
 			while (temp>=top)
 			{
 				if (buffer[temp]->tag==IDT)
 				{
 					// a=b ,b->a
-					Token* token = buffer[temp];
-					Idt* idt = (Idt*)token; 
-					if (idt->assType == NUM)
-					{
-						SoInt*hu = (SoInt*)idt->t;
-						hu->val = num;
+					Idt* idt = (Idt*)buffer[temp];
+					//	修改变量的值
+					string q = idt->name;
+					Idt *value = RunTime.query(q);
 
+					if (value->assType == NUM)
+					{
+						SoInt * p = (SoInt *)value->t;
+						SoInt* intt = new SoInt(num, 0, 0);
+						ConstStore.push_back(intt);
+						value->t = intt;
+					}
+					else if (value->assType==RNUM)
+					{
+						SoReal * p = (SoReal *)value->t;
+						SoReal* intt = new SoReal(num, 0, 0);
+						ConstStore.push_back(intt);
+						value->t = intt;
 					}
 					else {
 						cout << "Error!!!(expression assignment matching error)" << endl;
@@ -87,13 +105,17 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag == IDT)
 				{
-					Token* token = buffer[temp];
-					Idt* idt = (Idt*)token;
-					if (idt->assType == RNUM)
-					{
-						SoInt*hu = (SoInt*)idt->t;
-						hu->val = num;
+					Idt* idt = (Idt*)buffer[temp];
+					//	修改变量的值
+					string q = idt->name;
+					Idt *value = RunTime.query(q);
 
+					if (value->assType == RNUM)
+					{
+						SoReal * p = (SoReal *)value->t;
+						SoReal* intt = new SoReal(num, 0, 0);
+						ConstStore.push_back(intt);
+						value->t = intt;
 					}
 					else {
 						cout << "Error!!!(expression assignment matching error)" << endl;
@@ -110,12 +132,16 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag == IDT)
 				{
-					Token* token = buffer[temp];
-					Idt* idt = (Idt*)token;
-					if (idt->assType == STRING)
+					Idt* idt = (Idt*)buffer[temp];
+					//	修改变量的值
+					string q = idt->name;
+					Idt *value = RunTime.query(q);
+					if (value->assType == STRING)
 					{
-						SoString*hu = (SoString*)idt->t;
-						hu->str = numm;
+						SoString * p = (SoString *)value->t;
+						SoString* intt = new SoString(numm, 0, 0);
+						ConstStore.push_back(intt);
+						value->t = intt;
 
 					}
 					else {

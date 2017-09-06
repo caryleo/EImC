@@ -90,9 +90,11 @@ void FuncType::Func()
 	}
 	Caller ret(funcnamestring,paratype);  // 创建名为 ret 的 caller 类的 一个对象 两个参数 函数名 和 函数的参数类型构成的列表
 	// 调用 ModeExecute 类
-	ModeExecute function;				//  调用
-	function.caller(&ret, paralist); 
+	ModeExecute::caller(&ret,paralist);				//  调用
+	
 
 
 
 }
+
+

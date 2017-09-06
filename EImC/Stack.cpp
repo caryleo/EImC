@@ -2,7 +2,6 @@
 #include "EImC.h"
 #include "ModeTokenAnalysis.h"
 #include "Stack.h"
-#include <cstdlib>
 using namespace std;
 
 extern Stack RunTime;

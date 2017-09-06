@@ -3,6 +3,7 @@
 
 #include "EImC.h"
 #include "ModeTokenAnalysis.h"
+#include <cstdlib>
 
 const int STACK_INIT_SIZE = 100;	//初始大小
 const int STACK_INCREMENT = 10;		//增量大小

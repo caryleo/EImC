@@ -55,15 +55,15 @@ void ModeExecute::commence(int top, int bottom)
 			break;
 		}
 		case IF: {//Ifʽ
-			ModeIf mIf(CodeStore[i]->top, CodeStore[i]->bottom);
-			mIf.runIf();
+			SoIf * i = (SoIf *)CodeStore[i];
+			Token * ans = 
 			break;
 		}
-		case ELSE: {//Elseʽ
-			ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
-			mElse.runElse();
-			break;
-		}
+		//case ELSE: {//Elseʽ
+		//	ModeElse mElse(CodeStore[i]->top, CodeStore[i]->bottom);
+		//	mElse.runElse();
+		//	break;
+		//}
 		case WHILE: {//Whileʽ
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom);
 			mWhile.runWhile();

@@ -1,6 +1,8 @@
-#include<string>
+
 #include"Stack.h"
 #include "Expression.h"
+
+extern vector<Token*>buffer;
 
 //查询类型IDT,NUM,ADD等
 //IDT: FUNC,NUM,RNUM,STRING,ERR
@@ -19,6 +21,12 @@ bool ExprIR::isIDT(Token * t)
 {
     if(t->tag==IDT) return 1;
     else return 0;
+}
+//查询是否被赋值
+bool ExprIR::isAssign(Token *token)
+{
+    if(TransIDT(token)->t==NULL) return 0;
+    else return 1;
 }
 //将Token转换为Idt
 Idt* ExprIR::TransIDT(Token * t)
@@ -110,6 +118,11 @@ Token * ExprIR::add_op(Token * a,Token * b)
     }
     else
     {
+        if(isAssign(a)==0&&isAssign(b)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -145,6 +158,11 @@ Token * ExprIR::sub_op(Token * a,Token * b)
     }
     else
     {
+        if(isAssign(a)==0&&isAssign(b)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -180,6 +198,11 @@ Token * ExprIR::mul_op(Token * a,Token * b)
     }
     else
     {
+        if(isAssign(a)==0&&isAssign(b)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -220,6 +243,11 @@ Token * ExprIR::div_op(Token * a,Token * b)
     }
     else
     {
+        if(isAssign(a)==0&&isAssign(b)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -251,6 +279,11 @@ Token * ExprIR::mod_op(Token *a,Token *b)
     res->tag=IDT;
     if(getAsstype(a)==NUM&&getAsstype(b)==NUM&&getIntVal(b)!=0)
     {
+        if(isAssign(a)==0&&isAssign(b)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         TransIDT(res)->assType=NUM;
         TransInt(res)->val=getIntVal(a)%getIntVal(b);
     }
@@ -271,6 +304,11 @@ Token * ExprIR::pos_op(Token * a)
     }
     else
     {
+        if(isAssign(a)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -296,6 +334,11 @@ Token * ExprIR::neg_op(Token * a)
     }
     else
     {
+        if(isAssign(a)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getAsstype(a)==NUM)
         {
             TransIDT(res)->assType=NUM;
@@ -317,6 +360,11 @@ Token * ExprIR::connect_op(Token * s1,Token *s2)
     res->tag=IDT;
     if(getAsstype(s1)==STRING&&getAsstype(s2)==STRING)
     {
+        if(isAssign(s1)==0&&isAssign(s2)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         TransIDT(res)->assType=STRING;
         TransStr(res)->str=getStrVal(s1)+getStrVal(s2);
     }
@@ -334,6 +382,11 @@ Token * ExprIR::delete_spec(Token *s,Token *pos)
     res->tag=IDT;
     if(getAsstype(s)==STRING&&getAsstype(pos)==NUM)
     {
+        if(isAssign(s)==0&&isAssign(pos)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         if(getIntVal(pos)>=getStrVal(s).size())
         {
             TransIDT(res)->assType=ERR;
@@ -356,6 +409,11 @@ Token * ExprIR::delete_tail(Token *s)
     res->tag=IDT;
     if(getAsstype(s)==STRING)
     {
+        if(isAssign(s)==0)
+        {
+            TransIDT(res)->assType=ERR;
+            return res;
+        }
         TransIDT(res)->assType=STRING;
         TransStr(res)->str=getStrVal(s).erase(getStrVal(s).size()-1,1);
     }
@@ -371,6 +429,11 @@ Token * ExprIR::is_greater(Token * a,Token * b)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0&&isAssign(b)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==STRING&&getAsstype(b)==STRING)
     {
         TransIDT(res)->assType=NUM;
@@ -445,6 +508,11 @@ Token * ExprIR::is_less(Token *a,Token *b)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0&&isAssign(b)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==STRING&&getAsstype(b)==STRING)
     {
         TransIDT(res)->assType=NUM;
@@ -519,6 +587,11 @@ Token * ExprIR::is_equal(Token *a,Token *b)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0&&isAssign(b)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==STRING&&getAsstype(b)==STRING)
     {
         TransIDT(res)->assType=NUM;
@@ -588,6 +661,11 @@ Token * ExprIR::and_lop(Token *a,Token *b)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0&&isAssign(b)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
     {
         TransIDT(res)->assType=NUM;
@@ -609,6 +687,11 @@ Token * ExprIR::or_lop(Token *a,Token *b)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0&&isAssign(b)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==NUM&&getAsstype(b)==NUM)
     {
         TransIDT(res)->assType=NUM;
@@ -630,6 +713,11 @@ Token * ExprIR::not_lop(Token *a)
 {
     Token *res;
     res->tag=IDT;
+    if(isAssign(a)==0)
+    {
+        TransIDT(res)->assType=ERR;
+        return res;
+    }
     if(getAsstype(a)==NUM)
     {
         TransIDT(res)->assType=NUM;
@@ -647,4 +735,281 @@ Token * ExprIR::not_lop(Token *a)
             TransInt(res)->val=0;
     }
     return res;
+}
+
+//计算表达式的值
+//vector<Token*>buffer
+Token * ExprIR::calculate_expr(int head,int tail)
+{
+    pos=head;
+    start=head;
+    term=tail;
+    while(pos<=tail)
+    {
+        //操作数
+        if(isIDT(buffer[pos]))
+        {
+            operand_s.push(buffer[pos]);
+        }
+        else
+        {
+            if(pos==tail) operator_s.push(buffer[pos]);
+            else
+            {
+                solve_op(buffer[pos]);
+            }
+        }
+        pos++;
+    }
+    Token *result;
+    result->tag=IDT;
+    if(operator_s.size()==0&&operand_s.size()==1)
+    {
+        if(getAsstype(operand_s.front())!=ERR)
+        {
+            result=operand_s.front();
+        }
+        else TransIDT(result)->assType=ERR;
+    }
+    else TransIDT(result)->assType=ERR;
+    return result;
+}
+
+void ExprIR::solve_op(Token * op)
+{
+    if(getValType(op)==RPAR)
+    {
+        while(getValType(operator_s.front())!=LPAR&&operator_s.size()>0)
+        {
+            solve_op(operator_s.front());
+            operator_s.pop();
+        }
+        if(operator_s.size()>0) operator_s.pop();
+    }
+    else
+    {
+        //优先级比较高
+        if(judge_priority(op,operator_s.front()))
+            operator_s.push(op);
+        else
+        {
+            while(operator_s.size()>0&&judge_priority(op,operator_s.front())==0)
+            {
+                if(getValType(operator_s.front())==LPAR) break;
+                find_op(operator_s.front());
+                operator_s.pop();
+            }
+            operator_s.push(op);
+        }
+    }
+}
+
+//ADD,SUB,MUL,DIV,MOD
+//GT, GE, LT, LE, EQU, NEQU
+//AND, OR, NOT
+//LPAR, RPAR,
+
+void ExprIR::find_op(Token *op)
+{
+    switch(getValType(op))
+    {
+    case ADD:
+        {
+            if(pos==start||getValType(operator_s.front())==LPAR||operand_s.size()==1)
+            {
+                Token * a=operand_s.front();
+                operand_s.pop();
+                operand_s.push(pos_op(a));
+            }
+            else
+            {
+                if(operand_s.size()>=2)
+                {
+                    Token *a=operand_s.front();
+                    operand_s.pop();
+                    Token *b=operand_s.front();
+                    operand_s.pop();
+                    operand_s.push(add_op(a,b));
+                }
+                else return;
+            }
+            break;
+        }
+    case SUB:
+        {
+            if(pos==start||getValType(operator_s.front())==LPAR||operand_s.size()==1)
+            {
+                Token * a=operand_s.front();
+                operand_s.pop();
+                operand_s.push(neg_op(a));
+            }
+            else
+            {
+                if(operand_s.size()>=2)
+                {
+                    Token *a=operand_s.front();
+                    operand_s.pop();
+                    Token *b=operand_s.front();
+                    operand_s.pop();
+                    operand_s.push(sub_op(a,b));
+                }
+                else return;
+            }
+            break;
+        }
+    case MUL:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(mul_op(a,b));
+            }
+            else return;
+            break;
+        }
+    case DIV:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(div_op(a,b));
+            }
+            else return;
+            break;
+        }
+    case MOD:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(mod_op(a,b));
+            }
+            else return;
+            break;
+        }
+    case GT:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(is_greater(a,b));
+            }
+            else return;
+            break;
+        }
+    case GE:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(not_less(a,b));
+            }
+            else return;
+            break;
+        }
+    case LT:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(is_less(a,b));
+            }
+            else return;
+            break;
+        }
+    case LE:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(not_greater(a,b));
+            }
+            else return;
+            break;
+        }
+    case EQU:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(is_equal(a,b));
+            }
+            else return;
+            break;
+        }
+    case NEQU:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(not_equal(a,b));
+            }
+            else return;
+            break;
+        }
+    case AND:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(and_lop(a,b));
+            }
+            else return;
+            break;
+        }
+    case OR:
+        {
+            if(operand_s.size()>=2)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                Token *b=operand_s.front();
+                operand_s.pop();
+                operand_s.push(or_lop(a,b));
+            }
+            else return;
+            break;
+        }
+    case NOT:
+        {
+            if(pos<term&&getValType(buffer[pos+1])==IDT)
+            {
+                Token *a=operand_s.front();
+                operand_s.pop();
+                operand_s.push(not_lop(a));
+            }
+            else return;
+            break;
+        }
+    }
 }

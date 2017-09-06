@@ -2,6 +2,7 @@
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
 #include "ModeTokenAnalysis.h"
+#include "ModeExecute.h"
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//Óï¾ä¿é´æ´¢Çø
 

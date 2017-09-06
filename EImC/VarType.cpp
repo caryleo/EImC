@@ -33,11 +33,12 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 		int temp = top + 1;
 		while (temp<=bottom&&buffer[temp]->tag!=SEMICO) // 判断到不到分号 到分号为结束
 		{
-			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a
+			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->t = NULL;		//此时未赋值 修改 t 指针 指向空
 				RunTime.push(idt);   // 放入栈中
 				RunTime.sync(esp);	 // 修改ESP
 				temp++;
@@ -61,6 +62,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				ModeAssign test(start, end);
 				test.Fuzhi();
 			}
+			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
+			{
+				cout << "Error!!!" << endl;
+			}
 		}
 
 		//在符号表中新建一个名为temp指向的名字的 把名字存进去 类型是之前出现的int，或着其他
@@ -72,11 +77,12 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 		int temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // 判断到不到分号 到分号为结束
 		{
-			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a
+			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a   要添加新元素 a 进去
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->t = NULL;
 				RunTime.push(idt);   // 放入栈中
 				RunTime.sync(esp);	 // 修改ESP
 				temp++;
@@ -100,6 +106,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				ModeAssign test(start, end);
 				test.Fuzhi();
 			}
+			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
+			{
+				cout << "Error!!!" << endl;
+			}
 		}
 
 		
@@ -109,11 +119,12 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 		int temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // 判断到不到分号 到分号为结束
 		{
-			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a
+			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
+				idt->t = NULL;
 				RunTime.push(idt);		// 放入栈中
 				RunTime.sync(esp);	 // 修改ESP
 				temp++;
@@ -136,6 +147,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 										//调用赋值语句 （start，end） 暂定调用方法
 				ModeAssign test(start, end);
 				test.Fuzhi();
+			}
+			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
+			{
+				cout << "Error!!!" << endl;
 			}
 		}
 

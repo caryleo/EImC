@@ -43,6 +43,7 @@ void FuncType::Func()
 			Idt*value=RunTime.query(q); // 查询 这个标识符 
 			// value->assType 有三种情况
 			// 三种情况 num rnum string
+			// 451490053
 			if (value->assType==NUM)   
 			{
 				SoInt * p = (SoInt *)value->t;

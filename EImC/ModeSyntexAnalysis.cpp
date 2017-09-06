@@ -5,6 +5,7 @@
 #include "ModeExecute.h"
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//语句块存储区
+extern vector<SoFunc *>FuncStore;
 
 Block::Block()
 {
@@ -68,7 +69,7 @@ Expr::Expr(int t, int b)
 
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
-    int ss=buffer.size()-1;
+    int ss=CodeStore.size()-1;
     if(h<0||t>=buffer.size())
     {
         cout<<"Error in Syntex Analysis!"<<endl;
@@ -81,7 +82,13 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 	if(statement())
     {
         cout<<"Syntex Analysis sucess!"<<endl;
-        ModeExecute::commence(ss,buffer.size()-1);
+		if (subStart == 0 && subEnd == buffer.size() - 1) {
+			ModeExecute::init(ss, CodeStore.size() - 1);
+		}
+		else {
+			ModeExecute::commence(ss, CodeStore.size() - 1);
+		}
+        
         return 1;
     }
     else
@@ -563,7 +570,7 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
         delete now;
         return 0;
     }
-    CodeStore.push_back(now);
+    FuncStore.push_back(now);
     return 1;
 }
 

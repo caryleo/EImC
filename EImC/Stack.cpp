@@ -29,10 +29,9 @@ void Stack::push(Token * t) {/*将元素压入栈中*/
 	return;
 }
 
-void Stack::pop() {/*删除栈顶元素*/
+void Stack::pop() {/*删除栈顶元素，实际操作是控制指针*/
 	if (top != base) {
-		Token *tmp = *top--;
-		delete tmp;
+		top--;
 	}
 	cnt--;
 	return;

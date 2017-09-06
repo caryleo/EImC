@@ -1,4 +1,3 @@
-
 //#include "stdafx.h"
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
@@ -68,6 +67,7 @@ Expr::Expr(int t, int b)
 
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
+    int ss=buffer.size()-1;
     if(h<0||t>=buffer.size())
     {
         cout<<"Error in Syntex Analysis!"<<endl;
@@ -80,6 +80,7 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 	if(statement())
     {
         cout<<"Syntex Analysis sucess!"<<endl;
+        ModeExecute::commence(ss,buffer.size()-1);
         return 1;
     }
     else
@@ -87,6 +88,7 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
         cout<<"Error in Syntex Analysis!"<<endl;
         return 0;
     }
+
 }
 
 bool ModeSyntexAnalysis::statement()
@@ -220,7 +222,7 @@ bool ModeSyntexAnalysis::brkStat() //break语句块，tag为KEY_BRK
 
 bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，tag为KEY_RET
 {
-	AltExpr * now = new AltExpr(it, it);
+	AltExpr * now = new AltExpr(it, -1);
 	now->tag=KEY_RET;
 	match(KEY_RET);
 	while(it!=subEnd+1)
@@ -232,6 +234,8 @@ bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，
         }
         else
         {
+            if(now->bottom==-1)
+                return 0;
             CodeStore.push_back(now);
             return 1;
         }
@@ -333,7 +337,7 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 	now->tag=WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
-    now->conditionExprBottom = it;
+    now->conditionExprBottom = -1;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -343,6 +347,8 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
         }
         else
         {
+            if(now->conditionExprBottom==-1)
+                return 0;
             now->top = it;
             int cnt = 1;
             while ((it != subEnd+1 )&& cnt != 0)
@@ -369,13 +375,14 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 	delete now;
 	return 0;
 }
+
 bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 {
 	SoIf * now = new SoIf(0, 0, 0, 0);
 	now->tag=IF;
     match(KEY_IF);
 	now->judgeExprTop = it;
-	now->judgeExprBottom = it;
+	now->judgeExprBottom = -1;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -385,6 +392,8 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
         }
         else
         {
+            if(now->judgeExprBottom==-1)
+                return 0;
             now->top = it;
             int cnt = 1;
             while ((it != subEnd+1)&&cnt != 0)

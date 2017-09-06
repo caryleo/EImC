@@ -7,10 +7,12 @@
 #include"Expression.h"
 #include"Stack.h"
 #include"FuncType.h"
+
+
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
-extern Stack RunTime;					//运行栈
+extern Stack RunTime;				//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 extern vector<Token*>ConstStore;
 
@@ -165,6 +167,3 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 	}
 	
 }
-
-
-

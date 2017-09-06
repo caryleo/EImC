@@ -10,7 +10,7 @@ extern Stack RunTime;
 using namespace std;
 extern vector<Token*> buffer;
 extern vector<Token*> ConstStore;
-FuncType::FuncType(int a,int b){
+FuncType::FuncType(int a, int b) {
 	top = a;
 	bottom = b;
 }
@@ -20,7 +20,7 @@ void FuncType::Func()
 	vector<Token*> paralist;  // 存放参数的值
 	vector<Token*> paratype;	// 存放 参数的类型
 	int temp = top;
-	while (temp<=bottom) // 识别到 函数名 之后是个左括号 
+	while (temp <= bottom) // 识别到 函数名 之后是个左括号 
 	{
 		if (buffer[temp]->tag == IDT&&buffer[temp + 1]->tag == LPAR)
 		{
@@ -32,7 +32,7 @@ void FuncType::Func()
 	Idt *funame = (Idt*)buffer[funcname];
 	string funcnamestring = funame->name;
 	int para = temp + 2;
-	while (para<=bottom)  // 参数列表 fun（a,b,5)
+	while (para <= bottom)  // 参数列表 fun（a,b,5)
 	{
 		// 参数有四种情况 
 		// IDT NUM RNUM STRING
@@ -40,14 +40,14 @@ void FuncType::Func()
 		{
 			Idt* id = (Idt*)buffer[para];
 			string q = id->name;
-			Idt*value=RunTime.query(q); // 查询 这个标识符 
+			Idt*value = RunTime.query(q); // 查询 这个标识符 
 			// value->assType 有三种情况
 			// 三种情况 num rnum string
 			// 451490053
-			if (value->assType==NUM)   
+			if (value->assType == NUM)
 			{
 				SoInt * p = (SoInt *)value->t;
-				SoInt* intt = new SoInt(p->val,0,0);
+				SoInt* intt = new SoInt(p->val, 0, 0);
 				paralist.push_back(intt);
 				Token *type = new Token(NUM, 0, 0);
 				paratype.push_back(type);
@@ -89,10 +89,10 @@ void FuncType::Func()
 		}
 		para++;
 	}
-	Caller ret(funcnamestring,paratype);  // 创建名为 ret 的 caller 类的 一个对象 两个参数 函数名 和 函数的参数类型构成的列表
+	Caller ret(funcnamestring, paratype);  // 创建名为 ret 的 caller 类的 一个对象 两个参数 函数名 和 函数的参数类型构成的列表
 	// 调用 ModeExecute 类
-	ModeExecute::caller(&ret,paralist);				//  调用
-	
+	ModeExecute::caller(&ret, paralist);				//  调用
+
 
 
 

@@ -78,22 +78,37 @@ void ModeExecute::commence(int top, int bottom)
 			{
 				if (((SoInt *)ans)->val == 0) {//if不可执行，或跳过，或无条件执行紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 						i++;//执行else块 并跳至else块的下一个位置
+						RunTime.desync(ebp, esp);
 					}
 					else {
 					}
 				}
 				else {//if可执行，执行，并无条件跳过紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 						i++;
+						RunTime.desync(ebp, esp);
 					}
 					else {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						RunTime.desync(ebp, esp);
 					}
 				}
 				break;
@@ -101,22 +116,37 @@ void ModeExecute::commence(int top, int bottom)
 			case RNUM: {
 				if (((SoReal *)ans)->val == 0.0) {//if不可执行，或跳过，或无条件执行紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 						i++;//执行else块 并跳至else块的下一个位置
+						RunTime.desync(ebp, esp);
 					}
 					else {
 					}
 				}
 				else {//if可执行，执行，并无条件跳过紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 						i++;
+						RunTime.desync(ebp, esp);
 					}
 					else {
+						PRTR * build = new PRTR(ebp);
+						RunTime.push(build);
+						RunTime.sync(ebp);
+						RunTime.sync(esp);
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						RunTime.desync(ebp, esp);
 					}
 				}
 				break;
@@ -132,7 +162,10 @@ void ModeExecute::commence(int top, int bottom)
 				 //	break;
 				 //}
 		case WHILE: {//While式
-			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom);
+			Block * tmp = CodeStore[i];
+			SoWhile * baba = (SoWhile *)tmp;
+			ModeExecute::assign(baba->conditionExprTop, baba->conditionExprBottom);
+			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
 			mWhile.runWhile();
 			break;
 		}
@@ -158,7 +191,7 @@ void ModeExecute::commence(int top, int bottom)
 }
 
 
-void ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
+Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 {
 	string name = func->name;
 	int cnt = func->paralist.size();
@@ -202,6 +235,8 @@ void ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	esp = ebp;
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);
+	Token * ret = RunTime.front();				// 拿到函数返回值
+	RunTime.sync(esp);
 	return;
 }
 

@@ -67,6 +67,7 @@ Expr::Expr(int t, int b)
 
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
+    int ss=buffer.size()-1;
     if(h<0||t>=buffer.size())
     {
         cout<<"Error in Syntex Analysis!"<<endl;
@@ -79,6 +80,7 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 	if(statement())
     {
         cout<<"Syntex Analysis sucess!"<<endl;
+        ModeExecute::commence(ss,buffer.size()-1);
         return 1;
     }
     else
@@ -220,7 +222,7 @@ bool ModeSyntexAnalysis::brkStat() //break语句块，tag为KEY_BRK
 
 bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，tag为KEY_RET
 {
-	AltExpr * now = new AltExpr(it, it);
+	AltExpr * now = new AltExpr(it, -1);
 	now->tag=KEY_RET;
 	match(KEY_RET);
 	while(it!=subEnd+1)
@@ -232,6 +234,8 @@ bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，
         }
         else
         {
+            if(now->bottom==-1)
+                return 0;
             CodeStore.push_back(now);
             return 1;
         }

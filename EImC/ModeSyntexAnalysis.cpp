@@ -1,4 +1,3 @@
-
 //#include "stdafx.h"
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
@@ -87,6 +86,7 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
         cout<<"Error in Syntex Analysis!"<<endl;
         return 0;
     }
+
 }
 
 bool ModeSyntexAnalysis::statement()
@@ -333,7 +333,7 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 	now->tag=WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
-    now->conditionExprBottom = it;
+    now->conditionExprBottom = -1;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -343,6 +343,8 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
         }
         else
         {
+            if(now->conditionExprBottom==-1)
+                return 0;
             now->top = it;
             int cnt = 1;
             while ((it != subEnd+1 )&& cnt != 0)
@@ -369,13 +371,14 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 	delete now;
 	return 0;
 }
+
 bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 {
 	SoIf * now = new SoIf(0, 0, 0, 0);
 	now->tag=IF;
     match(KEY_IF);
 	now->judgeExprTop = it;
-	now->judgeExprBottom = it;
+	now->judgeExprBottom = -1;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -385,6 +388,8 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
         }
         else
         {
+            if(now->judgeExprBottom==-1)
+                return 0;
             now->top = it;
             int cnt = 1;
             while ((it != subEnd+1)&&cnt != 0)

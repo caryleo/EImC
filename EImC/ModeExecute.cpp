@@ -70,7 +70,7 @@ void ModeExecute::commence(int top, int bottom)
 			Block * tmp = CodeStore[i];
 			SoIf * baba = (SoIf *)tmp;
 			ExprIR eIR;
-			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);
+			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);//为表达式寻找值
 			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
 			switch (ans->tag)
 			{

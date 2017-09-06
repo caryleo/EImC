@@ -78,6 +78,24 @@ void Stack::sync(Token **& esp)
 	return;
 }
 
+void Stack::desync(Token **& ebp, Token **& esp)
+{
+	Token ** tmp = top;
+	while (tmp != base) {
+		tmp--;
+		if ((*tmp)->tag == PRT) {
+			PRTR * tt = (PRTR *)(*tmp);
+			ebp = tt->prt;//将上一层运行栈的栈底指针赋给ebp
+		}
+	}
+	while (esp != tmp) {
+		this->pop();
+		esp--;//将esp调整到存ebp地址的位置
+	}
+	this->pop();
+	esp--;//重置esp；
+}
+
 Stack::~Stack() {/*销毁*/
 	free(base);
 }

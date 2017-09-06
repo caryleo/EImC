@@ -154,7 +154,7 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
 {
     match(IDT);
     Block* now = new Block;
-    if(look->tag==LPAR)     //函数调用,top为函数名，bottom为右括号的位置,tag为CALL
+    if(look->tag==LPAR)     //函数调用,top为函数名，bottom为右括号的前一个位置,tag为CALL
     {
         now->tag=CALL;
         now->top=it-1;
@@ -180,7 +180,7 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
     }
     else        //变量表达式,top为变量名，bottom为分号前一个的位置,tag为EXPR
     {
-        now->tag=EXPR;
+        now->tag=STATE;
         now->top=it;
         sMove();
         while(it!=subEnd+1)
@@ -206,9 +206,9 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
 
 bool ModeSyntexAnalysis::brkStat() //break语句块，tag为KEY_BRK
 {
+    AltExpr * now = new AltExpr(it, it);
+    now->tag = KEY_BRK;
     match(KEY_BRK);
-	AltExpr * now = new AltExpr(it-1, it);
-	now->tag = KEY_BRK;
 	if(!match(SEMICO))
     {
         delete now;
@@ -217,9 +217,11 @@ bool ModeSyntexAnalysis::brkStat() //break语句块，tag为KEY_BRK
 	CodeStore.push_back(now);
 	return 1;
 }
+
 bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，tag为KEY_RET
 {
 	AltExpr * now = new AltExpr(it, it);
+	now->tag=KEY_RET;
 	match(KEY_RET);
 	while(it!=subEnd+1)
     {
@@ -230,7 +232,6 @@ bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，
         }
         else
         {
-            now->tag=KEY_RET;
             CodeStore.push_back(now);
             return 1;
         }
@@ -243,13 +244,13 @@ bool ModeSyntexAnalysis::retStat()     //return语句,bottom是分号前的第一个位置，
 bool ModeSyntexAnalysis::conStat() //continue语句，bottom为continue关键字的位置,tag为KEY_CON
 {
 	AltExpr *now = new AltExpr(it,it);
+	now->tag = KEY_CON;
 	match(KEY_CON);
 	if(!match(SEMICO))
     {
         delete now;
         return 0;
     }
-	now->tag = KEY_CON;
 	CodeStore.push_back(now);
 	return 1;
 }
@@ -332,6 +333,7 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 	now->tag=WHILE;
 	match(KEY_WHILE);
 	now->conditionExprTop = it;
+    now->conditionExprBottom = it;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -373,6 +375,7 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 	now->tag=IF;
     match(KEY_IF);
 	now->judgeExprTop = it;
+	now->judgeExprBottom = it;
 	while (it!=subEnd+1)
 	{
 	    if(!match(LBRACE))
@@ -412,10 +415,11 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 
 bool ModeSyntexAnalysis::elseStat()
 {
+
 	match(KEY_ELSE);
 	if(!match(LBRACE)) return 0;
-	SoElse * now = new SoElse(it, 0);
-	now->tag = ELSE;
+    SoElse * now = new SoElse(it, it);
+    now->tag = ELSE;
 	int cnt = 1;
 	while ((it != subEnd+1)&&cnt != 0)
 	{
@@ -508,7 +512,6 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
             {
                 q->name=((Idt*)look)->name;
                 now->paralist.push_back(q);
-                now->bottom=it;
                 sMove();
                 if(look->tag==COMMA)
                 {

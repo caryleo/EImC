@@ -34,20 +34,26 @@ void ModeExecute::commence(int top, int bottom)
 			switch (buffer[st]->tag)
 			{
 			case KEY_IN: {//输入式
-
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 				SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
 				break;
 			}
 				
-			case KEY_OUT: SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom); break;
+			case KEY_OUT: {
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+				SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom);
+				break;
+			}
 			case KEY_INT:																//三种类型关键字，默认是定义式
 			case KEY_REAL:
 			case KEY_STRING: {//默认是定义式
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 				VarType test(CodeStore[i]->top, CodeStore[i]->bottom);
 				test.input();
 				break;
 			}
 			case IDT: {//默认是赋值式
+				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 				ModeAssign test(CodeStore[i]->top, CodeStore[i]->bottom);
 				test.Fuzhi();
 			}
@@ -62,19 +68,59 @@ void ModeExecute::commence(int top, int bottom)
 		}
 		case IF: {//If式
 			Block * tmp = CodeStore[i];
-			SoIf * i = (SoIf *)tmp;
+			SoIf * baba = (SoIf *)tmp;
 			ExprIR eIR;
-			ModeExecute::assign(i->judgeExprTop, i->judgeExprBottom);
-			Token * ans = eIR.calculate_expr(i->judgeExprTop, i->judgeExprBottom); //获得条件表达式的结果
+			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);
+			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
 			switch (ans->tag)
 			{
 			case NUM:
 			{
 				if (((SoInt *)ans)->val == 0) {//if不可执行，或跳过，或无条件执行紧邻的else
-
+					if (CodeStore[i + 1]->tag == ELSE) {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+						i++;//执行else块 并跳至else块的下一个位置
+					}
+					else {
+					}
 				}
+				else {//if可执行，执行，并无条件跳过紧邻的else
+					if (CodeStore[i + 1]->tag == ELSE) {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						i++;
+					}
+					else {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+					}
+				}
+				break;
 			}
-			case RNUM:
+			case RNUM: {
+				if (((SoReal *)ans)->val == 0.0) {//if不可执行，或跳过，或无条件执行紧邻的else
+					if (CodeStore[i + 1]->tag == ELSE) {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+						i++;//执行else块 并跳至else块的下一个位置
+					}
+					else {
+					}
+				}
+				else {//if可执行，执行，并无条件跳过紧邻的else
+					if (CodeStore[i + 1]->tag == ELSE) {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						i++;
+					}
+					else {
+						ModeSyntexAnalysis mSA;
+						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+					}
+				}
+				break;
+			}
 			default:
 				break;
 			}
@@ -166,33 +212,39 @@ void ModeExecute::assign(int top, int bottom)
 		if (buffer[i]->tag == IDT) {//为表达式赋初值
 			Idt * tmp = (Idt *)buffer[i];
 			Idt * ret = RunTime.query(tmp->name);
-			tmp->assType = ret->assType;
-			switch (tmp->assType)
-			{
-			case NUM: {
-				SoInt * comecome = (SoInt *)(ret->t);
-				SoInt * gogo = new SoInt(comecome->val, 0, 0);
-				ConstStore.push_back(gogo);
-				tmp->t = gogo;
-				break;
+			if (ret != NULL) {
+				tmp->assType = ret->assType;
+				switch (tmp->assType)
+				{
+				case NUM: {
+					SoInt * comecome = (SoInt *)(ret->t);
+					SoInt * gogo = new SoInt(comecome->val, 0, 0);
+					ConstStore.push_back(gogo);
+					tmp->t = gogo;
+					break;
+				}
+				case RNUM: {
+					SoReal * comecome = (SoReal *)(ret->t);
+					SoReal * gogo = new SoReal(comecome->val, 0, 0);
+					ConstStore.push_back(gogo);
+					tmp->t = gogo;
+					break;
+				}
+				case STRING: {
+					SoString * comecome = (SoString *)(ret->t);
+					SoString * gogo = new SoString(comecome->str, 0, 0);
+					ConstStore.push_back(gogo);
+					tmp->t = gogo;
+					break;
+				}
+				default:
+					tmp->t = NULL;
+					break;
+				}
 			}
-			case RNUM: {
-				SoReal * comecome = (SoReal *)(ret->t);
-				SoReal * gogo = new SoReal(comecome->val, 0, 0);
-				ConstStore.push_back(gogo);
-				tmp->t = gogo;
-				break;
-			}
-			case STRING: {
-				SoString * comecome = (SoString *)(ret->t);
-				SoString * gogo = new SoString(comecome->str, 0, 0);
-				ConstStore.push_back(gogo);
-				tmp->t = gogo;
-				break;
-			}
-			default:
+			else {
+				tmp->assType = ERR;
 				tmp->t = NULL;
-				break;
 			}
 		}
 	}

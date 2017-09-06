@@ -64,4 +64,6 @@ public:
     Token * not_lop(Token *);
 
     Token * calculate_expr(int ,int );
+    void find_op(Token *);
+    void solve_op(Token *);
 };

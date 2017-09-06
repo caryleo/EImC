@@ -68,6 +68,11 @@ Expr::Expr(int t, int b)
 
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
+    if(h<0||t>=buffer.size())
+    {
+        cout<<"Error in Syntex Analysis!"<<endl;
+        return 0;
+    }
 	subStart = h;
 	subEnd = t;
 	it=h;
@@ -161,9 +166,17 @@ bool ModeSyntexAnalysis::distinguish()//Çø·Ö¸Ã±í´ïÊ½ÊÇº¯Êıµ÷ÓÃ»¹ÊÇ±äÁ¿±í´ïÊ½
             sMove();
         }
         if(cnt!=0)
+        {
+            delete now;
             return 0;
-        if(!match(SEMICO)) return 0;
+        }
+        if(!match(SEMICO))
+        {
+            delete now;
+            return 0;
+        }
         CodeStore.push_back(now);
+        return 1;
     }
     else        //±äÁ¿±í´ïÊ½,topÎª±äÁ¿Ãû£¬bottomÎª·ÖºÅÇ°Ò»¸öµÄÎ»ÖÃ,tagÎªEXPR
     {
@@ -183,6 +196,7 @@ bool ModeSyntexAnalysis::distinguish()//Çø·Ö¸Ã±í´ïÊ½ÊÇº¯Êıµ÷ÓÃ»¹ÊÇ±äÁ¿±í´ïÊ½
                 return 1;
             }
         }
+        delete now;
         return 0;
 
     }
@@ -196,7 +210,10 @@ bool ModeSyntexAnalysis::brkStat() //breakÓï¾ä¿é£¬tagÎªKEY_BRK
 	AltExpr * now = new AltExpr(it-1, it);
 	now->tag = KEY_BRK;
 	if(!match(SEMICO))
+    {
+        delete now;
         return 0;
+    }
 	CodeStore.push_back(now);
 	return 1;
 }
@@ -219,6 +236,7 @@ bool ModeSyntexAnalysis::retStat()     //returnÓï¾ä,bottomÊÇ·ÖºÅÇ°µÄµÚÒ»¸öÎ»ÖÃ£¬
         }
 
     }
+    delete now;
     return 0;
 }
 
@@ -226,7 +244,11 @@ bool ModeSyntexAnalysis::conStat() //continueÓï¾ä£¬bottomÎªcontinue¹Ø¼ü×ÖµÄÎ»ÖÃ,
 {
 	AltExpr *now = new AltExpr(it,it);
 	match(KEY_CON);
-	if(!match(SEMICO)) return 0;
+	if(!match(SEMICO))
+    {
+        delete now;
+        return 0;
+    }
 	now->tag = KEY_CON;
 	CodeStore.push_back(now);
 	return 1;
@@ -250,6 +272,7 @@ bool ModeSyntexAnalysis::inStat() //inÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_IN
         }
 
     }
+    delete now;
     return 0;
 }
 bool ModeSyntexAnalysis::outStat()//outÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_OUT
@@ -270,6 +293,8 @@ bool ModeSyntexAnalysis::outStat()//outÓï¾ä£¬bottomÎª·ÖºÅÇ°Ò»¸öÎ»ÖÃ£¬tagÎªKEY_OU
             return 1;
         }
     }
+    delete now;
+    return 0;
 }
 void ModeSyntexAnalysis::sMove()
 {
@@ -329,12 +354,17 @@ bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎŞ´óÀ¨ºÅ
                     sMove();
             }
             (now->bottom)=(now->bottom)-1;
-            if(cnt!=0) return 0;
+            if(cnt!=0)
+            {
+                delete now;
+                return 0;
+            }
             CodeStore.push_back(now);
             return 1;
         }
 
 	}
+	delete now;
 	return 0;
 }
 bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎŞ´óÀ¨ºÅ
@@ -366,13 +396,16 @@ bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎŞ´óÀ¨ºÅ
             }
             (now->bottom)=(now->bottom)-1;
             if (cnt!=0)
+            {
+                delete now;
                 return 0;
+            }
             CodeStore.push_back(now);
             return 1;
         }
 
 	}
-
+    delete now;
 	return 0;
 
 }
@@ -395,10 +428,15 @@ bool ModeSyntexAnalysis::elseStat()
 			sMove();
 	}
 	(now->bottom)=(now->bottom)-1;
-	if ( cnt!=0 ) return 0;
+	if ( cnt!=0 )
+    {
+        delete now;
+        return 0;
+    }
 	CodeStore.push_back(now);
 	return 1;
 }
+
 bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êı¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿é
 {
     string nowName;
@@ -410,6 +448,7 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êı¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
         if(look->tag==IDT)
         {
             nowName=((Idt*)look)->name;
+            //cout<<nowName<<endl;
             sMove();
             if(look->tag==LPAR)    //º¯Êı¶¨ÒåÓëÉùÃ÷
             {
@@ -506,7 +545,11 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êı¶¨ÒåÓëÉùÃ÷
         else
             sMove();
     }
-    if(cnt!=0) return 0;
+    if(cnt!=0)
+    {
+        delete now;
+        return 0;
+    }
     CodeStore.push_back(now);
     return 1;
 }

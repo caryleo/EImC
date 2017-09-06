@@ -79,7 +79,7 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
     }
     else
     {
-        cout<<"Error"<<endl;
+        cout<<"Error in Syntex Analysis!"<<endl;
         return 0;
     }
 }
@@ -92,50 +92,50 @@ bool ModeSyntexAnalysis::statement()
         {
             case KEY_WHILE:  //while语句块
                 {
-                    cout<<"while"<<endl;
+                    //cout<<"while"<<endl;
                     if(whileStat()) break;
                     else return 0;
 
                 }
             case KEY_IF:    //if语句块
                 {
-                    cout<<"if"<<endl;
+                    //cout<<"if"<<endl;
                     if(ifStat()) break;
                     else return 0;
                 }
             case KEY_ELSE:      //else语句块
                 {
-                    cout<<"else"<<endl;
+                    //cout<<"else"<<endl;
                     if(elseStat()) break;
                     else return 0;
                 }
             case KEY_BRK:       //break语句块
                 {
-                    cout<<"break"<<endl;
+                    //cout<<"break"<<endl;
                     if(brkStat()) break;
                     else return 0;
                 }
             case KEY_CON:       //continue语句块
                 {
-                    cout<<"continue"<<endl;
+                    //cout<<"continue"<<endl;
                     if(conStat()) break;
                     else return 0;
                 }
             case KEY_RET:       //return语句块
                 {
-                    cout<<"return"<<endl;
+                    //cout<<"return"<<endl;
                     if(retStat()) break;
                     else return 0;
                 }
             case IDT:       //函数调用、表达式语句块
                 {
-                    cout<<"idt"<<endl;
+                    //cout<<"idt"<<endl;
                     if(distinguish()) break;
                     else return 0;
                 }
             default:    //函数定义与声明、变量声明与定义语句块
                 {
-                    cout<<"altExpr"<<endl;
+                    //cout<<"altExpr"<<endl;
                     if(altExprStat()) break;
                     else return 0;
                 }
@@ -160,7 +160,7 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
             now->bottom=it;
             sMove();
         }
-        if(it==subEnd+1)
+        if(cnt!=0)
             return 0;
         if(!match(SEMICO)) return 0;
         CodeStore.push_back(now);
@@ -297,7 +297,7 @@ bool ModeSyntexAnalysis::whileStat()//while语义分析,无大括号
 			sMove();
 	}
 	(now->bottom)=(now->bottom)-1;
-	if(it==subEnd+1) return 0;
+	if(cnt!=0) return 0;
 	CodeStore.push_back(now);
 	return 1;
 }
@@ -326,7 +326,7 @@ bool ModeSyntexAnalysis::ifStat()//if语句分析，无大括号
 			sMove();
 	}
 	(now->bottom)=(now->bottom)-1;
-	if (it==subEnd+1)
+	if (cnt!=0)
         return 0;
 	CodeStore.push_back(now);
 	return 1;
@@ -349,7 +349,7 @@ bool ModeSyntexAnalysis::elseStat()
 			sMove();
 	}
 	(now->bottom)=(now->bottom)-1;
-	if ( it==subEnd+1) return 0;
+	if ( cnt!=0 ) return 0;
 	CodeStore.push_back(now);
 	return 1;
 }
@@ -451,7 +451,7 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
         else
             sMove();
     }
-    if(it==subEnd+1) return 0;
+    if(cnt!=0) return 0;
     CodeStore.push_back(now);
     return 1;
 }

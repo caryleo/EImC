@@ -38,6 +38,7 @@ Idt::Idt(string s, int l, int c) {
 	name = s;
 	line = l;
 	col = c;
+	t = NULL;
 }
 
 SoInt::SoInt(short n, int l, int c) {

@@ -15,7 +15,7 @@ FuncType::FuncType(int a,int b){
 	bottom = b;
 }
 
-void FuncType::Func()
+Token* FuncType::Func()
 {
 	vector<Token*> paralist;  // 存放参数的值
 	vector<Token*> paratype;	// 存放 参数的类型
@@ -91,11 +91,8 @@ void FuncType::Func()
 	}
 	Caller ret(funcnamestring,paratype);  // 创建名为 ret 的 caller 类的 一个对象 两个参数 函数名 和 函数的参数类型构成的列表
 	// 调用 ModeExecute 类
-	ModeExecute::caller(&ret,paralist);				//  调用
-	
-
-
-
+	Token*res= ModeExecute::caller(&ret,paralist);				//  调用
+	return res;
 }
 
 

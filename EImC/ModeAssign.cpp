@@ -6,6 +6,7 @@
 #include"Expression.h"
 #include"ModeExecute.h"
 #include"Stack.h"
+#include"FuncType.h"
 using namespace std;
 
 extern Stack RunTime;
@@ -34,18 +35,22 @@ void ModeAssign::Fuzhi()
 		temp++;
 	}
 	temp = expr_top;
-	while (temp<=bottom&&buffer[temp]->tag!=SEMICO)
+	while (buffer[temp]->tag!=SEMICO && buffer[temp]->tag != COMMA)  // 表达式到逗号或者分号为止
 	{
+		if (temp > bottom)
+		{
+			break;
+		}
 		temp++;
 	}
 	expr_bottom = temp - 1;
 	if ((expr_bottom-expr_top)<1)
 	{
-		cout << "Error!!!(no expression)" << endl;
+		cout << "Error!!!" << endl;
 	}
 	if ((expr_top - top) < 2)
 	{
-		cout << "Error!!!(no var)" << endl;
+		cout << "Error!!!" << endl;
 	}
 	else
 	{
@@ -89,10 +94,19 @@ void ModeAssign::Fuzhi()
 
 		// result 为表达式计算得到的返回值 类型为token
 		// 根据返回值的类型 有三种情况
+		Token *result;
+		if (buffer[expr_top]->tag == IDT&&buffer[expr_top + 1]->tag == LPAR)  //判断是函数
+		{
+			FuncType b(expr_top,expr_bottom);
+			result=b.Func();
+		}
+		else  // 判断是表达式
+		{
+			ExprIR a;
+			result = a.calculate_expr(expr_top, expr_bottom);
+		}
 
-
-		ExprIR a;
-		Token*result=a.calculate_expr(expr_top, expr_bottom);
+		
 		temp = expr_top;
 		// 考虑连等的情况
 		switch (result->tag)
@@ -199,5 +213,6 @@ void ModeAssign::Fuzhi()
 	//// 算术表达式的开始和结束时 expr_top & expr_bottom
 	//// 将算术表达式的值赋值给等式右边的 buffer[idt]
 	//// question： 表达式的返回值 以及 类型
+
 
 }

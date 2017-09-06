@@ -6,6 +6,7 @@
 #include"ModeExecute.h"
 #include"Expression.h"
 #include"Stack.h"
+#include"FuncType.h"
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
@@ -53,11 +54,15 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
+				
+
+				
 				while (buffer[temp]->tag != COMMA || buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
 				int end = temp-1;		// 这个赋值语句的结束
+				
 				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
 				ModeAssign test(start, end);
 				test.Fuzhi();

@@ -15,7 +15,7 @@ class FuncType
 {
 public:
 	FuncType(int a,int b);
-	void Func();
+	Token* Func();
 private:
 	int top;
 	int bottom;

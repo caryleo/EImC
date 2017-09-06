@@ -63,12 +63,6 @@
     <ClInclude Include="ModeWhile.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BreakType.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ContinueType.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ReturnType.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -119,13 +113,7 @@
     <ClCompile Include="ModeWhile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BreakType.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ReturnType.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ContinueType.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -209,10 +209,4 @@ void ModeAssign::Fuzhi()
 			break;
 		}
 
-	//// 调用算术表达式 ？？？？ 到底如何调用
-	//// 算术表达式的开始和结束时 expr_top & expr_bottom
-	//// 将算术表达式的值赋值给等式右边的 buffer[idt]
-	//// question： 表达式的返回值 以及 类型
-
-
 }

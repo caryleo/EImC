@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include"ModeExecute.h"
 #include"ModeWhile.h"
 #include"Expression.h"

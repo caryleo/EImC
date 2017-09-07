@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
 #include "ModeTokenAnalysis.h"

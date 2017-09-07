@@ -36,12 +36,12 @@ void SoOut::judgeIdt(int m)
 	}
 	else if (p->t->tag == RNUM)//如果是个实型
 	{
-		SoReal *q = (SoReal*)buffer.at(m);
+		SoReal *q = (SoReal*)p->t;
 		cout << q->val;
 	}
 	else if (p->t->tag == STRING)//如果是个字符串
 	{
-		SoString *q = (SoString*)buffer.at(m);
+		SoString *q = (SoString*)p->t;
 		cout << q->str;
 	}
 }

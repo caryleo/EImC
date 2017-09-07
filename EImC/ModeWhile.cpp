@@ -17,7 +17,7 @@ bool ModeWhile::calcu()
 {
     ExprIR *atom=new ExprIR;
     Token *tmp=atom->calculate_expr(conTop ,conBottom );
-    int now=expr.getIntVal(tmp);
+    int now=atom.getIntVal(tmp);
     if(now==0)
         return 0;
     else

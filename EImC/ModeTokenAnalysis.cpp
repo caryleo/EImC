@@ -41,6 +41,8 @@ Idt::Idt(string s, int l, int c) {
 	t = NULL;
 }
 
+SoInt::SoInt() {}
+
 SoInt::SoInt(short n, int l, int c) {
 	tag = NUM;
 	val = n;
@@ -48,12 +50,16 @@ SoInt::SoInt(short n, int l, int c) {
 	col = c;
 }
 
+SoReal::SoReal(){}
+
 SoReal::SoReal(float f, int l, int c) {
 	tag = RNUM;
 	val = f;
 	line = l;
 	col = c;
 }
+
+SoString::SoString(){}
 
 SoString::SoString(string s, int l, int c) {
 	tag = STRING;

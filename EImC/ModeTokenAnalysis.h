@@ -21,6 +21,7 @@ class SoInt :public Token/*int型常量类*/
 {
 public:
 	short val;
+	SoInt();
 	SoInt(short n, int l, int c);
 };
 
@@ -28,6 +29,7 @@ class SoReal :public Token/*real型常量类*/
 {
 public:
 	float val;
+	SoReal();
 	SoReal(float n, int l, int c);
 };
 
@@ -35,6 +37,7 @@ class SoString :public Token/*string型常量类*/
 {
 public:
 	string str;
+	SoString();
 	SoString(string s, int l, int c);
 };
 

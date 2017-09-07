@@ -90,7 +90,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 				p->t->tag = NUM;*/
 				if (p->t->tag == NUM)//如果是个整型
 				{
-					SoInt *s = (SoInt*)buffer.at(top + 1);
+					SoInt *s = (SoInt*)p->t;
 					/*测试用例
 					s->val = 3;*/
 					if (s->val > 0)

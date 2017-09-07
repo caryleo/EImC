@@ -3,6 +3,9 @@
 //    2.5*((10-1)/3),到最后乘号不能处理
 ////////////////////////////////
 
+#include "stdafx.h"
+#include "EImC.h"
+#include "ModeTokenAnalysis.h"
 #include "Expression.h"
 
 extern vector<Token*>buffer;

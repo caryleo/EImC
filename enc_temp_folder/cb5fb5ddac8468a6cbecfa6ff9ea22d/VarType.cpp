@@ -37,7 +37,6 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 		temp = top + 1;
 		while (temp<=bottom&&buffer[temp]->tag!=SEMICO) // 判断到不到分号 到分号为结束
 		{
-			// 新变量 将新变量 放入新栈中
 			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
 			{
 				Token* token = buffer[temp];

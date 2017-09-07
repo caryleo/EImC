@@ -1,4 +1,8 @@
 #include "ModeTokenAnalysis.h"
+#include"Stack.h"
+#include "EImC.h"
+#include<string>
+#include<cmath>
 
 class ExprIR
 {
@@ -14,20 +18,13 @@ private:
     Stack operand_s;
 public:
     //查询类型
-    Tag getValType(Token *);
+    Tag getType(Token *);
     //查询IDT asstype
     Tag getAsstype(Token *);
-    //判断是否为IDT
 
+    bool isAssign(Token *);
+    //判断是否为IDT
     bool isIDT(Token *);
-    //Token*向下转型为Idt*
-    Idt* TransIDT(Token *);
-    //Token*向下转型为SoString*
-    SoString *TransStr(Token *);
-    //Token*向下转型为SoInt*
-    SoInt *TransInt(Token *);
-    //Token*向下转型为SoReal*
-    SoReal *TransReal(Token *);
 
     //查询值
     string getStrVal(Token *);
@@ -41,7 +38,7 @@ public:
     //判断运算符优先级
     bool judge_priority(Token * ,Token *);
 
-    //算术运算：ADD,SUB,MUL,DIV,MOD
+    //双目算术运算：ADD,SUB,MUL,DIV,MOD
     Token * add_op(Token *,Token *);
     Token * sub_op(Token *,Token *);
     Token * mul_op(Token *,Token *);
@@ -72,7 +69,7 @@ public:
     Token * and_lop(Token *,Token *);
     Token * or_lop(Token *,Token *);
     Token * not_lop(Token *);
-
+    //vector<Token*>buffer
     //表达式处理入口
     Token * calculate_expr(int ,int );
     //查找对应的运算符处理模块

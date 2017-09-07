@@ -24,7 +24,7 @@ VarType::VarType(int a, int b)
 
 void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话 
 {
-	
+
 	int temp;
 	switch (buffer[top]->tag)  //读取第一个单词 判断是 int real string ;
 		// int a;  int a=1，b=1 ; int a,b; 大致有几种情况
@@ -35,7 +35,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 	case KEY_INT:
 	{
 		temp = top + 1;
-		while (temp<=bottom&&buffer[temp]->tag!=SEMICO) // 判断到不到分号 到分号为结束
+		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // 判断到不到分号 到分号为结束
 		{
 			// 新变量 将新变量 放入新栈中
 			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
@@ -49,7 +49,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				temp++;
 				continue;
 			}
-			if (buffer[temp]->tag== COMMA)  //读到逗号
+			if (buffer[temp]->tag == COMMA)  //读到逗号
 			{
 				temp++;
 				continue;
@@ -58,15 +58,15 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				
 
-				
-				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+
+				// 读到分号 或者 结束
+				while (buffer[temp]->tag != COMMA&&temp <= bottom) //读到逗号或者语句结束的时候 说明赋值语句结束
 				{
 					temp++;
 				}
-				int end = temp-1;		// 这个赋值语句的结束
-				
+				int end = temp - 1;		// 这个赋值语句的结束
+
 				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
 				ModeAssign test(start, end);
 				test.Fuzhi();
@@ -108,7 +108,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+				while (buffer[temp]->tag != COMMA && temp<=bottom) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
@@ -124,7 +124,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			}
 		}
 
-		
+
 	}
 	break;
 	case KEY_STRING:
@@ -152,7 +152,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+				while (buffer[temp]->tag != COMMA && temp<=bottom) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
@@ -173,5 +173,5 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 	default:
 		break;
 	}
-	
+
 }

@@ -1,8 +1,4 @@
-
-
-
-
-
+#include "stdafx.h"
 #include "Expression.h"
 
 extern vector<Token*>buffer;

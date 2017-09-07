@@ -3,6 +3,7 @@
 #include"ModeWhile.h"
 #include"Expression.h"
 #include"Stack.h"
+#include "Expression.h"
 extern Token ** esp, **ebp;	//运行栈的栈顶和栈底
 extern Stack RunTime; //使用运行栈
 ModeWhile::ModeWhile(int _s,int _t,int _x,int _y)

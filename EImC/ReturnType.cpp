@@ -20,21 +20,21 @@ void ReturnType::startReturn() {
 		if (buffer[top + 2]->tag = LPAR) {//返回值是一个函数调用的结果
 			FuncType fType(top + 1, bottom);
 			Token * tmp = fType.Func();
-			RunTime.ret(tmp, ebp);
-			RunTime.desync(ebp, esp);
+			RunTime.ret(tmp);
+			RunTime.desync();
 		}
 		else//返回值是表达式结果
 		{
 			ExprIR eIR;
 			Token * tmp = eIR.calculate_expr(top + 1, bottom);
-			RunTime.ret(tmp, ebp);
-			RunTime.desync(ebp, esp);
+			RunTime.ret(tmp);
+			RunTime.desync();
 		}
 	}
 	else {//返回值是表达式结果
 		ExprIR eIR;
 		Token * tmp = eIR.calculate_expr(top + 1, bottom);
-		RunTime.ret(tmp, ebp);
-		RunTime.desync(ebp, esp);
+		RunTime.ret(tmp);
+		RunTime.desync();
 	}
 }

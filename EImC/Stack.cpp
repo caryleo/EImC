@@ -4,6 +4,8 @@
 #include "Stack.h"
 using namespace std;
 
+extern Token** esp, **ebp;
+
 Stack::Stack() {
 	if (!(base = (Token **)malloc(STACK_INIT_SIZE * sizeof(Token *)))) {
 		exit(1);
@@ -49,7 +51,7 @@ Token * Stack::front() {/*取出栈顶元素*/
 }
 
 bool Stack::empty() {/*判断栈是否为空*/
-	return cnt==0 ? true : false;
+	return cnt == 0 ? true : false;
 }
 
 int Stack::size()
@@ -73,13 +75,19 @@ Idt * Stack::query(string n)
 	return nullptr;
 }
 
-void Stack::sync(Token **& esp)
+void Stack::sync()
 {
-	esp == top;
+	esp = top;
 	return;
 }
 
-void Stack::desync(Token **& ebp, Token **& esp)
+void Stack::syncb()
+{
+	ebp = top;
+	return;
+}
+
+void Stack::desync()
 {
 	Token ** tmp = top;
 	while (tmp != base) {
@@ -96,7 +104,7 @@ void Stack::desync(Token **& ebp, Token **& esp)
 	}
 }
 
-void Stack::ret(Token * s, Token ** ebp) {
+void Stack::ret(Token * s) {
 	Token ** tmp = top;
 	while (tmp != ebp) {
 		tmp--;

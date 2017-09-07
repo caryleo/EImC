@@ -45,7 +45,7 @@ void ModeAssign::Fuzhi()
 		temp++;
 	}
 	expr_bottom = temp - 1;
-	if ((expr_bottom - expr_top) < 1)
+	if ((expr_bottom - expr_top) < 0)
 	{
 		cout << "Error!!!" << endl;
 		return;

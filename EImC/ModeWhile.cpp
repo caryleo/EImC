@@ -30,11 +30,11 @@ void ModeWhile::runWhile()
     {
         PRTR *tmp=new PRTR(ebp);
         RunTime.push(tmp);
-        RunTime.sync(ebp);
-        RunTime.sync(esp);
+        RunTime.syncb();
+        RunTime.sync();
         ModeExecute::commence(top,bottom);
     }
     while(calcu())
         ModeExecute::commence(top,bottom);
-    RunTime.desync(ebp, esp);
+    RunTime.desync();
 }

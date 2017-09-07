@@ -34,9 +34,9 @@ public:
     //判断操作数,若不是操作数就是操作符
     bool isOperand(Token *);
     //运算符优先级
-    int oper_priority(Token *);
-    //判断运算符优先级
-    bool judge_priority(Token * ,Token *);
+    int oper_priority(Token * , Token * );
+    int isp(Tag );
+    int icp(Tag );
 
     //双目算术运算：ADD,SUB,MUL,DIV,MOD
     Token * add_op(Token *,Token *);
@@ -45,9 +45,6 @@ public:
     Token * div_op(Token *,Token *);
     Token * mod_op(Token *,Token *);
 
-    //单目算数运算符：正负号规定正负号要带括号例如（-a）
-    Token * pos_op(Token *);
-    Token * neg_op(Token *);
 
     //字符串处理DOLLA, HASH
     //定义$不改变原字符串的值，#删除字符对原字符串进行更改
@@ -73,7 +70,7 @@ public:
     //表达式处理入口
     Token * calculate_expr(int ,int );
     //查找对应的运算符处理模块
-    void find_op(Token *);
+    int find_op(Token *);
     //当扫描到运算符时执行
-    void solve_op(Token *);
+    int solve_op(Token *);
 };

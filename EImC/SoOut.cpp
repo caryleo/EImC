@@ -32,17 +32,17 @@ void SoOut::judgeIdt(int m)
 		SoInt *q = (SoInt*)buffer.at(m);
 		/*测试用例
 		q->val = 3;*/
-		cout << q->val << endl;
+		cout << q->val;
 	}
 	else if (p->t->tag == RNUM)//如果是个实型
 	{
 		SoReal *q = (SoReal*)buffer.at(m);
-		cout << q->val << endl;
+		cout << q->val;
 	}
 	else if (p->t->tag == STRING)//如果是个字符串
 	{
 		SoString *q = (SoString*)buffer.at(m);
-		cout << q->str << endl;
+		cout << q->str;
 	}
 }
 
@@ -58,7 +58,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 			if (buffer[top + 1]->tag == STRING)//只输出字符串的情况
 			{
 				SoString *p = (SoString*)buffer.at(top + 1);
-				cout << p->str << endl;
+				cout << p->str;
 			}
 			else if (buffer[top + 1]->tag == IDT)//只输出标识符的值的情况
 			{
@@ -70,11 +70,11 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 			if (buffer[top + 1]->tag == STRING)//第一部分输出字符串的情况
 			{
 				SoString *p = (SoString*)buffer.at(top + 1);
-				cout << p->str << endl;
+				cout << p->str;
 				if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
 				{
 					SoString *p = (SoString*)buffer.at(top + 3);
-					cout << p->str << endl;
+					cout << p->str;
 				}
 				else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的情况
 				{
@@ -100,7 +100,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 							if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
 							{
 								SoString *m = (SoString*)buffer.at(top + 3);
-								cout << m->str << endl;
+								cout << m->str;
 							}
 							else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
 							{
@@ -121,7 +121,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
 						{
 							SoString *m = (SoString*)buffer.at(top + 3);
-							cout << m->str << endl;
+							cout << m->str;
 						}
 						else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
 						{
@@ -129,7 +129,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						}
 					}
 				}
-				cout << "ERROR!!!" << endl;
+				else cout << "ERROR!!!" << endl;
 			}
 		}
 	}

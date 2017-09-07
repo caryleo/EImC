@@ -201,7 +201,7 @@ bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
     else        //变量表达式,top为变量名，bottom为分号前一个的位置,tag为EXPR
     {
         now->tag=STATE;
-        now->top=it;
+        now->top=it-1;
         sMove();
         while(it!=subEnd+1)
         {

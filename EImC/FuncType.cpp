@@ -18,10 +18,10 @@ FuncType::FuncType(int a, int b) {
 
 Token* FuncType::Func()
 {
-	vector<Token*> paralist;  // 存放参数的值
+	vector<Token*> paralist;	// 存放参数的值
 	vector<Token*> paratype;	// 存放 参数的类型
 	int temp = top;
-	while (temp <= bottom) // 识别到 函数名 之后是个左括号 
+	while (temp <= bottom)		// 识别到 函数名 之后是个左括号 
 	{
 		if (buffer[temp]->tag == IDT&&buffer[temp + 1]->tag == LPAR)
 		{

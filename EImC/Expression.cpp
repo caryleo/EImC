@@ -1,11 +1,8 @@
-////////////////////////////////
-//    1.转型有点问题
-//    2.5*((10-1)/3),到最后乘号不能处理
-////////////////////////////////
 
-#include "stdafx.h"
-#include "EImC.h"
-#include "ModeTokenAnalysis.h"
+
+
+
+
 #include "Expression.h"
 
 extern vector<Token*>buffer;
@@ -21,8 +18,7 @@ Tag ExprIR::getType(Token * t)
 //查询IDT asstype
 Tag ExprIR::getAsstype(Token *t)
 {
-    Idt *idt=new Idt;
-    idt=(Idt*)t;
+    Idt *idt=(Idt*)t;
     return idt->assType;
 }
 //判断是否为IDT
@@ -34,8 +30,7 @@ bool ExprIR::isIDT(Token * t)
 //查询是否被赋值
 bool ExprIR::isAssign(Token *token)
 {
-    Idt *idt;
-    idt=(Idt*) token;
+    Idt *idt=(Idt*) token;
     if(idt->t==NULL) return 0;
     else return 1;
 }
@@ -47,12 +42,12 @@ string ExprIR::getStrVal(Token *token)
     if(token->tag==STRING)
     {
         SoString *so_string=new SoString;
-        so_string= (SoString *) token;
+        so_string=(SoString *) token;
         return so_string->str;
     }
     else
     {
-        Idt *idt;
+        Idt *idt=new Idt;
         idt=(Idt*) token;
         SoString *so_string=new SoString;
         so_string= (SoString *)(idt->t);
@@ -64,14 +59,13 @@ short ExprIR::getIntVal(Token *token)
 {
     if(token->tag==NUM)
     {
-        SoInt *so_int=new SoInt;
-        so_int= (SoInt *) token;
-        cout<<so_int->val<<endl;
+        SoInt *so_int= new SoInt;
+        so_int=(SoInt *) token;
         return so_int->val;
     }
     else
     {
-        Idt *idt;
+        Idt *idt=new Idt;
         idt=(Idt*) token;
         SoInt *so_int=new SoInt;
         so_int= (SoInt *)(idt->t);
@@ -89,7 +83,7 @@ float ExprIR::getRealVal(Token *token)
     }
     else
     {
-        Idt *idt;
+        Idt *idt=new Idt;
         idt=(Idt*) token;
         SoReal *so_real=new SoReal;
         so_real= (SoReal *)(idt->t);
@@ -168,7 +162,7 @@ Token * ExprIR::add_op(Token * a,Token * b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(a)==STRING||getType(b)==STRING)
     {
@@ -185,13 +179,16 @@ Token * ExprIR::add_op(Token * a,Token * b)
         {
             idt->assType=NUM;
             SoInt *so_int=new SoInt;
+            idt->t=new SoInt;
             so_int=(SoInt*) idt->t;
             so_int->val=getIntVal(a)+getIntVal(b);
+            //cout<<so_int->val<<endl;
         }
         else if(getType(a)==RNUM&&getType(b)==NUM)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)+getIntVal(b);
         }
@@ -199,6 +196,7 @@ Token * ExprIR::add_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getIntVal(a)+getRealVal(b);
         }
@@ -206,6 +204,7 @@ Token * ExprIR::add_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)+getRealVal(b);
         }
@@ -218,7 +217,7 @@ Token * ExprIR::sub_op(Token * a,Token * b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(a)==STRING||getType(b)==STRING)
     {
@@ -235,13 +234,16 @@ Token * ExprIR::sub_op(Token * a,Token * b)
         {
             idt->assType=NUM;
             SoInt *so_int=new SoInt;
+            idt->t=new SoInt;
             so_int=(SoInt*) idt->t;
             so_int->val=getIntVal(a)-getIntVal(b);
+            //cout<<so_int->val<<endl;
         }
         else if(getType(a)==RNUM&&getType(b)==NUM)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)-getIntVal(b);
         }
@@ -249,6 +251,7 @@ Token * ExprIR::sub_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getIntVal(a)-getRealVal(b);
         }
@@ -256,6 +259,7 @@ Token * ExprIR::sub_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)-getRealVal(b);
         }
@@ -268,7 +272,7 @@ Token * ExprIR::mul_op(Token * a,Token * b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(a)==STRING||getType(b)==STRING)
     {
@@ -285,13 +289,16 @@ Token * ExprIR::mul_op(Token * a,Token * b)
         {
             idt->assType=NUM;
             SoInt *so_int=new SoInt;
+            idt->t=new SoInt;
             so_int=(SoInt*) idt->t;
             so_int->val=getIntVal(a)*getIntVal(b);
+            //cout<<so_int->val<<endl;
         }
         else if(getType(a)==RNUM&&getType(b)==NUM)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)*getIntVal(b);
         }
@@ -299,6 +306,7 @@ Token * ExprIR::mul_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getIntVal(a)*getRealVal(b);
         }
@@ -306,6 +314,7 @@ Token * ExprIR::mul_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)*getRealVal(b);
         }
@@ -318,7 +327,7 @@ Token * ExprIR::div_op(Token * a,Token * b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(b)==NUM&&getIntVal(b)==0||getType(b)==RNUM&&getRealVal(b)==0.0)
     {
@@ -340,13 +349,16 @@ Token * ExprIR::div_op(Token * a,Token * b)
         {
             idt->assType=NUM;
             SoInt *so_int=new SoInt;
+            idt->t=new SoInt;
             so_int=(SoInt*) idt->t;
             so_int->val=getIntVal(a)/getIntVal(b);
+            //cout<<so_int->val<<endl;
         }
         else if(getType(a)==RNUM&&getType(b)==NUM)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)/getIntVal(b);
         }
@@ -354,6 +366,7 @@ Token * ExprIR::div_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getIntVal(a)/getRealVal(b);
         }
@@ -361,6 +374,7 @@ Token * ExprIR::div_op(Token * a,Token * b)
         {
             idt->assType=RNUM;
             SoReal *so_real=new SoReal;
+            idt->t=new SoReal;
             so_real=(SoReal*) idt->t;
             so_real->val=getRealVal(a)/getRealVal(b);
         }
@@ -373,7 +387,7 @@ Token * ExprIR::mod_op(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(a)==NUM&&getType(b)==NUM&&getIntVal(b)!=0)
     {
@@ -384,6 +398,7 @@ Token * ExprIR::mod_op(Token *a,Token *b)
         }
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         so_int->val=getIntVal(a)%getIntVal(b);
     }
@@ -400,7 +415,7 @@ Token * ExprIR::connect_op(Token * s1,Token *s2)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(s1)==STRING&&getType(s2)==STRING)
     {
@@ -410,6 +425,7 @@ Token * ExprIR::connect_op(Token * s1,Token *s2)
         }
         idt->assType=STRING;
         SoString *so_string=new SoString;
+        idt->t=new SoString;
         so_string=(SoString*) idt->t;
         so_string->str=getStrVal(s1)+getStrVal(s2);
     }
@@ -425,7 +441,7 @@ Token * ExprIR::delete_spec(Token *s,Token *pos)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(s)==STRING&&getType(pos)==NUM)
     {
@@ -441,6 +457,7 @@ Token * ExprIR::delete_spec(Token *s,Token *pos)
         }
         idt->assType=STRING;
         SoString *so_string=new SoString;
+        idt->t=new SoString;
         so_string=(SoString*) idt->t;
         so_string->str=getStrVal(s).erase(getIntVal(pos),1);
     }
@@ -456,7 +473,7 @@ Token * ExprIR::delete_tail(Token *s)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(s)==STRING)
     {
@@ -467,6 +484,7 @@ Token * ExprIR::delete_tail(Token *s)
         }
         idt->assType=STRING;
         SoString *so_string=new SoString;
+        idt->t=new SoString;
         so_string=(SoString*) idt->t;
         so_string->str=getStrVal(s).erase(getStrVal(s).size()-1,1);
     }
@@ -482,7 +500,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0&&isAssign(b)==0)
     {
@@ -493,6 +511,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getStrVal(a)>getStrVal(b))
         {
@@ -504,6 +523,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)>getIntVal(b))
         {
@@ -515,6 +535,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)>getIntVal(b))
         {
@@ -526,6 +547,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)>getIntVal(b))
         {
@@ -537,6 +559,7 @@ Token * ExprIR::is_greater(Token * a,Token * b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)>getIntVal(b))
         {
@@ -556,7 +579,7 @@ Token * ExprIR::not_less(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(is_less(a,b))==ERR)
     {
@@ -566,6 +589,7 @@ Token * ExprIR::not_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         so_int->val=!getIntVal(is_less(a,b));
     }
@@ -577,7 +601,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0&&isAssign(b)==0)
     {
@@ -588,6 +612,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getStrVal(a)<getStrVal(b))
         {
@@ -599,6 +624,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)<getIntVal(b))
         {
@@ -610,6 +636,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)<getIntVal(b))
         {
@@ -621,6 +648,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)<getIntVal(b))
         {
@@ -632,6 +660,7 @@ Token * ExprIR::is_less(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getRealVal(a)<getIntVal(b))
         {
@@ -651,7 +680,7 @@ Token * ExprIR::not_greater(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(is_greater(a,b))==ERR)
     {
@@ -661,6 +690,7 @@ Token * ExprIR::not_greater(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         so_int->val=!getIntVal(is_greater(a,b));
     }
@@ -672,7 +702,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0&&isAssign(b)==0)
     {
@@ -683,6 +713,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getStrVal(a)==getStrVal(b))
             so_int->val=1;
@@ -693,6 +724,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)==getIntVal(b))
             so_int->val=1;
@@ -703,6 +735,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(fabs(getRealVal(a)-getIntVal(b))<1e-8)
             so_int->val=1;
@@ -713,6 +746,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(fabs(getRealVal(a)-getRealVal(b))<1e-8)
             so_int->val=1;
@@ -723,6 +757,7 @@ Token * ExprIR::is_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(fabs(getIntVal(a)-getRealVal(b))<1e-8)
             so_int->val=1;
@@ -741,7 +776,7 @@ Token * ExprIR::not_equal(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(getType(is_equal(a,b))==ERR)
     {
@@ -751,6 +786,7 @@ Token * ExprIR::not_equal(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         so_int->val=!getIntVal(is_equal(a,b));
     }
@@ -762,7 +798,7 @@ Token * ExprIR::and_lop(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0&&isAssign(b)==0)
     {
@@ -773,6 +809,7 @@ Token * ExprIR::and_lop(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)==0||getIntVal(b)==0)
         {
@@ -792,7 +829,7 @@ Token * ExprIR::or_lop(Token *a,Token *b)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0&&isAssign(b)==0)
     {
@@ -803,6 +840,7 @@ Token * ExprIR::or_lop(Token *a,Token *b)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)==1||getIntVal(b)==1)
         {
@@ -822,7 +860,7 @@ Token * ExprIR::not_lop(Token *a)
 {
     Token *res=new Token;
     res->tag=IDT;
-    Idt *idt;
+    Idt *idt=new Idt;
     idt = (Idt*) res;
     if(isAssign(a)==0)
     {
@@ -833,6 +871,7 @@ Token * ExprIR::not_lop(Token *a)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(getIntVal(a)!=0)
             so_int->val=0;
@@ -843,6 +882,7 @@ Token * ExprIR::not_lop(Token *a)
     {
         idt->assType=NUM;
         SoInt *so_int=new SoInt;
+        idt->t=new SoInt;
         so_int=(SoInt*) idt->t;
         if(fabs(getRealVal(a)-0.0)<1e-8)
             so_int->val=1;
@@ -856,6 +896,11 @@ Token * ExprIR::not_lop(Token *a)
 //vector<Token*>buffer
 Token * ExprIR::calculate_expr(int head,int tail)
 {
+    Token *result=new Token;
+    result->tag=IDT;
+    Idt *idt=new Idt;
+    idt = (Idt*) result;
+
     pos=head;
     start=head;
     term=tail;
@@ -864,21 +909,35 @@ Token * ExprIR::calculate_expr(int head,int tail)
     operator_s.push(st);
     while(pos<=tail+1)
     {
+        Token *now=new Token;
         if(pos==(tail+1))
         {
-            Token *ed=new Token;
-            ed->tag=END;
-            operator_s.push(ed);
-            if(solve_op(operator_s.front())==-1) break;
+            now->tag=END;
+            while(operator_s.size()>0)
+            {
+                Token * ex_op= new Token;
+                ex_op=operator_s.front();
+                if(oper_priority(ex_op,now)==0)
+                {
+                    operator_s.pop();
+                    break;
+                }
+                if(find_op(ex_op)==-1)
+                {
+                    idt->assType=ERR;
+                    return result;
+                }
+                operator_s.pop();
+            }
         }
         //操作数
         else
             {
-            Token *now=new Token;
             now=buffer[pos];
             if(isOperand(now))//操作数直接入栈
             {
                 operand_s.push(now);
+                //cout<<operand_s.size()<<endl;
                 //if(getType(now)==NUM) cout<<getIntVal(now)<<endl;
             }
             //操作符
@@ -893,23 +952,57 @@ Token * ExprIR::calculate_expr(int head,int tail)
                     so_int->val=0;
                     operand_s.push(zero);
                 }
+                if(getType(now)==NOT)
+                {
+                    if(pos<term&&(getType(buffer[pos+1])==NUM||getType(buffer[pos+1])==LPAR||getType(buffer[pos+1])==RNUM))
+                    {
+                        int i=1;
+                    }
+                    else
+                    {
+                        idt->assType=ERR;
+                        return result;
+                    }
+                }
                 //优先级高，直接入栈
                 if(oper_priority(now,operator_s.front())==1) operator_s.push(now);
                 //否则先处理前面的那个
                 else
                 {
-                    if(solve_op(operator_s.front())==-1) break;
-                    operator_s.push(now);
+                    if(getType(now)==RPAR||getType(now)==END)
+                    {
+                        while(operator_s.size()>0)
+                        {
+                            Token * ex_op= new Token;
+                            ex_op=operator_s.front();
+                            if(oper_priority(ex_op,now)==0)
+                            {
+                                operator_s.pop();
+                                break;
+                            }
+                            if(find_op(ex_op)==-1)
+                            {
+                                idt->assType=ERR;
+                                return result;
+                            }
+                            operator_s.pop();
+                        }
+                    }
+                    else
+                    {
+                        if(solve_op(operator_s.front())==-1)
+                        {
+                            idt->assType=ERR;
+                            return result;
+                        }
+                        operator_s.push(now);
+                    }
                 }
             }
         }
-
         pos++;
     }
-    Token *result=new Token;
-    result->tag=IDT;
-    Idt *idt;
-    idt = (Idt*) result;
+
     if(operand_s.size()==1&&operator_s.size()==0)
     {
         if(getType(operand_s.front())!=ERR)
@@ -924,46 +1017,8 @@ Token * ExprIR::calculate_expr(int head,int tail)
 
 int ExprIR::solve_op(Token * op)
 {
-    if(getType(op)==RPAR)
-    {
-        operator_s.pop();
-        while(operator_s.size()>0)
-        {
-			Token * now_op= new Token;
-			now_op=operator_s.front();
-			//cout<<getType(now_op)<<endl;
-			if(oper_priority(now_op,op)==0)
-            {
-                operator_s.pop();
-                break;
-            }
-            if(find_op(now_op)==-1) return -1;
-            operator_s.pop();
-        }
-    }
-    else if(getType(op)==END)
-    {
-        operator_s.pop();
-        while(operator_s.size()>0)
-        {
-            Token * now_op= new Token;
-            now_op=operator_s.front();
-        //cout<<getType(now_op)<<endl;
-            if(oper_priority(now_op,op)==0)
-            {
-            operator_s.pop();
-            break;
-            }
-        if(find_op(now_op)==-1) return -1;
-        operator_s.pop();
-        }
-    }
-    else
-    {
-        Token * ex_op =operator_s.front();
-        if(find_op(ex_op)==-1) return -1;
-        operator_s.pop();
-    }
+    if(find_op(op)==-1) return -1;
+    operator_s.pop();
     return 0;
 }
 
@@ -985,7 +1040,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=add_op(a,b);
+                num=add_op(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -999,7 +1054,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=sub_op(a,b);
+                num=sub_op(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1013,7 +1068,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=mul_op(a,b);
+                num=mul_op(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1027,7 +1082,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=div_op(a,b);
+                num=div_op(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1041,7 +1096,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=mod_op(a,b);
+                num=mod_op(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1055,7 +1110,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=is_greater(a,b);
+                num=is_greater(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1069,7 +1124,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=not_less(a,b);
+                num=not_less(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1083,7 +1138,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=is_less(a,b);
+                num=is_less(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1097,7 +1152,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=not_greater(a,b);
+                num=not_greater(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1111,7 +1166,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=is_equal(a,b);
+                num=is_equal(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1125,7 +1180,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=not_equal(a,b);
+                num=not_equal(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1139,7 +1194,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=and_lop(a,b);
+                num=and_lop(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1153,7 +1208,7 @@ int ExprIR::find_op(Token *op)
                 operand_s.pop();
                 Token *b=operand_s.front();
                 operand_s.pop();
-                num=or_lop(a,b);
+                num=or_lop(b,a);
                 operand_s.push(num);
             }
             else return -1;
@@ -1162,7 +1217,7 @@ int ExprIR::find_op(Token *op)
     //非！必须在操作数或者左括号前边
     case NOT:
         {
-            if(pos<term&&(getType(buffer[pos+1])==IDT||getType(buffer[pos+1])==LPAR))
+            if(operand_s.size()>=1)
             {
                 Token *a=operand_s.front();
                 operand_s.pop();

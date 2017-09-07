@@ -2,10 +2,10 @@
 #include"SoIn.h"
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"
-
+#include"Stack.h"
+extern Stack RunTime;
 extern vector<Token*>buffer;
 extern vector<Token*>ConstStore;
-
 
 void SoIn::judgeIdt(int m)
 {
@@ -21,12 +21,14 @@ void SoIn::judgeIdt(int m)
 		cout << "ERROR!!!" << endl;
 	else
 	{
-		Idt *p = (Idt*)buffer.at(m);
-		/*测试用例
-		Token qi(NUM, 1, 1);//in a;中a的类型假如是整型
-		p->t = &qi;
-		p->t->tag = NUM;*/
-		if (p->t->tag == NUM)//如果是个整型
+		Idt *a = (Idt*)buffer.at(m);
+		Idt *p=RunTime.query(a->name);
+		if (p == NULL)//如果变量之前未声明过
+		{
+			cout << "ERROR!!!" << endl;
+			return;
+		}
+		if (p->assType== NUM)//如果是个整型
 		{
 			if (buffer[len]->tag == NUM)
 			{
@@ -37,7 +39,7 @@ void SoIn::judgeIdt(int m)
 			}
 			else cout << "ERROR!!!" << endl;
 		}
-		else if (p->t->tag == RNUM)//如果是个实型
+		else if (p->assType == RNUM)//如果是个实型
 		{
 			if (buffer[len]->tag == RNUM)
 			{
@@ -51,21 +53,19 @@ void SoIn::judgeIdt(int m)
 				SoInt *s = (SoInt*)buffer.at(len);
 				float tmp = s->val;
 				SoReal * tmpr = new SoReal(tmp, 0, 0);
-				ConstStore.push_back(s);
 				ConstStore.push_back(tmpr);
 				p->t = tmpr;
 				//cout << q->val << endl;
 			}
 			else cout << "ERROR!!!" << endl;
 		}
-		else if (p->t->tag == STRING)//如果是个字符串
+		else if (p->assType == STRING)//如果是个字符串
 		{
 			if (buffer[len]->tag == STRING)
 			{
-				SoString *q = (SoString*)buffer.at(m);
 				SoString *s = (SoString*)buffer.at(len);
-				q->str = s->str;
-				cout << q->str << endl;
+				ConstStore.push_back(s);
+				p->t = s;
 			}
 			else cout << "ERROR!!!" << endl;
 		}

@@ -66,6 +66,7 @@ void ModeAssign::Fuzhi()
 			result = b.Func();
 			//???
 		}
+		
 		else
 		{
 			// 判断是表达式
@@ -125,6 +126,8 @@ void ModeAssign::Fuzhi()
 			ExprIR a;
 			result = a.calculate_expr(expr_top, expr_bottom);
 		}
+
+		
 		temp = expr_top;
 		// 考虑连等的情况
 		switch (result->tag)

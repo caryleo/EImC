@@ -309,22 +309,40 @@ void ModeExecute::assign(int top, int bottom)
 				{
 				case NUM: {
 					SoInt * comecome = (SoInt *)(ret->t);
-					SoInt * gogo = new SoInt(comecome->val, 0, 0);
-					ConstStore.push_back(gogo);
+					SoInt * gogo;
+					if (comecome != nullptr) {
+						gogo = new SoInt(comecome->val, 0, 0);
+						ConstStore.push_back(gogo);
+					}
+					else {
+						gogo = nullptr;
+					}
 					tmp->t = gogo;
 					break;
 				}
 				case RNUM: {
 					SoReal * comecome = (SoReal *)(ret->t);
-					SoReal * gogo = new SoReal(comecome->val, 0, 0);
-					ConstStore.push_back(gogo);
+					SoReal * gogo;
+					if (comecome != nullptr) {
+						gogo = new SoReal(comecome->val, 0, 0);
+						ConstStore.push_back(gogo);
+					}
+					else {
+						gogo = nullptr;
+					}
 					tmp->t = gogo;
 					break;
 				}
 				case STRING: {
 					SoString * comecome = (SoString *)(ret->t);
-					SoString * gogo = new SoString(comecome->str, 0, 0);
-					ConstStore.push_back(gogo);
+					SoString * gogo;
+					if (comecome != nullptr) {
+						gogo = new SoString(comecome->str, 0, 0);
+						ConstStore.push_back(gogo);
+					}
+					else {
+						gogo = nullptr;
+					}
 					tmp->t = gogo;
 					break;
 				}

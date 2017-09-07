@@ -49,7 +49,7 @@ SoFunc::SoFunc(string n, Tag r)
 }
 Caller::Caller(string n, vector<Token *> t) {
 	tag = CALL;
-	string name = n;
+	name = n;
 	paralist = t;
 };
 

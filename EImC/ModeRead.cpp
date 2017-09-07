@@ -81,6 +81,7 @@ int ModeRead::readMode()
 		{
 			in_content.push_back(in_char);
 		}
+		cin.get();
 		//output();
 		return 0;
 	}
@@ -111,7 +112,6 @@ int ModeRead::readmode()
 {
     cout << "ÇëÊäÈë´úÂëÄÚÈİ" << endl;
     char in_char;
-    getchar();
     while (cin.get(in_char))
     {
         in_content.push_back(in_char);

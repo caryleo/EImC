@@ -10,7 +10,7 @@
 
 
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
-// 赋值式子 监测语法是否有语法错误  如何赋值是 需要调用的功能 
+// 赋值式子   监测语法是否有语法错误  如何赋值是 需要调用的功能 
 extern vector<Token*>buffer;
 extern Stack RunTime;				//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
@@ -25,6 +25,7 @@ VarType::VarType(int a, int b)
 void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话 
 {
 	
+	int temp;
 	switch (buffer[top]->tag)  //读取第一个单词 判断是 int real string ;
 		// int a;  int a=1，b=1 ; int a,b; 大致有几种情况
 		//a=2 赋值 
@@ -33,7 +34,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 	{
 	case KEY_INT:
 	{
-		int temp = top + 1;
+		temp = top + 1;
 		while (temp<=bottom&&buffer[temp]->tag!=SEMICO) // 判断到不到分号 到分号为结束
 		{
 			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
@@ -59,7 +60,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				
 
 				
-				while (buffer[temp]->tag != COMMA || buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
@@ -72,6 +73,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				return;
 			}
 		}
 
@@ -79,9 +81,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 		//继续
 
 	}
+	break;
 	case KEY_REAL:
 	{
-		int temp = top + 1;
+		temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // 判断到不到分号 到分号为结束
 		{
 			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a   要添加新元素 a 进去
@@ -104,7 +107,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA || buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
@@ -116,14 +119,16 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				return;
 			}
 		}
 
 		
 	}
+	break;
 	case KEY_STRING:
 	{
-		int temp = top + 1;
+		temp = top + 1;
 		while (temp <= bottom&&buffer[temp]->tag != SEMICO) // 判断到不到分号 到分号为结束
 		{
 			if (buffer[temp]->tag == IDT)  //idt 是标识符 比如 a  要添加新元素 a 进去
@@ -146,7 +151,7 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA || buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
+				while (buffer[temp]->tag != COMMA && buffer[temp]->tag != SEMICO) //读到为分号或者逗号 说明赋值语句结束
 				{
 					temp++;
 				}
@@ -158,10 +163,12 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				return;
 			}
 		}
 
 	}
+	break;
 	default:
 		break;
 	}

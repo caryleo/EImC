@@ -64,64 +64,69 @@ void ModeAssign::Fuzhi()
 		{
 			FuncType b(expr_top, expr_bottom);
 			result = b.Func();
-			return;
+			//???
 		}
 		
-		while (temp <= expr_bottom)
+		else
 		{
-			if (buffer[temp]->tag == IDT)
+			// 判断是表达式
+			while (temp <= expr_bottom)
 			{
-				Idt* tem = (Idt*)buffer[temp]; //将表达式里的变量的值 和栈联系在一起  
-				string q = tem->name;
-				Idt *ret = RunTime.query(q);
-				if (ret == NULL)
+				//将表达式里的变量的值 和栈联系在一起  
+				if (buffer[temp]->tag == IDT)
 				{
-					cout << "Error!" << endl;
-					return;
+					Idt* tem = (Idt*)buffer[temp];
+					string q = tem->name;
+					Idt *ret = RunTime.query(q);
+					if (ret == NULL)
+					{
+						cout << "Error!" << endl;
+						return;
+					}
+					if (ret->t == NULL)
+					{
+						cout << "Error!" << endl;
+						return;
+					}
+					// int c=a+b; 此a 非彼 a 而且要把表达式里的 a 指向的assType 改掉
+					// 判断三种情况 新建对象 和idt->t 联系在一起
+					if (ret->assType == NUM)
+					{
+						tem->assType = NUM;
+						SoInt*intt = (SoInt*)ret->t;
+						SoInt *a = new SoInt(intt->val, 0, 0);
+						tem->t = a;
+					}
+					if (ret->assType == RNUM)
+					{
+						tem->assType = RNUM;
+						SoReal*intt = (SoReal*)ret->t;
+						SoReal *a = new SoReal(intt->val, 0, 0);
+						tem->t = a;
+					}
+					if (ret->assType == STRING)
+					{
+						tem->assType = STRING;
+						SoString*strr = (SoString*)ret->t;
+						SoString*b = new SoString(strr->str, 0, 0);
+						tem->t = b;
+					}
 				}
-				if (ret->t==NULL)
-				{
-					cout << "Error!" << endl;
-					return;
-				}
-				// int c=a+b; 此a 非彼 a 而且要把表达式里的 a 指向的assType 改掉
-				// 判断三种情况 新建对象 和idt->t 联系在一起
-				if (ret->assType == NUM)
-				{
-					tem->assType = NUM;
-					SoInt*intt = (SoInt*)ret->t;
-					SoInt *a = new SoInt(intt->val, 0, 0);
-					tem->t = a;
-				}
-				if (ret->assType == RNUM)
-				{
-					tem->assType = RNUM;
-					SoReal*intt = (SoReal*)ret->t;
-					SoReal *a = new SoReal(intt->val, 0, 0);
-					tem->t = a;
-				}
-				if (ret->assType == STRING)
-				{
-					tem->assType = STRING;
-					SoString*strr = (SoString*)ret->t;
-					SoString*b = new SoString(strr->str, 0, 0);
-					tem->t = b;
-				}
+				temp++;
 			}
-			temp++;
+			// 调用算术表达式的值 ？？？？ 到底如何调用
+			// 算术表达式的开始和结束时 expr_top & expr_bottom
+			// 将算术表达式的值赋值给等式右边的 buffer[idt]
+			// a+b 
+			// f(a)
+			// result 为表达式计算得到的返回值 类型为token
+			// 根据返回值的类型 有三种情况
+			
+
+			ExprIR a;
+			result = a.calculate_expr(expr_top, expr_bottom);
 		}
-		// 调用算术表达式的值 ？？？？ 到底如何调用
-		// 算术表达式的开始和结束时 expr_top & expr_bottom
-		// 将算术表达式的值赋值给等式右边的 buffer[idt]
-		// a+b 
-		// f(a)
-		// result 为表达式计算得到的返回值 类型为token
-		// 根据返回值的类型 有三种情况
-		
-		// 判断是表达式
-		
-		ExprIR a;
-		result = a.calculate_expr(expr_top, expr_bottom);
+
 		
 		temp = expr_top;
 		// 考虑连等的情况

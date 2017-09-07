@@ -131,6 +131,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 				}
 				else cout << "ERROR!!!" << endl;
 			}
+			else cout << "ERROR!!!" << endl;
 		}
 	}
 }

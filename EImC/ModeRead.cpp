@@ -107,6 +107,19 @@ int ModeRead::readMode()
 	}
 }
 
+int ModeRead::readmode()
+{
+    cout << "请输入代码内容" << endl;
+    char in_char;
+    getchar();
+    while (cin.get(in_char))
+    {
+        in_content.push_back(in_char);
+    }
+    //output();
+    return 0;
+}
+
 /*查看in_content里的内容（即手动输入）
 void ModeRead::output()
 {

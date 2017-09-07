@@ -4,6 +4,7 @@
 #include"ModeTokenAnalysis.h"
 
 extern vector<Token*>buffer;
+extern vector<Token*>ConstStore;
 
 
 void SoIn::judgeIdt(int m)
@@ -16,7 +17,7 @@ void SoIn::judgeIdt(int m)
 	for (int i = 0; i < buffer.size(); i++) {
 		cout << buffer[i]->tag << endl;
 	}
-	if (len2 - len != 2)//只支持输入一个
+	if (len2 - len != 1)//只支持输入一个
 		cout << "ERROR!!!" << endl;
 	else
 	{
@@ -29,10 +30,10 @@ void SoIn::judgeIdt(int m)
 		{
 			if (buffer[len]->tag == NUM)
 			{
-				SoInt *q = (SoInt*)buffer.at(m);
 				SoInt *s = (SoInt*)buffer.at(len);
-				q->val = s->val;
-				cout << q->val << endl;
+				ConstStore.push_back(s);
+				p->t = s;
+				//cout << p->val << endl;
 			}
 			else cout << "ERROR!!!" << endl;
 		}
@@ -40,17 +41,18 @@ void SoIn::judgeIdt(int m)
 		{
 			if (buffer[len]->tag == RNUM)
 			{
-				SoReal *q = (SoReal*)buffer.at(m);
 				SoReal *s = (SoReal*)buffer.at(len);
-				q->val = s->val;
-				cout << q->val << endl;
+				ConstStore.push_back(s);
+				p->t = s;
+				//cout << q->val << endl;
 			}
 			else if (buffer[len]->tag == NUM)
 			{
-				SoReal *q = (SoReal*)buffer.at(m);
 				SoInt *s = (SoInt*)buffer.at(len);
-				q->val = s->val;
-				cout << q->val << endl;
+				float tmp = s->val;
+				SoReal * tmpr = new SoReal(tmp, 0, 0);
+				p->t = tmpr;
+				//cout << q->val << endl;
 			}
 			else cout << "ERROR!!!" << endl;
 		}

@@ -16,22 +16,12 @@ bool ModeWhile::calcu()
 {
     ExprIR *atom=new ExprIR;
     Token *tmp=atom->calculate_expr(conTop ,conBottom );
-    if(tmp->tag==NUM)
-    {
-        if(((SoInt*)tmp)->val==0)
-            return 0;
-        else
-            return 1;
-    }
-    else if(tmp->tag==RNUM)
-    {
-        if(((SoReal*)tmp)->val==0)
-            return 0;
-        else
-            return 1;
-    }
-    else
+    int now=expr.getIntVal(tmp);
+    if(now==0)
         return 0;
+    else
+        return 1;
+
 }
 void ModeWhile::runWhile()
 {

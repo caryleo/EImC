@@ -51,6 +51,8 @@ void SoIn::judgeIdt(int m)
 				SoInt *s = (SoInt*)buffer.at(len);
 				float tmp = s->val;
 				SoReal * tmpr = new SoReal(tmp, 0, 0);
+				ConstStore.push_back(s);
+				ConstStore.push_back(tmpr);
 				p->t = tmpr;
 				//cout << q->val << endl;
 			}

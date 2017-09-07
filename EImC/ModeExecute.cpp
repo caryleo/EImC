@@ -58,6 +58,7 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 			default:
 				break;
 			}
+			break;
 		}
 		case CALL:
 		case IF:
@@ -82,22 +83,21 @@ void ModeExecute::commence(int top, int bottom)
 	for (int i = top; i <= bottom; i++) {
 		switch (CodeStore[i]->tag)
 		{
+		case KEY_IN: {//输入式
+			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+			SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
+			break;
+		}
+		case KEY_OUT: {
+			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
+			SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom);
+			break;
+		}
 		case STATE: {
 			int st = CodeStore[i]->top;
 			int ed = CodeStore[i]->bottom;
 			switch (buffer[st]->tag)
 			{
-			case KEY_IN: {//输入式
-				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
-				SoIn::input(CodeStore[i]->top, CodeStore[i]->bottom);
-				break;
-			}
-
-			case KEY_OUT: {
-				ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
-				SoOut::print(CodeStore[i]->top, CodeStore[i]->bottom);
-				break;
-			}
 			case KEY_INT:																//三种类型关键字，默认是定义式
 			case KEY_REAL:
 			case KEY_STRING: {//默认是定义式
@@ -114,6 +114,7 @@ void ModeExecute::commence(int top, int bottom)
 			default:
 				break;
 			}
+			break;
 		}
 		case CALL: {//函数调用式
 			FuncType fType(CodeStore[i]->top, CodeStore[i]->bottom);

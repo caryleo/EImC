@@ -29,7 +29,7 @@ void SoOut::judgeIdt(int m)
 	p->t->tag = NUM;*/
 	if (p->t->tag == NUM)//如果是个整型
 	{
-		SoInt *q = (SoInt*)buffer.at(m);
+		SoInt *q = (SoInt*)p->t;
 		/*测试用例
 		q->val = 3;*/
 		cout << q->val;

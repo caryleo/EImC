@@ -58,6 +58,7 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 			default:
 				break;
 			}
+			break;
 		}
 		case CALL:
 		case IF:
@@ -114,6 +115,7 @@ void ModeExecute::commence(int top, int bottom)
 			default:
 				break;
 			}
+			break;
 		}
 		case CALL: {//函数调用式
 			FuncType fType(CodeStore[i]->top, CodeStore[i]->bottom);

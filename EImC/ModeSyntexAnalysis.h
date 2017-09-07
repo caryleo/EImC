@@ -78,6 +78,7 @@ public:
 	bool distinguish();
 	bool funStat(Tag retType,string name);
 	bool getHeadAndTail(int h, int t);
+	bool exp();
 	int subEnd, subStart, it;
 	Token *look;
 };

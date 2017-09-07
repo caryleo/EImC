@@ -11,12 +11,12 @@ void SoIn::judgeIdt(int m)
 {
 	int len = buffer.size();
 	ModeRead in;
-	in.readmode();
+	in.readMode();
 	ModeTokenAnalysis::read(in);
 	int len2 = buffer.size();
-	for (int i = 0; i < buffer.size(); i++) {
+	/*for (int i = 0; i < buffer.size(); i++) {
 		cout << buffer[i]->tag << endl;
-	}
+	}*/
 	if (len2 - len != 1)//只支持输入一个
 		cout << "ERROR!!!" << endl;
 	else

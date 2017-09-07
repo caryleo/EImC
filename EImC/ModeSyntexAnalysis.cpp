@@ -538,7 +538,13 @@ bool ModeSyntexAnalysis::exp()
     while(it!=subEnd+1)
     {
         if(match(SEMICO))
-            break;
+        {
+            int en=it-2;
+            AltExpr *now=new AltExpr(st,en);
+            now->tag=STATE;
+            CodeStore.push_back(now);
+            return 1;
+        }
         if(match(COMMA))
         {
             if(match(IDT))
@@ -556,12 +562,8 @@ bool ModeSyntexAnalysis::exp()
         else
             return 0;
     }
-    if(it==subEnd+1) return 0;
-    int en=it-2;
-    AltExpr *now=new AltExpr(st,en);
-    now->tag=STATE;
-    CodeStore.push_back(now);
-    return 1;
+    return 0;
+
 
 }
 bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明

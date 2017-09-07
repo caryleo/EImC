@@ -4,8 +4,6 @@
 #include "Stack.h"
 using namespace std;
 
-extern Stack RunTime;
-
 Stack::Stack() {
 	if (!(base = (Token **)malloc(STACK_INIT_SIZE * sizeof(Token *)))) {
 		exit(1);
@@ -23,23 +21,24 @@ void Stack::push(Token * t) {/*将元素压入栈中*/
 		}
 	}
 	else {
-		*top++ = t;
+		*top = t;
+		top++;
 	}
 	cnt++;
 	return;
 }
 
 void Stack::pop() {/*删除栈顶元素，实际操作是控制指针*/
-	if (top != base) {
+	if (cnt) {
 		top--;
+		cnt--;
 	}
-	cnt--;
 	return;
 }
 
 Token * Stack::front() {/*取出栈顶元素*/
-	if (top == base) {
-		return NULL;
+	if (cnt == 0) {
+		return nullptr;
 	}
 	else {
 		top--;
@@ -50,7 +49,7 @@ Token * Stack::front() {/*取出栈顶元素*/
 }
 
 bool Stack::empty() {/*判断栈是否为空*/
-	return top == base ? true : false;
+	return cnt==0 ? true : false;
 }
 
 int Stack::size()
@@ -62,6 +61,7 @@ Idt * Stack::query(string n)
 {
 	Token ** p = top;
 	while (p != base) {
+		p--;
 		if ((*p)->tag == IDT) {
 			Idt * q = (Idt*)(*p);
 			string name = q->name;
@@ -69,7 +69,6 @@ Idt * Stack::query(string n)
 				return q;
 			}
 		}
-		p--;
 	}
 	return nullptr;
 }
@@ -95,8 +94,6 @@ void Stack::desync(Token **& ebp, Token **& esp)
 		this->pop();
 		esp--;//将esp调整到存ebp地址的位置
 	}
-	this->pop();
-	esp--;//重置esp；
 }
 
 void Stack::ret(Token * s, Token ** ebp) {
@@ -104,9 +101,9 @@ void Stack::ret(Token * s, Token ** ebp) {
 	while (tmp != ebp) {
 		tmp--;
 	}
+	tmp--;//减两次，跳过
 	tmp--;
-	Token * tmpp = *tmp;
-	tmpp = s;
+	*tmp = s;
 }
 
 Stack::~Stack() {/*销毁*/

@@ -131,29 +131,43 @@ void ModeExecute::commence(int top, int bottom)
 			case NUM:
 			{
 				if (((SoInt *)ans)->val == 0) {//if不可执行，或跳过，或无条件执行紧邻的else
-					if (CodeStore[i + 1]->tag == ELSE) {
-						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
-						RunTime.sync(ebp);
-						RunTime.sync(esp);
-						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
-						i++;//执行else块 并跳至else块的下一个位置
-						RunTime.desync(ebp, esp);
-					}
-					else {
+					if (i < CodeStore.size() - 1) {
+						if (CodeStore[i + 1]->tag == ELSE) {
+							PRTR * build = new PRTR(ebp);
+							RunTime.push(build);
+							RunTime.sync(ebp);
+							RunTime.sync(esp);
+							ModeSyntexAnalysis mSA;
+							mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+							i++;//执行else块 并跳至else块的下一个位置
+							RunTime.desync(ebp, esp);
+						}
+						else {
+
+						}
 					}
 				}
 				else {//if可执行，执行，并无条件跳过紧邻的else
-					if (CodeStore[i + 1]->tag == ELSE) {
-						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
-						RunTime.sync(ebp);
-						RunTime.sync(esp);
-						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						i++;
-						RunTime.desync(ebp, esp);
+					if (i < CodeStore.size() - 1) {
+						if (CodeStore[i + 1]->tag == ELSE) {
+							PRTR * build = new PRTR(ebp);
+							RunTime.push(build);
+							RunTime.sync(ebp);
+							RunTime.sync(esp);
+							ModeSyntexAnalysis mSA;
+							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							i++;
+							RunTime.desync(ebp, esp);
+						}
+						else {
+							PRTR * build = new PRTR(ebp);
+							RunTime.push(build);
+							RunTime.sync(ebp);
+							RunTime.sync(esp);
+							ModeSyntexAnalysis mSA;
+							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							RunTime.desync(ebp, esp);
+						}
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
@@ -257,9 +271,8 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 		}
 	}
 	SoFunc * a = FuncStore[ans];				//调用函数
-	vector<Token *> tmp = a->paralist;
-	for (int i = 0; i < tmp.size(); i++) {
-		Idt * idt = (Idt *)tmp[i];
+	for (int i = 0; i < a->paralist.size(); i++) {
+		Idt * idt = (Idt *)(a->paralist)[i];
 		idt->t = s[i];
 		RunTime.push(idt);
 		RunTime.sync(esp);						//同步运行栈栈顶
@@ -268,20 +281,19 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	{
 	case NUM: RunTime.push(new SoInt(0, 0, 0)); RunTime.sync(esp); break;
 	case RNUM: RunTime.push(new SoReal(0, 0, 0)); RunTime.sync(esp); break;
-	case STRING:
-	default: RunTime.push(new SoString(0, 0, 0)); RunTime.sync(esp);
+	case STRING:RunTime.push(new SoString(0, 0, 0)); RunTime.sync(esp); break;
+	default: 
 		break;
 	}
 	PRTR * prt = new PRTR(ebp);					//将当前层运行栈指针保存
 	RunTime.push(prt);
 	RunTime.sync(ebp);
 	RunTime.sync(esp);
-	esp = ebp;
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);
 	Token * ret = RunTime.front();				// 拿到函数返回值
 	RunTime.sync(esp);
-	return;
+	return ret;
 }
 
 void ModeExecute::assign(int top, int bottom)

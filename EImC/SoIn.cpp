@@ -11,7 +11,7 @@ void SoIn::judgeIdt(int m)
 {
 	int len = buffer.size();
 	ModeRead in;
-	in.readMode();
+	in.readmode();
 	ModeTokenAnalysis::read(in);
 	int len2 = buffer.size();
 	for (int i = 0; i < buffer.size(); i++) {

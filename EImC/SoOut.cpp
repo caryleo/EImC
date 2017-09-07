@@ -23,15 +23,15 @@ bool SoOut::isValid(int top, int bottom)
 void SoOut::judgeIdt(int m)
 {
 	Idt *p = (Idt*)buffer.at(m);
-	/*测试用例*/
+	/*测试用例
 	Token qi(NUM, 1, 1);
 	p->t = &qi;
-	p->t->tag = NUM;
+	p->t->tag = NUM;*/
 	if (p->t->tag == NUM)//如果是个整型
 	{
 		SoInt *q = (SoInt*)buffer.at(m);
-		/*测试用例*/
-		q->val = 3;
+		/*测试用例
+		q->val = 3;*/
 		cout << q->val << endl;
 	}
 	else if (p->t->tag == RNUM)//如果是个实型
@@ -84,16 +84,39 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 			else if (buffer[top + 1]->tag == IDT)//第一部分输出标识符的情况
 			{
 				Idt *p = (Idt*)buffer.at(top + 1);
-				/*测试用例*/
+				/*测试用例
 				Token qi(NUM, 1, 1);
 				p->t = &qi;
-				p->t->tag = NUM;
+				p->t->tag = NUM;*/
 				if (p->t->tag == NUM)//如果是个整型
 				{
 					SoInt *s = (SoInt*)buffer.at(top + 1);
-					/*测试用例*/
-					s->val = 3;
-					for (int i = 0; i < s->val; i++)
+					/*测试用例
+					s->val = 3;*/
+					if (s->val > 0)
+					{
+						for (int i = 0; i < s->val; i++)
+						{
+							if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
+							{
+								SoString *m = (SoString*)buffer.at(top + 3);
+								cout << m->str << endl;
+							}
+							else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
+							{
+								judgeIdt(top + 3);
+							}
+						}
+					}
+				}
+				else cout << "ERROR!!!" << endl;//如果不是整数也不是字符串则报错
+			}
+			else if (buffer[top + 1]->tag == NUM)//第一部分输出整数的情况
+			{
+				SoInt *p = (SoInt*)buffer.at(top + 1);
+				if (p->val > 0)
+				{
+					for (int i = 0; i < p->val; i++)
 					{
 						if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
 						{
@@ -106,23 +129,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						}
 					}
 				}
-				else cout << "ERROR!!!" << endl;//如果不是整数也不是字符串则报错
-			}
-			else if (buffer[top + 1]->tag == NUM)//第一部分输出整数的情况
-			{
-				SoInt *p = (SoInt*)buffer.at(top + 1);
-				for (int i = 0; i < p->val; i++)
-				{
-					if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
-					{
-						SoString *m = (SoString*)buffer.at(top + 3);
-						cout << m->str << endl;
-					}
-					else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
-					{
-						judgeIdt(top + 3);
-					}
-				}
+				cout << "ERROR!!!" << endl;
 			}
 		}
 	}

@@ -18,10 +18,11 @@ public:
 	bool empty();				//检查栈是否为空
 	int size();					//已使用的栈空间的个数
 	Idt * query(string n);		//查询指定的标识符
-	void sync();	//同步栈顶指针
-	void syncb();
-	void desync();//重置运行栈
-	void ret(Token * s);			//控制返回值的赋值
+	void sync();				//同步esp指针
+	void syncb();				//同步ebp指针
+	void desync();				//重置运行栈
+	void ret(Token * s);		//控制返回值的赋值
+	Idt * query_alt(string n);	//查询到当前ebp
 	~Stack();					//销毁整个栈
 private:
 	Token ** base;				//栈底

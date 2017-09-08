@@ -114,6 +114,22 @@ void Stack::ret(Token * s) {
 	*tmp = s;
 }
 
+Idt * Stack::query_alt(string n)
+{
+	Token ** p = top;
+	while (p != ebp) {
+		p--;
+		if ((*p)->tag == IDT) {
+			Idt * q = (Idt*)(*p);
+			string name = q->name;
+			if (n.compare(name) == 0) {
+				return q;
+			}
+		}
+	}
+	return nullptr;
+}
+
 Stack::~Stack() {/*Ïú»Ù*/
 	free(base);
 }

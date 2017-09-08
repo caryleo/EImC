@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "Expression.h"
 
 extern vector<Token*>buffer;
@@ -388,6 +388,7 @@ Token * ExprIR::connect_op(Token * s1, Token *s2)
 		if (isAssign(s1) == 0 && isAssign(s2) == 0)
 		{
 			res->tag = ERR;
+			return res;
 		}
 		res->tag = STRING;
 		SoString *so_string = new SoString;
@@ -827,12 +828,12 @@ Token * ExprIR::calculate_expr(int head, int tail)
 					operator_s.pop();
 					break;
 				}
-				if (find_op(ex_op) == -1)
+				if (solve_op(ex_op) == -1)
 				{
 					result->tag = ERR;
 					return result;
 				}
-				operator_s.pop();
+				//operator_s.pop();
 			}
 		}
 		//操作数
@@ -869,6 +870,18 @@ Token * ExprIR::calculate_expr(int head, int tail)
 						return result;
 					}
 				}
+				if (getType(now) == HASH)
+                {
+                    if (pos > start && (getType(buffer[pos - 1]) == STRING || getType(buffer[pos - 1]) == RPAR || getType(buffer[pos + 1]) == HASH))
+					{
+						int i = 1;
+					}
+					else
+					{
+						result->tag = ERR;
+						return result;
+					}
+                }
 				//优先级高，直接入栈
 				if (oper_priority(now, operator_s.front()) == 1) operator_s.push(now);
 				//否则先处理前面的那个
@@ -885,12 +898,11 @@ Token * ExprIR::calculate_expr(int head, int tail)
 								operator_s.pop();
 								break;
 							}
-							if (find_op(ex_op) == -1)
+							if (solve_op(ex_op) == -1)
 							{
 								result->tag = ERR;
 								return result;
 							}
-							operator_s.pop();
 						}
 					}
 					else
@@ -1163,6 +1175,41 @@ int ExprIR::find_op(Token *op)
 		else return -1;
 		break;
 	}
+	case DOLLA:
+    {
+        if (operand_s.size() >= 2)
+		{
+			Token *a = operand_s.front();
+			operand_s.pop();
+			Token *b = operand_s.front();
+			operand_s.pop();
+			num = connect_op(b,a);
+			operand_s.push(num);
+		}
+		else return -1;
+		break;
+    }
+    case HASH:
+    {
+        if(operand_s.size()>=1)
+        {
+            Token *a = operand_s.front();
+			operand_s.pop();
+			num= delete_tail(a);
+			operand_s.push(num);
+        }
+        else if(operand_s.size()>=2)
+        {
+            Token *a = operand_s.front();
+			operand_s.pop();
+			Token *b = operand_s.front();
+			operand_s.pop();
+			num= delete_spec(b,a);
+			operand_s.push(num);
+        }
+        else return -1;
+		break;
+    }
 	}
 	return 0;
 }

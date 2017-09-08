@@ -110,9 +110,11 @@ int ExprIR::isp(Tag tag) {/*Õ»ÄÚ*/
 	case NOT: ans = 15; break;
 	case MUL:
 	case DIV:
-	case MOD: ans = 13; break;
+	case MOD:
+	case HASH: ans = 13; break;
 	case ADD:
-	case SUB: ans = 11; break;
+	case SUB:
+	case DOLLA: ans = 11; break;
 	case GT:
 	case GE:
 	case LT:
@@ -135,9 +137,11 @@ int ExprIR::icp(Tag tag) {/*Õ»Íâ*/
 	case NOT: ans = 14; break;
 	case MUL:
 	case DIV:
-	case MOD: ans = 12; break;
+	case MOD:
+	case HASH: ans = 12; break;
 	case ADD:
-	case SUB: ans = 10; break;
+	case SUB:
+	case DOLLA: ans = 10; break;
 	case GT:
 	case GE:
 	case LT:

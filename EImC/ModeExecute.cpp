@@ -232,7 +232,6 @@ void ModeExecute::commence(int top, int bottom)
 		case WHILE: {//Whileʽ
 			Block * tmp = CodeStore[i];
 			SoWhile * baba = (SoWhile *)tmp;
-			ModeExecute::assign(baba->conditionExprTop, baba->conditionExprBottom);
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
 			mWhile.runWhile();
 			break;

@@ -16,6 +16,7 @@ ModeWhile::ModeWhile(int _s,int _t,int _x,int _y)
 bool ModeWhile::calcu()
 {
     ExprIR *atom=new ExprIR;
+	ModeExecute::assign(conTop, conBottom);
     Token *tmp=atom->calculate_expr(conTop ,conBottom );
     int now=atom->getIntVal(tmp);
     if(now==0)
@@ -32,9 +33,12 @@ void ModeWhile::runWhile()
         RunTime.push(tmp);
         RunTime.syncb();
         RunTime.sync();
-        ModeExecute::commence(top,bottom);
+		ModeSyntexAnalysis mSA;
+		mSA.getHeadAndTail(top, bottom);
     }
-    while(calcu())
-        ModeExecute::commence(top,bottom);
+	while (calcu()) {
+		ModeSyntexAnalysis mSA;
+		mSA.getHeadAndTail(top, bottom);
+	}
     RunTime.desync();
 }

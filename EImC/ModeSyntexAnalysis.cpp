@@ -49,7 +49,7 @@ SoFunc::SoFunc(string n, Tag r)
 }
 Caller :: Caller(string n, vector<Token *> t) {
     tag = CALL;
-	string name=n;
+	name=n;
 	paralist=t;
 };
 
@@ -576,7 +576,8 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
         if(look->tag==KEY_INT||look->tag==KEY_REAL||look->tag==KEY_STRING)
         {
             q=new Idt;
-            q->assType=look->tag;
+
+			q->assType=look->tag;
             sMove();
             if(look->tag==IDT)
             {

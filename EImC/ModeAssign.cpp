@@ -40,8 +40,13 @@ void ModeAssign::Fuzhi()
 	// int a=b+c,d;
 	// b=1;
 	//int a=b+c
-	while (buffer[temp]->tag != COMMA&&temp<=bottom)  // 表达式到逗号为止
+	// 可能的bug a=1+f(2,3);
+	while (temp<=bottom)  // 表达式到逗号为止
 	{
+		if (buffer[temp]->tag == COMMA && temp == bottom)
+		{
+			break;
+		}
 		temp++;
 	}
 	expr_bottom = temp - 1;
@@ -58,17 +63,93 @@ void ModeAssign::Fuzhi()
 	else
 	{
 		temp = expr_top;
-		// 判断是不是函数
-		Token *result;
-		if (buffer[expr_top]->tag == IDT&&buffer[expr_top + 1]->tag == LPAR)  //判断是函数
+		Token *result; // 代表表达式处理的结果
+		// 判断是不是表达式里混有函数声明 1+fun(2);
+		int funcflag = 0;
+		int exprflag = 0;
+		int functop=0;
+		int funcbottom=0;
+		int mixuse = 0; // 标记是否为混用
+		// 判断是不是混用
+		while (temp<=expr_bottom)
+		{
+			if (buffer[temp]->tag == IDT &&buffer[temp + 1]->tag == LPAR)
+			{
+				funcflag = 1;
+				functop = temp;
+				while (temp <= bottom)
+				{
+					if (buffer[temp]->tag == RPAR)
+					{
+						funcbottom = temp;
+						break;
+					}
+					temp++;
+				}
+			}
+			temp++;
+		}
+		// 是 混用
+		temp = expr_top;
+		if (funcflag == 1 && (funcbottom - functop) < (expr_bottom - expr_top))
+		{
+			mixuse = 1;
+			int funcstart;
+			int funcend;
+			int expr_len=expr_bottom - expr_top;
+			// 压栈一遍 
+			while (temp <= expr_bottom)
+			{
+				if (buffer[temp]->tag == IDT&&buffer[temp + 1]->tag == LPAR)
+				{
+					funcstart = temp;
+					while (temp<=bottom)
+					{
+						if (buffer[temp]->tag == RPAR)
+						{
+							funcend = temp;
+							// 
+							break;
+						}
+						temp++;
+					}
+					// 将函数的值 压入 buffer 
+					expr_len = expr_len - (funcend - funcstart);
+					Token *restemp;
+					FuncType a(funcstart, funcend);
+					restemp = a.Func();
+					buffer.push_back(restemp);
+				}
+				else   // 其他变量 直接压入栈
+				{
+					Token *token = buffer[temp];
+					buffer.push_back(token);
+				}
+				temp++;
+			}
+			// 开始计算 处理后的表达式 里面的函数已经被处理 得到了 结果
+			int hu_end = buffer.size() - 1; // 处理后的表达式的结束
+			int hu_start = hu_end - expr_len;
+			// 调用 表达式处理函数
+			// 处理 表达式
+			ModeExecute::assign(hu_start, hu_end);
+			ExprIR c;
+			result = c.calculate_expr(hu_start, hu_end);
+
+		}
+		
+		// 是 纯函数
+		else if ( mixuse == 0 && buffer[expr_top]->tag == IDT&&buffer[expr_top + 1]->tag == LPAR)  //判断是函数
 		{
 			FuncType b(expr_top, expr_bottom);
 			result = b.Func();
 			//???
 		}
+		// 是 表达式
 		else
 		{
-			// 判断是表达式
+			
+			temp = expr_top;
 			while (temp <= expr_bottom)
 			{
 				//将表达式里的变量的值 和栈联系在一起  
@@ -113,15 +194,9 @@ void ModeAssign::Fuzhi()
 				}
 				temp++;
 			}
-			// 调用算术表达式的值 ？？？？ 到底如何调用
-			// 算术表达式的开始和结束时 expr_top & expr_bottom
-			// 将算术表达式的值赋值给等式右边的 buffer[idt]
-			// a+b 
-			// f(a)
+			
 			// result 为表达式计算得到的返回值 类型为token
 			// 根据返回值的类型 有三种情况
-			
-
 			ExprIR a;
 			result = a.calculate_expr(expr_top, expr_bottom);
 		}

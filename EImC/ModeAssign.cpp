@@ -98,6 +98,8 @@ void ModeAssign::Fuzhi()
 		temp = expr_top;
 		if (funcflag == 1 && (funcbottom - functop) < (expr_bottom - expr_top))
 		{
+			int hu_start = buffer.size();
+
 			mixuse = 1;
 			int funcstart;
 			int funcend;
@@ -133,8 +135,9 @@ void ModeAssign::Fuzhi()
 				temp++;
 			}
 			// 开始计算 处理后的表达式 里面的函数已经被处理 得到了 结果
-			int hu_end = buffer.size() - 1; // 处理后的表达式的结束
-			int hu_start = hu_end - expr_len;
+			int hu_end = hu_start + expr_len ; 
+			// 处理后的表达式的结束
+			// int hu_start = hu_end - expr_len;
 			// 调用 表达式处理函数
 			// 处理 表达式
 			ModeExecute::assign(hu_start, hu_end);

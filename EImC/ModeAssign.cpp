@@ -127,6 +127,7 @@ void ModeAssign::Fuzhi()
 		}
 		temp = expr_top;
 		// 考虑连等的情况
+		// 可能有未定义就赋值的情况 但是默认为整型 所以只有num讨论了这种情况
 		switch (result->tag)
 		{
 		case NUM:
@@ -149,11 +150,21 @@ void ModeAssign::Fuzhi()
 					Idt* idt = (Idt*)buffer[temp];
 					//	修改变量的值
 					string q = idt->name;
-					Idt *value = RunTime.query(q);
-					if (value == NULL)
+					Idt *value = RunTime.query(q);// 查找全部栈 看是否有这个变量名
+					if (value == NULL)  //找不到该数 说明未定义就使用
 					{
-						cout << "Error!!!" << endl;
-						return;
+						//Idt *res = RunTime.query_alt(q);
+						// 新建一个变量 默认为整型 放入栈中
+						Token* token = buffer[temp];
+						Idt* newidt = (Idt*)token;
+						newidt->assType = NUM;  
+						newidt->t = NULL;		//此时未赋值 修改 t 指针 指向空
+						RunTime.push(idt);   // 放入栈中
+						RunTime.sync();	 // 修改ESP
+						SoInt*intt = new SoInt(num, 0, 0);
+						ConstStore.push_back(intt);
+						Idt *newvalue = RunTime.query(q);
+						newvalue->t = intt;
 					}
 					if (value->assType == NUM)  //short
 					{

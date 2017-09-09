@@ -42,6 +42,13 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
+				// 判断是否已经在当前栈出现 不能重复定义
+				Idt *ressu = RunTime.query_alt(idt->name);
+				if (ressu!=NULL)
+				{
+					cout << "Error!!!" << endl;
+					return;
+				}
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;		//此时未赋值 修改 t 指针 指向空
 				RunTime.push(idt);   // 放入栈中
@@ -92,6 +99,13 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
+				// 判断是否已经在当前栈出现 不能重复定义
+				Idt *ressu = RunTime.query_alt(idt->name);
+				if (ressu != NULL)
+				{
+					cout << "Error!!!" << endl;
+					return;
+				}
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;
 				RunTime.push(idt);   // 放入栈中
@@ -136,6 +150,13 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				Token* token = buffer[temp];
 				Idt* idt = (Idt*)token;
+				// 判断是否已经在当前栈出现 不能重复定义
+				Idt *ressu = RunTime.query_alt(idt->name);
+				if (ressu != NULL)
+				{
+					cout << "Error!!!" << endl;
+					return;
+				}
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;
 				RunTime.push(idt);		// 放入栈中

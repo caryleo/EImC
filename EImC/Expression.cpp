@@ -165,11 +165,15 @@ Token * ExprIR::add_op(Token * a, Token * b)
 	if (getType(a) == STRING || getType(b) == STRING)
 	{
 		res->tag = ERR;
+		ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 	}
 	else
 	{
 		if (isAssign(a) == 0 && isAssign(b) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -212,12 +216,16 @@ Token * ExprIR::sub_op(Token * a, Token * b)
 	Token *res = new Token;
 	if (getType(a) == STRING || getType(b) == STRING)
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	else
 	{
 		if (isAssign(a) == 0 && isAssign(b) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -260,12 +268,16 @@ Token * ExprIR::mul_op(Token * a, Token * b)
 	Token *res = new Token;
 	if (getType(a) == STRING || getType(b) == STRING)
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	else
 	{
 		if (isAssign(a) == 0 && isAssign(b) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -308,17 +320,23 @@ Token * ExprIR::div_op(Token * a, Token * b)
 	Token *res = new Token;
 	if (getType(b) == NUM&&getIntVal(b) == 0 || getType(b) == RNUM&&getRealVal(b) == 0.0)
 	{
+	    ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
 	if (getType(a) == STRING || getType(b) == STRING)
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	else
 	{
 		if (isAssign(a) == 0 && isAssign(b) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -363,6 +381,8 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	{
 		if (isAssign(a) == 0 && isAssign(b) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -373,6 +393,16 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	}
 	else
 	{
+	    if(getType(b) == NUM&&getIntVal(b) == 0)
+        {
+            ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
+        }
+        else
+        {
+            ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
+        }
 		res->tag = ERR;
 	}
 	return res;
@@ -459,6 +489,8 @@ Token * ExprIR::is_greater(Token * a, Token * b)
 	Token *res = new Token;
 	if (isAssign(a) == 0 && isAssign(b) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -519,6 +551,8 @@ Token * ExprIR::is_greater(Token * a, Token * b)
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -548,6 +582,8 @@ Token * ExprIR::is_less(Token *a, Token *b)
 	Token *res = new Token;
 	if (isAssign(a) == 0 && isAssign(b) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -608,6 +644,8 @@ Token * ExprIR::is_less(Token *a, Token *b)
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -637,6 +675,8 @@ Token * ExprIR::is_equal(Token *a, Token *b)
 	Token *res = new Token;
 	if (isAssign(a) == 0 && isAssign(b) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -692,6 +732,8 @@ Token * ExprIR::is_equal(Token *a, Token *b)
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -721,6 +763,8 @@ Token * ExprIR::and_lop(Token *a, Token *b)
 	Token *res = new Token;
 	if (isAssign(a) == 0 && isAssign(b) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -737,6 +781,8 @@ Token * ExprIR::and_lop(Token *a, Token *b)
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -748,6 +794,8 @@ Token * ExprIR::or_lop(Token *a, Token *b)
 	Token *res = new Token;
 	if (isAssign(a) == 0 && isAssign(b) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -764,6 +812,8 @@ Token * ExprIR::or_lop(Token *a, Token *b)
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -775,6 +825,8 @@ Token * ExprIR::not_lop(Token *a)
 	Token *res = new Token;
 	if (isAssign(a) == 0)
 	{
+	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 		return res;
 	}
@@ -798,6 +850,11 @@ Token * ExprIR::not_lop(Token *a)
 		else
 			so_int->val = 0;
 	}
+	else
+    {
+        ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
+    }
 	return res;
 }
 
@@ -830,6 +887,8 @@ Token * ExprIR::calculate_expr(int head, int tail)
 				}
 				if (solve_op(ex_op) == -1)
 				{
+				    ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
+                    EXPR.report();
 					result->tag = ERR;
 					return result;
 				}
@@ -866,6 +925,8 @@ Token * ExprIR::calculate_expr(int head, int tail)
 					}
 					else
 					{
+					    ModeErrorReport EXPR(303, buffer[term]->line, buffer[term]->col);
+                        EXPR.report();
 						result->tag = ERR;
 						return result;
 					}
@@ -878,6 +939,8 @@ Token * ExprIR::calculate_expr(int head, int tail)
 					}
 					else
 					{
+					    ModeErrorReport EXPR(303, buffer[term]->line, buffer[term]->col);
+                        EXPR.report();
 						result->tag = ERR;
 						return result;
 					}
@@ -900,6 +963,8 @@ Token * ExprIR::calculate_expr(int head, int tail)
 							}
 							if (solve_op(ex_op) == -1)
 							{
+							    ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
+                                EXPR.report();
 								result->tag = ERR;
 								return result;
 							}
@@ -909,6 +974,8 @@ Token * ExprIR::calculate_expr(int head, int tail)
 					{
 						if (solve_op(operator_s.front()) == -1)
 						{
+						    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+                            EXPR.report();
 							result->tag = ERR;
 							return result;
 						}
@@ -957,9 +1024,19 @@ Token * ExprIR::calculate_expr(int head, int tail)
 			}
 			else result = operand_s.front();
 		}
-		else result->tag = ERR;
+		else
+        {
+            ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
+            result->tag = ERR;
+        }
 	}
-	else result->tag = ERR;
+	else
+    {
+        ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
+        result->tag = ERR;
+    }
 	return result;
 }
 

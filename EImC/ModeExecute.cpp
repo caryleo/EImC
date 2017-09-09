@@ -267,11 +267,11 @@ void ModeExecute::commence(int top, int bottom)
 }
 
 
-Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
+Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对应的函数*/
 {
 	string name = func->name;
 	int cnt = func->paralist.size();
-	int ans = 0;
+	int ans = -1;
 	for (int i = 0; i < FuncStore.size(); i++) {
 		if ((FuncStore[i]->paralist.size() == cnt) && (name.compare(FuncStore[i]->name) == 0))
 		{
@@ -288,6 +288,10 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 				break;
 			}
 		}
+	}
+	if (ans == -1) {
+		ModeErrorReport mER(501, line, 0);
+		mER.report
 	}
 	SoFunc * a = FuncStore[ans];				//调用函数
 	Token *t = new Token;

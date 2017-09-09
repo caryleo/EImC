@@ -7,7 +7,7 @@ private:
 	int errorCode;
 	int line;
 	int col;
-	std::map <int, std::string> content;
+	static std::map <int, std::string> content;
 public:
 	ModeErrorReport(int code, int l, int c);
 	void report();

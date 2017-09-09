@@ -17,7 +17,7 @@ ReturnType::ReturnType(int t, int b){
 
 void ReturnType::startReturn() {
 	if (buffer[top + 1]->tag == IDT) {
-		if (buffer[top + 2]->tag = LPAR) {//返回值是一个函数调用的结果
+		if (buffer[top + 2]->tag == LPAR) {//返回值是一个函数调用的结果
 			FuncType fType(top + 1, bottom);
 			Token * tmp = fType.Func();
 			RunTime.ret(tmp);

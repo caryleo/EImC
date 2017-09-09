@@ -1,5 +1,6 @@
 #include"stdafx.h"
 #include "ModeRead.h"
+#include "ModeErrorReport.h"
 
 ModeRead::ModeRead()//≥ı ºªØ
 {

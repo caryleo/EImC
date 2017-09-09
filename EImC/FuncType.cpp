@@ -35,13 +35,13 @@ Token* FuncType::Func()
 	Idt *funame = (Idt*)buffer[funcname];
 	string funcnamestring = funame->name;
 	int para = temp + 2;
-	if ((bottom - para) < 1)
+	/*if ((bottom - para) < 1)
 	{
 		cout << "Error!!!" << endl;
 		ModeErrorReport error(451, buffer[temp]->line, buffer[temp]->col);
 		error.report();
 		return 0;
-	}
+	}*/
 	// para 参数的开始
 	while (para <= bottom)  // 参数列表 fun（a+2,b,5)
 	{

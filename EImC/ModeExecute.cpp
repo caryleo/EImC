@@ -66,7 +66,8 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 		case ELSE:
 		case WHILE:
 		case KEY_RET: {//return语句
-			cout << "ERROR!!!" << endl;
+			ModeErrorReport mER(251, buffer[CodeStore[i]->bottom]->line, buffer[CodeStore[i]->bottom]->col);
+			mER.report();
 			break;
 		}
 		default:

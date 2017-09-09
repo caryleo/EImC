@@ -93,7 +93,8 @@ int ModeRead::readMode()
 		file = fopen(filePathName, "r");
 		if (!file)
 		{
-			cout << "找不到该文件" << endl;
+			ModeErrorReport EMR(100, 0, 0);
+            EMR.report();
 			return -1;
 		}
 		else

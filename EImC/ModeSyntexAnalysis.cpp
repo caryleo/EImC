@@ -6,7 +6,7 @@
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//Óï¾ä¿é´æ´¢Çø
 extern vector<SoFunc *>FuncStore;
-
+extern babababana retPos;
 Block::Block()
 {
 }
@@ -104,7 +104,12 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 }
 bool ModeSyntexAnalysis::hasRet()
 {
-    return ret;
+    for(int i=0;i<retPos.cnt;i++)
+    {
+        if(retPos.num[i]>=subStart&&retPos.num[i]<=subEnd)
+            return 1;
+    }
+    return 0;
 }
 bool ModeSyntexAnalysis::statement()
 {
@@ -146,7 +151,6 @@ bool ModeSyntexAnalysis::statement()
             case KEY_RET:       //returnÓï¾ä¿é
                 {
                     //cout<<"return"<<endl;
-                    ret=1;
                     if(retStat()) break;
                     else return 0;
                 }

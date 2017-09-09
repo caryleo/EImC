@@ -5,6 +5,7 @@
 #include"ModeSyntexAnalysis.h"
 #include"FuncType.h"
 #include"Stack.h"
+#include"ModeErrorReport.h"
 
 extern Stack RunTime;
 
@@ -33,6 +34,13 @@ Token* FuncType::Func()
 	Idt *funame = (Idt*)buffer[funcname];
 	string funcnamestring = funame->name;
 	int para = temp + 2;
+	if ((bottom - para) < 1)
+	{
+		cout << "Error!!!" << endl;
+		ModeErrorReport error(451, buffer[temp]->line, buffer[temp]->col);
+		error.report();
+		return 0;
+	}
 	while (para <= bottom)  // 参数列表 fun（a,b,5)
 	{
 		// 参数有四种情况 

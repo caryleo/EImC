@@ -7,7 +7,7 @@
 #include"Expression.h"
 #include"Stack.h"
 #include"FuncType.h"
-
+#include"ModeErrorReport.h"
 
 // 存在的问题 赋值调用的实现(关键字为等于号)还没有写好 还空在那里 50，  85 .118 行
 // 赋值式子   监测语法是否有语法错误  如何赋值是 需要调用的功能 
@@ -47,6 +47,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				if (ressu!=NULL)
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(351, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
@@ -81,6 +83,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				ModeErrorReport error(352, buffer[temp]->line, buffer[temp]->col);
+				error.report();
 				return;
 			}
 		}
@@ -104,6 +108,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				if (ressu != NULL)
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(351, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
@@ -134,6 +140,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				ModeErrorReport error(352, buffer[temp]->line, buffer[temp]->col);
+				error.report();
 				return;
 			}
 		}
@@ -155,6 +163,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				if (ressu != NULL)
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(351, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
@@ -185,6 +195,8 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
 				cout << "Error!!!" << endl;
+				ModeErrorReport error(352, buffer[temp]->line, buffer[temp]->col);
+				error.report();
 				return;
 			}
 		}

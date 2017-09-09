@@ -7,6 +7,7 @@
 #include"ModeExecute.h"
 #include"Stack.h"
 #include"FuncType.h"
+#include"ModeErrorReport.h"
 using namespace std;
 
 extern Stack RunTime;
@@ -53,11 +54,15 @@ void ModeAssign::Fuzhi()
 	if ((expr_bottom - expr_top) < 0)
 	{
 		cout << "Error!!!" << endl;
+		ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+		error.report();
 		return;
 	}
 	if ((expr_top - top) < 2)
 	{
 		cout << "Error!!!" << endl;
+		ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+		error.report();
 		return;
 	}
 	else
@@ -161,11 +166,15 @@ void ModeAssign::Fuzhi()
 					if (ret == NULL)
 					{
 						cout << "Error!" << endl;
+						ModeErrorReport error(402, buffer[temp]->line, buffer[temp]->col);
+						error.report();
 						return;
 					}
 					if (ret->t == NULL)
 					{
 						cout << "Error!" << endl;
+						ModeErrorReport error(403, buffer[temp]->line, buffer[temp]->col);
+						error.report();
 						return;
 					}
 					// int c=a+b; 此a 非彼 a 而且要把表达式里的 a 指向的assType 改掉
@@ -216,6 +225,8 @@ void ModeAssign::Fuzhi()
 				if (buffer[temp]->tag != ASSIGN)
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				temp--;
@@ -263,7 +274,9 @@ void ModeAssign::Fuzhi()
 					}
 					else 
 					{
-						cout << "Error!!!(expression assignment matching error)" << endl;
+						cout << "Error!!!" << endl;
+						ModeErrorReport error(404, buffer[temp]->line, buffer[temp]->col);
+						error.report();
 						return;
 					}
 					temp--;
@@ -271,6 +284,8 @@ void ModeAssign::Fuzhi()
 				else
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				
@@ -287,7 +302,9 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag != ASSIGN)
 				{
-					cout << "Error!!!\n" << endl;
+					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				temp--;
@@ -305,13 +322,18 @@ void ModeAssign::Fuzhi()
 					}
 					else 
 					{
-						cout << "Error!!!(expression assignment matching error)" << endl;
+						cout << "Error!!!" << endl;
+						ModeErrorReport error(404, buffer[temp]->line, buffer[temp]->col);
+						error.report();
+
 						return; 
 					}
 				}
 				else
 				{
-					cout << "Error!!!\n" << endl;
+					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				temp--;
@@ -327,7 +349,9 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag != ASSIGN)
 				{
-					cout << "Error!!!\n" << endl;
+					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				temp--;
@@ -347,12 +371,16 @@ void ModeAssign::Fuzhi()
 					}
 					else 
 					{
-						cout << "Error!!!(expression assignment matching error)" << endl;
+						cout << "Error!!!" << endl;
+						ModeErrorReport error(404, buffer[temp]->line, buffer[temp]->col);
+						error.report();
 					}
 				}
 				else
 				{
 					cout << "Error!!!" << endl;
+					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
+					error.report();
 					return;
 				}
 				temp--;

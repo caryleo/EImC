@@ -230,18 +230,25 @@ void ModeAssign::Fuzhi()
 					{
 						//Idt *res = RunTime.query_alt(q);
 						// 新建一个变量 默认为整型 放入栈中
+						// 测试
 						Token* token = buffer[temp];
 						Idt* newidt = (Idt*)token;
 						newidt->assType = NUM;  
 						newidt->t = NULL;		//此时未赋值 修改 t 指针 指向空
-						RunTime.push(idt);   // 放入栈中
+						RunTime.push(newidt);   // 放入栈中
 						RunTime.sync();	 // 修改ESP
 						SoInt*intt = new SoInt(num, 0, 0);
 						ConstStore.push_back(intt);
 						Idt *newvalue = RunTime.query(q);
+						/*if (newvalue == NULL)
+							cout << "have" << endl;
+						else
+						{
+							cout << "do not have" << endl;
+						}*/
 						newvalue->t = intt;
 					}
-					if (value->assType == NUM)  //short
+					else if (value->assType == NUM)  //short
 					{
 						SoInt* intt = new SoInt(num, 0, 0);
 						ConstStore.push_back(intt);

@@ -116,8 +116,13 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 							}
 						}
 					}
+					else //如果不是正整数则报错
+					{
+						ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+						mER.report();
+					}
 				}
-				else //如果不是整数也不是字符串则报错
+				else //如果不是正整数则报错
 				{
 					ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
 					mER.report();

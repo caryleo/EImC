@@ -237,6 +237,7 @@ void ModeExecute::commence(int top, int bottom)
 			break;
 		}
 		case KEY_RET: {//return语句
+			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();
 			break;
@@ -274,14 +275,28 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	for (int i = 0; i < a->paralist.size(); i++) {
 		Idt * idt = (Idt *)(a->paralist)[i];
 		idt->t = s[i];
+		idt->tag = IDT;
 		RunTime.push(idt);
 		RunTime.sync();						//同步运行栈栈顶
 	}
+	Token *t = new Token;
 	switch (a->retType)							//将函数返回值入栈
 	{
-	case KEY_INT: RunTime.push(new SoInt(0, 0, 0)); RunTime.sync(); break;
-	case KEY_REAL: RunTime.push(new SoReal(0, 0, 0)); RunTime.sync(); break;
-	case KEY_STRING:RunTime.push(new SoString(0, 0, 0)); RunTime.sync(); break;
+	case KEY_INT: 
+		t = new SoInt(0, 0, 0);
+		RunTime.push(t);
+		RunTime.sync();
+		break;
+	case KEY_REAL: 
+		t = new SoReal(0.0, 0, 0);
+		RunTime.push(t);
+		RunTime.sync();
+		break;
+	case KEY_STRING:
+		t = new SoString("", 0, 0);
+		RunTime.push(t);
+		RunTime.sync();
+		break;
 	default: 
 		break;
 	}

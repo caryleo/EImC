@@ -576,8 +576,15 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
         if(look->tag==KEY_INT||look->tag==KEY_REAL||look->tag==KEY_STRING)
         {
             q=new Idt;
-
-			q->assType=look->tag;
+			q->tag = IDT;
+			switch (look->tag)
+			{
+			case KEY_INT: q->assType = NUM; break;
+			case KEY_REAL: q->assType = RNUM; break;
+			case KEY_STRING: q->assType = STRING; break;
+			default:
+				break;
+			}
             sMove();
             if(look->tag==IDT)
             {

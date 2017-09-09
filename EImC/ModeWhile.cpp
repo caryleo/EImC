@@ -27,18 +27,19 @@ bool ModeWhile::calcu()
 }
 void ModeWhile::runWhile()
 {
+	ModeSyntexAnalysis mSA;
     if(calcu())
     {
         PRTR *tmp=new PRTR(ebp);
         RunTime.push(tmp);
         RunTime.syncb();
         RunTime.sync();
-		ModeSyntexAnalysis mSA;
 		mSA.getHeadAndTail(top, bottom);
     }
 	while (calcu()) {
-		ModeSyntexAnalysis mSA;
 		mSA.getHeadAndTail(top, bottom);
 	}
-    RunTime.desync();
+	if (!mSA.hasRet()) {
+		RunTime.desync();
+	}
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include"ModeTokenAnalysis.h"
+#include"ModeErrorReport.h"
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -139,8 +140,8 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模
 				return new Token(AND, l, c);
 			}
 			else {
-				cout << "ERROR!!!" << endl;
-				return NULL;
+				ModeErrorReport mEP(150, l, c);
+				mEP.report();
 			}
 		}
 		if (ch == '|')/*逻辑或*/ {
@@ -152,8 +153,8 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模
 				return new Token(OR, l, c);
 			}
 			else {
-				cout << "ERROR!!!" << endl;
-				return NULL;
+				ModeErrorReport mEP(151, l, c);
+				mEP.report();
 			}
 		}
 		if (ch == '!')/*逻辑非*/ {
@@ -310,8 +311,8 @@ Token * ModeTokenAnalysis::getNum(ModeRead & mRead, char & ch) {
 			return new SoReal(val2, l, c);
 		}
 		else {
-			cout << "ERROR!!!" << endl;
-			return NULL;
+			ModeErrorReport mEP(152, l, c);
+			mEP.report();
 		}
 	}
 	else {
@@ -325,6 +326,7 @@ Token * ModeTokenAnalysis::getString(ModeRead & mRead, char & ch) {
 	string str = "";
 	ch = mRead.scan();
 	while (ch != '"') {
+		ModeErrorReport mEP(153, l, c);
 		if (ch == '\\') {
 			ch = mRead.scan();
 			switch (ch)
@@ -338,15 +340,14 @@ Token * ModeTokenAnalysis::getString(ModeRead & mRead, char & ch) {
 			case 'r':str.push_back('\r'); break;
 			case '\n':
 			case -1:
-				cout << "ERROR!!!" << endl;
-				return NULL;
+				mEP.report();
 				break;
 			default:str.push_back(ch);
 			}
 		}
 		else if (ch == '\n' || ch == -1) {
-			cout << "ERROR!!!" << endl;
-			return NULL;
+			ModeErrorReport mEP(154, l, c);
+			mEP.report();
 		}
 		else {
 			str.push_back(ch);

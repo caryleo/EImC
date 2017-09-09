@@ -150,6 +150,7 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="FuncType.h" />
     <ClInclude Include="ModeAssign.h" />
+    <ClInclude Include="ModeErrorReport.h" />
     <ClInclude Include="ModeWhile.h" />
     <ClInclude Include="ReturnType.h" />
     <ClInclude Include="Stack.h" />

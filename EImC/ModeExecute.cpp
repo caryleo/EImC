@@ -12,6 +12,7 @@
 #include "Expression.h"
 #include "ModeWhile.h"
 #include "ReturnType.h"
+#include "ModeErrorReport.h"
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -127,6 +128,8 @@ void ModeExecute::commence(int top, int bottom)
 			ExprIR eIR;
 			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);//为表达式寻找值
 			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
+			Token * tmpn = buffer[CodeStore[i]->top];
+			ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 			switch (ans->tag)
 			{
 			case NUM:
@@ -141,7 +144,9 @@ void ModeExecute::commence(int top, int bottom)
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 							i++;//执行else块 并跳至else块的下一个位置
-							RunTime.desync();
+							if (!mSA.hasRet()) {
+								RunTime.desync();
+							}
 						}
 						else {
 
@@ -158,7 +163,9 @@ void ModeExecute::commence(int top, int bottom)
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 							i++;
-							RunTime.desync();
+							if (!mSA.hasRet()) {
+								RunTime.desync();
+							}
 						}
 						else {
 							PRTR * build = new PRTR(ebp);
@@ -167,7 +174,9 @@ void ModeExecute::commence(int top, int bottom)
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							RunTime.desync();
+							if (!mSA.hasRet()) {
+								RunTime.desync();
+							}
 						}
 					}
 					else {
@@ -177,7 +186,9 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						RunTime.desync();
+						if (!mSA.hasRet()) {
+							RunTime.desync();
+						}
 					}
 				}
 				break;
@@ -192,7 +203,9 @@ void ModeExecute::commence(int top, int bottom)
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 						i++;//执行else块 并跳至else块的下一个位置
-						RunTime.desync();
+						if (!mSA.hasRet()) {
+							RunTime.desync();
+						}
 					}
 					else {
 					}
@@ -206,7 +219,9 @@ void ModeExecute::commence(int top, int bottom)
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 						i++;
-						RunTime.desync();
+						if (!mSA.hasRet()) {
+							RunTime.desync();
+						}
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
@@ -215,7 +230,9 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						RunTime.desync();
+						if (!mSA.hasRet()) {
+							RunTime.desync();
+						}
 					}
 				}
 				break;
@@ -226,7 +243,7 @@ void ModeExecute::commence(int top, int bottom)
 			break;
 		}
 		case ELSE: {//没有关联if的else式
-			cout << "ERROR!!!" << endl;
+			mEP.report();
 			break;
 		}
 		case WHILE: {//While式
@@ -306,7 +323,11 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	RunTime.sync();
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);
-	Token * ret = RunTime.front();				// 拿到函数返回值
+	Token * ret = RunTime.front();	// 拿到函数返回值，此时函数已经退栈，返回值在最内部
+	RunTime.pop();					//pop掉返回值
+	for (int i = 0; i < a->paralist.size(); i++) {	//把所有的函数形参pop
+		RunTime.pop();
+	}
 	RunTime.sync();
 	return ret;
 }
@@ -366,9 +387,11 @@ void ModeExecute::assign(int top, int bottom)
 					break;
 				}
 			}
-			else {
-				tmp->assType = ERR;
+			else {//变量未定义 直接定义成int型量
+				tmp->assType = NUM;
 				tmp->t = NULL;
+				RunTime.push(tmp);
+				RunTime.sync();
 			}
 		}
 	}

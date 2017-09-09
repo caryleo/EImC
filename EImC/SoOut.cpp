@@ -2,6 +2,7 @@
 #include "EImC.h"
 #include "SoOut.h"
 #include "ModeTokenAnalysis.h"
+#include "ModeErrorReport.h"
 
 extern vector<Token*>buffer;
 

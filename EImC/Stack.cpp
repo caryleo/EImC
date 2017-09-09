@@ -109,7 +109,8 @@ void Stack::desync_func()
 	Token ** tmp = top;
 	while (tmp != base) {
 		tmp--;
-		if ((*tmp)->tag == PRT) {
+		if ((*tmp)->tag == NUM || (*tmp)->tag == RNUM || (*tmp)->tag == STRING) {
+			tmp++;
 			PRTR * tt = (PRTR *)(*tmp);
 			ebp = tt->prt;//将上一层运行栈的栈底指针赋给ebp
 			break;

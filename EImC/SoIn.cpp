@@ -3,6 +3,7 @@
 #include"EImC.h"
 #include"ModeTokenAnalysis.h"
 #include"Stack.h"
+#include "ModeErrorReport.h"
 extern Stack RunTime;
 extern vector<Token*>buffer;
 extern vector<Token*>ConstStore;

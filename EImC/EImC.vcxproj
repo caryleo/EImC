@@ -169,6 +169,7 @@
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="FuncType.cpp" />
     <ClCompile Include="ModeAssign.cpp" />
+    <ClCompile Include="ModeErrorReport.cpp" />
     <ClCompile Include="ModeWhile.cpp" />
     <ClCompile Include="ReturnType.cpp" />
     <ClCompile Include="Stack.cpp" />

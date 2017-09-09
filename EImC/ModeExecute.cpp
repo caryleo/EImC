@@ -82,6 +82,8 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 void ModeExecute::commence(int top, int bottom)
 {
 	for (int i = top; i <= bottom; i++) {
+		Token * tmpn = buffer[CodeStore[i]->top];
+		ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 		switch (CodeStore[i]->tag)
 		{
 		case KEY_IN: {//输入式
@@ -128,8 +130,6 @@ void ModeExecute::commence(int top, int bottom)
 			ExprIR eIR;
 			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);//为表达式寻找值
 			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
-			Token * tmpn = buffer[CodeStore[i]->top];
-			ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 			switch (ans->tag)
 			{
 			case NUM:

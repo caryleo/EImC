@@ -79,6 +79,7 @@ public:
 	bool funStat(Tag retType,string name);
 	bool getHeadAndTail(int h, int t);
 	int subEnd, subStart, it;
+	bool findSame(string name, SoFunc * func);
 	void getError(int _l,int _r,int _code)
 	{
 	    l=_l;

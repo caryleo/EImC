@@ -55,9 +55,18 @@ public:
 	static void read(ModeRead& mRead);
 	static Token * getToken(ModeRead & mRead, char & ch);
 	static Token * getIdt(ModeRead & mRead, char & ch);
-	static Token * getNum(ModeRead & mRead, char & ch); 
+	static Token * getNum(ModeRead & mRead, char & ch);
 	static Token * getString(ModeRead & mRead, char & ch);
 };
+
+class babababana{
+public:
+    void add(int pos);
+    babababana();
+    int cnt;
+    int num[105];
+};
+babababana retPos,conPos,brkPos;
 
 #endif // !MODETOKENANALYSIS_H_
 #pragma once

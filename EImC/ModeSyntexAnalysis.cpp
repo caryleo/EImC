@@ -6,7 +6,7 @@
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//语句块存储区
 extern vector<SoFunc *>FuncStore;
-
+extern babababana retPos;
 Block::Block()
 {
 }
@@ -104,7 +104,12 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 }
 bool ModeSyntexAnalysis::hasRet()
 {
-    return ret;
+    for(int i=0;i<retPos.cnt;i++)
+    {
+        if(retPos.num[i]>=subStart&&retPos.num[i]<=subEnd)
+            return 1;
+    }
+    return 0;
 }
 bool ModeSyntexAnalysis::statement()
 {
@@ -146,7 +151,6 @@ bool ModeSyntexAnalysis::statement()
             case KEY_RET:       //return语句块
                 {
                     //cout<<"return"<<endl;
-                    ret=1;
                     if(retStat()) break;
                     else return 0;
                 }
@@ -586,6 +590,7 @@ bool ModeSyntexAnalysis::exp()
     getError(look->line,look->col,2);
     return 0;
 }
+
 bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
 {
     SoFunc *now =new SoFunc(name,retType);
@@ -599,11 +604,11 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
 			q->tag = IDT;
 			switch (look->tag)
 			{
-			case KEY_INT: q->assType = NUM; break;
-			case KEY_REAL: q->assType = RNUM; break;
-			case KEY_STRING: q->assType = STRING; break;
-			default:
-				break;
+                case KEY_INT: q->assType = NUM; break;
+                case KEY_REAL: q->assType = RNUM; break;
+                case KEY_STRING: q->assType = STRING; break;
+                default:
+                    break;
 			}
             sMove();
             if(look->tag==IDT)
@@ -663,8 +668,16 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
         if(cnt==0)
         {
             now->bottom=((now->bottom)-1);
-            FuncStore.push_back(now);
-            return 1;
+            if(findSame(name,now))
+            {
+                delete now;
+                return 0;
+            }
+            else
+            {
+                FuncStore.push_back(now);
+                return 1;
+            }
         }
     }
     getError(look->line,look->col,1);
@@ -672,4 +685,29 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
     return 0;
 }
 
+bool ModeSyntexAnalysis::findSame(string name,SoFunc *func)
+{
+    int cnt=func->paralist.size();
+    for (int i = 0; i < FuncStore.size(); i++) {
+		if ((FuncStore[i]->paralist.size() == cnt) && (name.compare(FuncStore[i]->name) == 0))
+		{
+		    bool flag=1;
+			for (int j = 0; j < func->paralist.size(); j++) {
+				Idt * a = (Idt *)FuncStore[i]->paralist[j];
+				Idt * b = (Idt *)func->paralist[j];
+				if((a->assType)!=(b->assType))
+                {
+                    flag=0;
+                    break;
+                }
+			}
+			if(flag==1)
+            {
+                getError(look->line,look->col,10);
+                return 1;
+            }
+		}
+	}
+	return 0;
+}
 

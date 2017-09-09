@@ -70,6 +70,7 @@ public:
 	bool ifStat();
 	bool elseStat();
 	bool altExprStat();
+	bool exp();
 	bool brkStat();
 	bool conStat();
 	bool retStat();
@@ -78,9 +79,18 @@ public:
 	bool distinguish();
 	bool funStat(Tag retType,string name);
 	bool getHeadAndTail(int h, int t);
-	bool exp();
 	int subEnd, subStart, it;
+	void getError(int _l,int _r,int _code)
+	{
+	    l=_l;
+	    r=_r;
+	    code=_code;
+	}
+	bool hasRet();
 	Token *look;
+private:
+    int l,r,code;
+    bool ret;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_

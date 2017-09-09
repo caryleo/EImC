@@ -291,7 +291,7 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 	}
 	if (ans == -1) {
 		ModeErrorReport mER(501, line, 0);
-		mER.report
+		mER.report();
 	}
 	SoFunc * a = FuncStore[ans];				//调用函数
 	Token *t = new Token;

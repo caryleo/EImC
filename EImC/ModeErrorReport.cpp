@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "EImC.h"
 #include "ModeErrorReport.h"
 using namespace std;
 
@@ -36,9 +37,20 @@ ModeErrorReport::ModeErrorReport(int code, int l, int c)
 	content.insert(pair<int, string>(402, "赋值表达式里参数未定义"));
 	content.insert(pair<int, string>(403, "赋值表达式里参数未赋初值"));
 	content.insert(pair<int, string>(451, "函数参数不合法"));
-
+	content.insert(pair<int, string>(501, "函数签名不匹配"));
+	content.insert(pair<int, string>(750, "输入数量不是一个"));
+	content.insert(pair<int, string>(751, "输入数据类型与变量数据类型不符"));
+	content.insert(pair<int, string>(752, "输入语句格式不对"));
+	content.insert(pair<int, string>(753, "输出格式不对"));
+	content.insert(pair<int, string>(754, "输出次数不为正整数"));
+	content.insert(pair<int, string>(755, "输出变量类型不合法"));
+	content.insert(pair<int, string>(756, "输出变量未定义"));
 }
 
 void ModeErrorReport::report()
 {
+	string ans = content[errorCode];
+	cout << "发生错误" << endl;
+	cout << "行数：" << line << endl;
+	cout << "错误原因：" << ans << endl;
 }

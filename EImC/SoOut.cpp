@@ -45,12 +45,19 @@ void SoOut::judgeIdt(int m)
 		SoString *q = (SoString*)p->t;
 		cout << q->str;
 	}
+	else {
+		ModeErrorReport mER(756, buffer[m]->line, buffer[m]->col);
+		mER.report();
+	}
 }
 
 void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bottom是buffer数组的out语句结束词的位置
 {
 	if (isValid(top, bottom) == 0)//如果有错
-		cout << "ERROR!!!" << endl;
+	{
+		ModeErrorReport mER(753, buffer[bottom]->line, buffer[bottom]->col);
+		mER.report();
+	}
 	else
 	{
 		if (buffer[top + 2]->tag != COMMA)//没有','的情况
@@ -110,7 +117,11 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						}
 					}
 				}
-				else cout << "ERROR!!!" << endl;//如果不是整数也不是字符串则报错
+				else //如果不是整数也不是字符串则报错
+				{
+					ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+					mER.report();
+				}
 			}
 			else if (buffer[top + 1]->tag == NUM)//第一部分输出整数的情况
 			{
@@ -130,9 +141,15 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						}
 					}
 				}
-				else cout << "ERROR!!!" << endl;
+				else {
+					ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+					mER.report();
+				}
 			}
-			else cout << "ERROR!!!" << endl;
+			else {
+				ModeErrorReport mER(755, buffer[bottom]->line, buffer[bottom]->col);
+				mER.report();
+			}
 		}
 	}
 }

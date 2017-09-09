@@ -289,13 +289,6 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 		}
 	}
 	SoFunc * a = FuncStore[ans];				//调用函数
-	for (int i = 0; i < a->paralist.size(); i++) {
-		Idt * idt = (Idt *)(a->paralist)[i];
-		idt->t = s[i];
-		idt->tag = IDT;
-		RunTime.push(idt);
-		RunTime.sync();						//同步运行栈栈顶
-	}
 	Token *t = new Token;
 	switch (a->retType)							//将函数返回值入栈
 	{
@@ -321,13 +314,17 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s)/*寻找对应的函数*/
 	RunTime.push(prt);
 	RunTime.syncb();
 	RunTime.sync();
+	for (int i = 0; i < a->paralist.size(); i++) {
+		Idt * idt = (Idt *)(a->paralist)[i];
+		idt->t = s[i];
+		idt->tag = IDT;
+		RunTime.push(idt);
+		RunTime.sync();						//同步运行栈栈顶
+	}
 	ModeSyntexAnalysis mSA;						//分析执行
 	mSA.getHeadAndTail(a->top, a->bottom);
 	Token * ret = RunTime.front();	// 拿到函数返回值，此时函数已经退栈，返回值在最内部
 	RunTime.pop();					//pop掉返回值
-	for (int i = 0; i < a->paralist.size(); i++) {	//把所有的函数形参pop
-		RunTime.pop();
-	}
 	RunTime.sync();
 	return ret;
 }
@@ -390,8 +387,6 @@ void ModeExecute::assign(int top, int bottom)
 			else {//变量未定义 直接定义成int型量
 				tmp->assType = NUM;
 				tmp->t = NULL;
-				RunTime.push(tmp);
-				RunTime.sync();
 			}
 		}
 	}

@@ -5,6 +5,8 @@
 #include"ModeSyntexAnalysis.h"
 #include"FuncType.h"
 #include"Stack.h"
+#include"ModeErrorReport.h"
+#include"Expression.h"
 
 extern Stack RunTime;
 
@@ -33,12 +35,55 @@ Token* FuncType::Func()
 	Idt *funame = (Idt*)buffer[funcname];
 	string funcnamestring = funame->name;
 	int para = temp + 2;
-	while (para <= bottom)  // 参数列表 fun（a,b,5)
+	if ((bottom - para) < 1)
+	{
+		cout << "Error!!!" << endl;
+		ModeErrorReport error(451, buffer[temp]->line, buffer[temp]->col);
+		error.report();
+		return 0;
+	}
+	// para 参数的开始
+	while (para <= bottom)  // 参数列表 fun（a+2,b,5)
 	{
 		// 参数有四种情况 
-		// IDT NUM RNUM STRING
+		// IDT NUM RNUM STRING 
+		if (buffer[para]->tag != COMMA  && buffer[para + 1]->tag != COMMA) // 后面跟的不是逗号 说明是一个表达式
+		{
+			int exprstart = para;
+			para++;
+			while (buffer[para]->tag != COMMA)
+			{
+				para++;
+			}
+			int exprend = para - 1;
+			// 函数参数里有表达式 获取结果
+			ExprIR a;
+			Token *ress=a.calculate_expr(exprstart, exprend);
+			// 返回的 token 
+			if (ress->tag == NUM)  // 以下三种为参数列表中为数字的情况 
+			{
+				paralist.push_back(ress); // 将参数的token 放入paralist 中
+				Token *type = new Token(NUM, 0, 0); // 将参数的类型 放入 paratype 中
+				paratype.push_back(type);
+			}
+			if (ress->tag == RNUM)
+			{
+				paralist.push_back(ress);
+				Token *type = new Token(RNUM, 0, 0);
+				paratype.push_back(type);
+			}
+			if (ress->tag == STRING)
+			{
+				paralist.push_back(ress);
+				Token *type = new Token(STRING, 0, 0);
+				paratype.push_back(type);
+			}
+
+		}
 		if (buffer[para]->tag == IDT) // 为标识符 将标识符对应的值 加入函数的参数列表中
 		{
+			
+			
 			Idt* id = (Idt*)buffer[para];
 			string q = id->name;
 			Idt*value = RunTime.query(q); // 查询 这个标识符 

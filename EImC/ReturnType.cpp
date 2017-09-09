@@ -21,20 +21,20 @@ void ReturnType::startReturn() {
 			FuncType fType(top + 1, bottom);
 			Token * tmp = fType.Func();
 			RunTime.ret(tmp);
-			RunTime.desync();
+			RunTime.desync_func();
 		}
 		else//返回值是表达式结果
 		{
 			ExprIR eIR;
 			Token * tmp = eIR.calculate_expr(top + 1, bottom);
 			RunTime.ret(tmp);
-			RunTime.desync();
+			RunTime.desync_func();
 		}
 	}
 	else {//返回值是表达式结果
 		ExprIR eIR;
 		Token * tmp = eIR.calculate_expr(top + 1, bottom);
 		RunTime.ret(tmp);
-		RunTime.desync();
+		RunTime.desync_func();
 	}
 }

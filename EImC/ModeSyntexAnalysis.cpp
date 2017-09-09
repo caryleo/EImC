@@ -179,13 +179,12 @@ bool ModeSyntexAnalysis::distinguish()//Çø·Ö¸Ã±í´ïÊ½ÊÇº¯Êýµ÷ÓÃ»¹ÊÇ±äÁ¿±í´ïÊ½
         now->tag=CALL;
         now->top=it-1;
         match(LPAR);
-        int cnt=1;
         while((it!=subEnd+1)&&(!match(RPAR)))
         {
             now->bottom=it;
             sMove();
         }
-        if(cnt!=0)
+        if(it==subEnd+1)
         {
             delete now;
             return 0;
@@ -365,7 +364,7 @@ bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎÞ´óÀ¨ºÅ
                 return 0;
             now->top = it;
             int cnt = 1;
-            while ((it != subEnd+1 )&& cnt != 0)
+            while (it != subEnd+1 )
             {
                 now->bottom = it;
                 if (match(LBRACE))
@@ -374,15 +373,14 @@ bool ModeSyntexAnalysis::whileStat()//whileÓïÒå·ÖÎö,ÎÞ´óÀ¨ºÅ
                     cnt--;
                 else
                     sMove();
+                if(cnt==0)
+                {
+                    (now->bottom)=(now->bottom)-1;
+                    CodeStore.push_back(now);
+                    return 1;
+                }
             }
-            (now->bottom)=(now->bottom)-1;
-            if(cnt!=0)
-            {
-                delete now;
-                return 0;
-            }
-            CodeStore.push_back(now);
-            return 1;
+
         }
 
 	}
@@ -410,7 +408,7 @@ bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎÞ´óÀ¨ºÅ
                 return 0;
             now->top = it;
             int cnt = 1;
-            while ((it != subEnd+1)&&cnt != 0)
+            while (it != subEnd+1)
             {
                 now->bottom = it;
                 if (match(LBRACE))
@@ -419,15 +417,14 @@ bool ModeSyntexAnalysis::ifStat()//ifÓï¾ä·ÖÎö£¬ÎÞ´óÀ¨ºÅ
                     cnt--;
                 else
                     sMove();
+                if(cnt==0)
+                {
+                    (now->bottom)=(now->bottom)-1;
+                    CodeStore.push_back(now);
+                    return 1;
+                }
             }
-            (now->bottom)=(now->bottom)-1;
-            if (cnt!=0)
-            {
-                delete now;
-                return 0;
-            }
-            CodeStore.push_back(now);
-            return 1;
+
         }
 
 	}
@@ -453,15 +450,17 @@ bool ModeSyntexAnalysis::elseStat()
 			cnt--;
 		else
 			sMove();
+        if(cnt==0)
+        {
+            (now->bottom)=(now->bottom)-1;
+            CodeStore.push_back(now);
+            return 1;
+        }
 	}
-	(now->bottom)=(now->bottom)-1;
-	if ( cnt!=0 )
-    {
-        delete now;
-        return 0;
-    }
-	CodeStore.push_back(now);
-	return 1;
+
+
+    delete now;
+    return 0;
 }
 
 bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿é
@@ -485,33 +484,6 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êý¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
             }
             else
                 return exp();
-            /*
-            else if(look->tag==ASSIGN)  //±äÁ¿ÉùÃ÷Óë¶¨Òå
-            {
-                int st=it-2;
-                sMove();
-                int en=-1;
-                while(it!=subEnd+1)
-                {
-                    if(!match(SEMICO))
-                    {
-                        en=it;
-                        sMove();
-                    }
-                    else
-                    {
-                        AltExpr *now=new AltExpr(st,en);
-                        now->tag=STATE;
-                        CodeStore.push_back(now);
-                        return 1;
-                    }
-
-                }
-
-                return 0;
-            }
-            else
-                return 0;*/
 
         }
         else
@@ -576,8 +548,15 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êý¶¨ÒåÓëÉùÃ÷
         if(look->tag==KEY_INT||look->tag==KEY_REAL||look->tag==KEY_STRING)
         {
             q=new Idt;
-
-			q->assType=look->tag;
+			q->tag = IDT;
+			switch (look->tag)
+			{
+			case KEY_INT: q->assType = NUM; break;
+			case KEY_REAL: q->assType = RNUM; break;
+			case KEY_STRING: q->assType = STRING; break;
+			default:
+				break;
+			}
             sMove();
             if(look->tag==IDT)
             {
@@ -599,17 +578,15 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êý¶¨ÒåÓëÉùÃ÷
             else return 0;
         }
         else if(look->tag==RPAR)
-        {
-            sMove();
             break;
-        }
         else   return 0;
     }
     if(it==subEnd+1)   return 0;
+    match(RPAR);
     if(!match(LBRACE))  return 0;
     now->top=it;
     int cnt=1;
-    while(cnt!=0&&(it!=subEnd+1))
+    while(it!=subEnd+1)
     {
         now->bottom=it;
         if(match(LBRACE))
@@ -618,15 +595,16 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êý¶¨ÒåÓëÉùÃ÷
             cnt--;
         else
             sMove();
+        if(cnt==0)
+        {
+            now->bottom=((now->bottom)-1);
+            FuncStore.push_back(now);
+            return 1;
+        }
     }
-    if(cnt!=0)
-    {
-        delete now;
-        return 0;
-    }
-    now->bottom=((now->bottom)-1);
-    FuncStore.push_back(now);
-    return 1;
+
+    delete now;
+    return 0;
 }
 
 

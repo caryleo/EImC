@@ -77,7 +77,7 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 	vector <Token *> tmp;
 	tmp.clear();
 	Caller * main = new Caller("main", tmp);
-	ModeExecute::caller(main, tmp);
+	ModeExecute::caller(main, tmp, 0);
 }
 
 void ModeExecute::commence(int top, int bottom)

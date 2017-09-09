@@ -21,6 +21,7 @@ public:
 	void sync();				//同步esp指针
 	void syncb();				//同步ebp指针
 	void desync();				//重置运行栈
+	void desync_func();			//重置函数运行栈
 	void ret(Token * s);		//控制返回值的赋值
 	Idt * query_alt(string n);	//查询到当前ebp
 	~Stack();					//销毁整个栈

@@ -104,13 +104,28 @@ void Stack::desync()
 	}
 }
 
-void Stack::ret(Token * s) {
+void Stack::desync_func()
+{
 	Token ** tmp = top;
-	while (tmp != ebp) {
+	while (tmp != base) {
+		tmp--;
+		if ((*tmp)->tag == PRT) {
+			PRTR * tt = (PRTR *)(*tmp);
+			ebp = tt->prt;//将上一层运行栈的栈底指针赋给ebp
+			break;
+		}
+	}
+	while (esp != tmp) {
+		this->pop();
+		esp--;//将esp调整到存ebp地址的位置
+	}
+}
+
+void Stack::ret(Token * s) {
+	Token ** tmp = top - 1;
+	while (((*tmp)->tag != NUM ) && ((*tmp)->tag != RNUM) && ((*tmp)->tag != STRING)) {
 		tmp--;
 	}
-	tmp--;//减两次，跳过
-	tmp--;
 	*tmp = s;
 }
 

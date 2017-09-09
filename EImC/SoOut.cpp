@@ -23,16 +23,10 @@ bool SoOut::isValid(int top, int bottom)
 }
 void SoOut::judgeIdt(int m)
 {
-	Idt *p = (Idt*)buffer.at(m);
-	/*测试用例
-	Token qi(NUM, 1, 1);
-	p->t = &qi;
-	p->t->tag = NUM;*/
+	Idt *p = (Idt*)buffer.at(m);	
 	if (p->t->tag == NUM)//如果是个整型
 	{
 		SoInt *q = (SoInt*)p->t;
-		/*测试用例
-		q->val = 3;*/
 		cout << q->val;
 	}
 	else if (p->t->tag == RNUM)//如果是个实型
@@ -92,36 +86,44 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 			else if (buffer[top + 1]->tag == IDT)//第一部分输出标识符的情况
 			{
 				Idt *p = (Idt*)buffer.at(top + 1);
-				/*测试用例
-				Token qi(NUM, 1, 1);
-				p->t = &qi;
-				p->t->tag = NUM;*/
-				if (p->t->tag == NUM)//如果是个整型
+				if (p == NULL||p->t==NULL)//此变量之前未声明过
 				{
-					SoInt *s = (SoInt*)p->t;
-					/*测试用例
-					s->val = 3;*/
-					if (s->val > 0)
-					{
-						for (int i = 0; i < s->val; i++)
-						{
-							if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
-							{
-								SoString *m = (SoString*)buffer.at(top + 3);
-								cout << m->str;
-							}
-							else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
-							{
-								judgeIdt(top + 3);
-							}
-						}
-					}
-				}
-				else //如果不是整数也不是字符串则报错
-				{
-					ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+					ModeErrorReport mER(756, buffer[bottom]->line, buffer[bottom]->col);
 					mER.report();
 				}
+				else 
+				{					
+					if (p->t->tag == NUM)//如果是个整型
+					{
+						SoInt *s = (SoInt*)p->t;						
+						if (s->val > 0)
+						{
+							for (int i = 0; i < s->val; i++)
+							{
+								if (buffer[top + 3]->tag == STRING)//第二部分输出字符串的情况
+								{
+									SoString *m = (SoString*)buffer.at(top + 3);
+									cout << m->str;
+								}
+								else if (buffer[top + 3]->tag == IDT)//第二部分输出标识符的值的情况
+								{
+									judgeIdt(top + 3);
+								}
+							}
+						}
+						else //如果不是正整数则报错
+						{
+							ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+							mER.report();
+						}
+					}
+					else //如果不是正整数则报错
+					{
+						ModeErrorReport mER(754, buffer[bottom]->line, buffer[bottom]->col);
+						mER.report();
+					}
+				}
+				
 			}
 			else if (buffer[top + 1]->tag == NUM)//第一部分输出整数的情况
 			{

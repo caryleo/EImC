@@ -69,12 +69,32 @@ SoString::SoString(string s, int l, int c) {
 	col = c;
 }
 
+
+babababana::babababana()
+{
+    cnt=0;
+}
+
+void babababana::add(int pos)
+{
+    num[cnt]=pos;
+    cnt++;
+}
+
+
+
 void ModeTokenAnalysis::read(ModeRead& mRead)/*´ÊÒå·ÖÎöÖ÷¿Ø*/ {
 	Token* t;
 	char ch = ' ';
 	t = ModeTokenAnalysis::getToken(mRead, ch);
+	int cnt=0;
 	while (t != NULL)
 	{
+	    if( t->tag == KEY_RET )
+        {
+            retPos.add(cnt);
+        }
+        cnt++;
 		buffer.push_back(t);
 		t = ModeTokenAnalysis::getToken(mRead, ch);
 	}
@@ -277,10 +297,12 @@ Token * ModeTokenAnalysis::getIdt(ModeRead & mRead, char & ch) {
 	} while (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9');
 	Keywords kw;
 	Tag tag = kw.getTag(name);
-	if (tag == IDT) {
+	if (tag == IDT)
+    {
 		return new Idt(name, l, c);
 	}
-	else {
+	else
+	{
 		return new Token(tag, l, c);
 	}
 }

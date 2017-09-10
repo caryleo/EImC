@@ -18,9 +18,71 @@ void SoIn::judgeIdt(int m)
 	/*for (int i = 0; i < buffer.size(); i++) {
 		cout << buffer[i]->tag << endl;
 	}*/
-	if (len2 - len != 1) {//只支持输入一个
+	if (!(len2 - len == 1||len2-len==2)) {//只支持输入一个或者两个
 		ModeErrorReport mER(750, buffer[m]->line, buffer[m]->col);
 		mER.report();
+	}
+	else if (len2 - len == 2)
+	{
+		Idt *a = (Idt*)buffer.at(m);
+		Idt *p = RunTime.query(a->name);
+		if (p == NULL)//如果变量之前未声明过
+		{
+			a->assType = NUM;
+			a->t = NULL;
+			RunTime.push(a);
+			p = a;
+			
+		}
+		if (p->assType == NUM)//如果是个整型
+		{
+			if (buffer[len]->tag == SUB && (buffer[len + 1]->tag == NUM))//-5
+			{
+				SoInt *s = (SoInt*)buffer.at(len + 1);
+				s->val = -s->val;
+				ConstStore.push_back(s);
+				p->t = s;
+			}
+			else if (buffer[len]->tag == ADD && (buffer[len + 1]->tag == NUM))//+6
+			{
+				SoInt *s = (SoInt*)buffer.at(len + 1);
+				ConstStore.push_back(s);
+				p->t = s;
+			}
+			else
+			{
+				ModeErrorReport mER(751, buffer[m]->line, buffer[m]->col);
+				mER.report();
+			}
+		}
+		else if (p->assType == RNUM)//如果是个实型
+		{
+		   if (buffer[len]->tag == SUB && (buffer[len + 1]->tag == RNUM))//-2.2
+		   {
+				SoReal *s = (SoReal*)buffer.at(len + 1);
+				s->val = -s->val;
+				ConstStore.push_back(s);
+				p->t = s;
+			}
+
+			else if (buffer[len]->tag == ADD && (buffer[len + 1]->tag == RNUM))//+6.3
+			{
+				SoReal *s = (SoReal*)buffer.at(len + 1);
+				ConstStore.push_back(s);
+				p->t = s;
+			}
+			else
+			{
+				ModeErrorReport mER(751, buffer[m]->line, buffer[m]->col);
+				mER.report();
+			}
+		}
+		else
+		{
+			ModeErrorReport mER(750, buffer[m]->line, buffer[m]->col);
+			mER.report();
+		}
+		
 	}
 	else
 	{

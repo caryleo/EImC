@@ -254,6 +254,12 @@ void ModeExecute::commence(int top, int bottom)
 			mWhile.runWhile();
 			break;
 		}
+		case DOUNTIL: {//do-untilÊ½
+			Block *tmp = CodeStore[i];
+			DoUntil * baba = (DoUntil *)tmp;
+			ModeDo mDo(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
+			mDo.runDo();
+		}
 		case KEY_RET: {//returnÓï¾ä
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);

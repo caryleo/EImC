@@ -175,7 +175,6 @@
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="VarType.cpp" />
     <ClCompile Include="ModeExecute.cpp" />
-    <ClCompile Include="ModeInPart.cpp" />
     <ClCompile Include="ModeRead.cpp" />
     <ClCompile Include="ModeSyntexAnalysis.cpp" />
     <ClCompile Include="ModeTokenAnalysis.cpp" />

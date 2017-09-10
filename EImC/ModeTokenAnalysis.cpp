@@ -19,6 +19,8 @@ Keywords::Keywords()/*关键字列表初始化*/ {
 	keywords.insert(pair<string, Tag>("return", KEY_RET));
 	keywords.insert(pair<string, Tag>("in", KEY_IN));
 	keywords.insert(pair<string, Tag>("out", KEY_OUT));
+	keywords.insert(pair<string, Tag>("do", KEY_DO));
+	keywords.insert(pair<string, Tag>("until", KEY_UNTIL));
 }
 
 Tag Keywords::getTag(string name)/*查询关键字*/ {
@@ -284,6 +286,12 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模
 			int c = mRead.getCol();
 			ch = mRead.scan();
 			return new Token(HASH, l, c);
+		}
+		if (ch == '^')/*乘方*/ {
+			int l = mRead.getLine();
+			int c = mRead.getCol();
+			ch = mRead.scan();
+			return new Token(POW, l, c);
 		}
 	}
 	return NULL;

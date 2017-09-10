@@ -27,9 +27,13 @@ bool ExprIR::isIDT(Token * t)
 //查询是否被赋值
 bool ExprIR::isAssign(Token *token)
 {
-	Idt *idt = (Idt*)token;
-	if (idt->t == NULL) return 0;
+	if (isIDT(token))
+	{
+		Idt *idt = (Idt*)token;
+		if ((idt->t == NULL)) return 0;
+	}
 	else return 1;
+
 }
 
 
@@ -436,35 +440,34 @@ Token * ExprIR::connect_op(Token * s1, Token *s2)
 //删除指定位置字符，对原字符串进行了更改
 Token * ExprIR::delete_spec(Token *s, Token *pos)
 {
-	Token *res = new Token;
+	SoString *res = new SoString;
 	if (getType(s) == STRING&&getType(pos) == NUM)
 	{
 		if (isAssign(s) == 0 && isAssign(pos) == 0)
 		{
-		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
-            EXPR.report();
+			ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+			EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		if (getIntVal(pos) >= getStrVal(s).size())
 		{
-		    ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
-            EXPR.report();
+			ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+			EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		res->tag = STRING;
-		SoString *so_string = new SoString;
-		so_string = (SoString*)res;
-		so_string->str = getStrVal(s).erase(getIntVal(pos), 1);
+		res->str = getStrVal(s).erase(getIntVal(pos), 1);
 	}
 	else
 	{
-	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
-        EXPR.report();
+		ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+		EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
+
 }
 
 //大于
@@ -1011,12 +1014,10 @@ Token * ExprIR::calculate_expr(int head, int tail)
 				}
 				else if (getType(operand_s.front()) == STRING)
 				{
-					Idt *idt = new Idt;
-					idt = (Idt*)bababa;
 					SoString *temp = new SoString;
-					result->tag = STRING;
-					temp = (SoString*)result;
+					temp->tag = STRING;
 					temp->str = getStrVal(bababa);
+					return temp;
 				}
 			}
 			else result = operand_s.front();

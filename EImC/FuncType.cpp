@@ -47,7 +47,7 @@ Token* FuncType::Func()
 	{
 		// 参数有四种情况 
 		// IDT NUM RNUM STRING 
-		if (buffer[para]->tag != COMMA  && buffer[para + 1]->tag != COMMA ) // 后面跟的不是逗号 说明是一个表达式
+		if (buffer[para]->tag != COMMA  && buffer[para + 1]->tag != COMMA && (para + 1) < bottom) // 后面跟的不是逗号 说明是一个表达式
 		{
 			int exprstart = para;
 			para++;

@@ -39,8 +39,11 @@ void SoIn::judgeIdt(int m)
 				p->t = s;
 				//cout << p->val << endl;
 			}
-			ModeErrorReport mER(751, buffer[m]->line, buffer[m]->col);
-			mER.report();
+			else
+			{
+				ModeErrorReport mER(751, buffer[m]->line, buffer[m]->col);
+				mER.report();
+			}
 		}
 		if (p->assType== NUM)//如果是个整型
 		{

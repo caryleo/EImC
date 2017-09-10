@@ -8,6 +8,12 @@ extern vector<Token*>buffer;
 
 bool SoOut::isValid(int top, int bottom)
 {
+	for (int i = top; i < bottom; i++)//如果中间有变量未声明过
+	{
+		Idt *p = (Idt*)buffer.at(i);
+		if (p==NULL||p->t == NULL)//如果变量之前未声明过
+			return 0;
+	}
 	if (bottom - top <= 1 || bottom - top > 4 || bottom - top == 3)//out与;之间没东西或者之间的东西多了
 		return 0;
 	for (int i = top + 1; i < bottom; i++)
@@ -19,6 +25,7 @@ bool SoOut::isValid(int top, int bottom)
 		return 0;
 	if (bottom - top == 4 && buffer[top + 2]->tag != COMMA || buffer[top + 1]->tag == COMMA || buffer[top + 3]->tag == COMMA)//只能在第二个位置是，
 		return 0;
+	
 	else return 1;
 }
 void SoOut::judgeIdt(int m)

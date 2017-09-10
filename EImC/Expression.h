@@ -46,6 +46,7 @@ public:
 	Token * mul_op(Token *, Token *);
 	Token * div_op(Token *, Token *);
 	Token * mod_op(Token *, Token *);
+	Token * pow_op(Token *, Token *);
 
 
 	//×Ö·û´®´¦ÀíDOLLA, HASH

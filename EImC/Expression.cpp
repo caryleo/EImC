@@ -183,7 +183,6 @@ Token * ExprIR::add_op(Token * a, Token * b)
 			SoInt *so_int = new SoInt;
 			so_int = (SoInt*)res;
 			so_int->val = getIntVal(a) + getIntVal(b);
-			//cout<<so_int->val<<endl;
 		}
 		else if (getType(a) == RNUM&&getType(b) == NUM)
 		{
@@ -412,21 +411,23 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 //字符串连接
 Token * ExprIR::connect_op(Token * s1, Token *s2)
 {
-	Token *res = new Token;
+	SoString *res = new SoString;
 	if (getType(s1) == STRING&&getType(s2) == STRING)
 	{
-		if (isAssign(s1) == 0 && isAssign(s2) == 0)
+		if (isAssign(s1) == 0 || isAssign(s2) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		res->tag = STRING;
-		SoString *so_string = new SoString;
-		so_string = (SoString*)res;
-		so_string->str = getStrVal(s1) + getStrVal(s2);
+		res->str = getStrVal(s1) + getStrVal(s2);
 	}
 	else
 	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -440,11 +441,15 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 	{
 		if (isAssign(s) == 0 && isAssign(pos) == 0)
 		{
+		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		if (getIntVal(pos) >= getStrVal(s).size())
 		{
+		    ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
@@ -455,29 +460,8 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 	}
 	else
 	{
-		res->tag = ERR;
-	}
-	return res;
-}
-
-//删除最后一个字符
-Token * ExprIR::delete_tail(Token *s)
-{
-	Token *res = new Token;
-	if (getType(s) == STRING)
-	{
-		if (isAssign(s) == 0)
-		{
-			res->tag = ERR;
-			return res;
-		}
-		res->tag = STRING;
-		SoString *so_string = new SoString;
-		so_string = (SoString*)res;
-		so_string->str = getStrVal(s).erase(getStrVal(s).size() - 1, 1);
-	}
-	else
-	{
+	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
@@ -892,7 +876,6 @@ Token * ExprIR::calculate_expr(int head, int tail)
 					result->tag = ERR;
 					return result;
 				}
-				//operator_s.pop();
 			}
 		}
 		//操作数
@@ -902,8 +885,6 @@ Token * ExprIR::calculate_expr(int head, int tail)
 			if (isOperand(now))//操作数直接入栈
 			{
 				operand_s.push(now);
-				//cout<<operand_s.size()<<endl;
-				//if(getType(now)==NUM) cout<<getIntVal(now)<<endl;
 			}
 			//操作符
 			else
@@ -931,20 +912,7 @@ Token * ExprIR::calculate_expr(int head, int tail)
 						return result;
 					}
 				}
-				if (getType(now) == HASH)
-                {
-                    if (pos > start && (getType(buffer[pos - 1]) == STRING || getType(buffer[pos - 1]) == RPAR || getType(buffer[pos + 1]) == HASH))
-					{
-						int i = 1;
-					}
-					else
-					{
-					    ModeErrorReport EXPR(303, buffer[term]->line, buffer[term]->col);
-                        EXPR.report();
-						result->tag = ERR;
-						return result;
-					}
-                }
+
 				//优先级高，直接入栈
 				if (oper_priority(now, operator_s.front()) == 1) operator_s.push(now);
 				//否则先处理前面的那个
@@ -982,6 +950,35 @@ Token * ExprIR::calculate_expr(int head, int tail)
 						operator_s.push(now);
 					}
 				}
+				if (getType(now) == HASH)
+                {
+
+                    if (pos > start && (getType(buffer[pos - 1]) == STRING || getType(buffer[pos - 1]) == RPAR || getType(buffer[pos - 1]) == HASH))
+					{
+					    if(pos<tail&&getType(buffer[pos+1])==NUM)
+                        {
+                            int i=1;
+                        }
+                        else
+                        {
+                            SoInt *last = new SoInt;
+                            last->tag = NUM;
+                            Token *temp=operand_s.front();
+                            if(getType(temp)==STRING)
+                            {
+                                last->val=getStrVal(temp).size()-1;
+                            }
+                            operand_s.push(last);
+                        }
+					}
+					else
+					{
+					    ModeErrorReport EXPR(303, buffer[term]->line, buffer[term]->col);
+                        EXPR.report();
+						result->tag = ERR;
+						return result;
+					}
+                }
 			}
 		}
 		pos++;

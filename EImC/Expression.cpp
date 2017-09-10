@@ -110,8 +110,9 @@ int ExprIR::isp(Tag tag) {/*Õ»ÄÚ*/
 	int ans = -1;
 	switch (tag) {
 	case LPAR: ans = 1; break;
-	case RPAR: ans = 16; break;
-	case NOT: ans = 15; break;
+	case RPAR: ans = 18; break;
+	case NOT: ans = 17; break;
+	case POW: ans = 14; break;
 	case MUL:
 	case DIV:
 	case MOD:
@@ -136,9 +137,10 @@ int ExprIR::isp(Tag tag) {/*Õ»ÄÚ*/
 int ExprIR::icp(Tag tag) {/*Õ»Íâ*/
 	int ans = -1;
 	switch (tag) {
-	case LPAR: ans = 16; break;
+	case LPAR: ans = 18; break;
 	case RPAR: ans = 1; break;
-	case NOT: ans = 14; break;
+	case NOT: ans = 16; break;
+	case POW: ans = 15; break;
 	case MUL:
 	case DIV:
 	case MOD:

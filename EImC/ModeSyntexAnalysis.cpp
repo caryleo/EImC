@@ -711,3 +711,11 @@ bool ModeSyntexAnalysis::findSame(string name,SoFunc *func)
 	return 0;
 }
 
+DoUntil::DoUntil(int t, int b, int cETop, int cEBottom)
+{
+	tag = DOUNTIL;
+	top = t;
+	bottom = b;
+	conditionExprTop = cETop;
+	conditionExprBottom = cEBottom;
+}

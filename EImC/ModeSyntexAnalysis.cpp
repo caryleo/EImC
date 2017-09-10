@@ -68,6 +68,16 @@ Expr::Expr(int t, int b)
 	bottom = b;
 }
 
+DoUntil::DoUntil(int t, int b, int cETop, int cEBottom)
+{
+	tag = DOUNTIL;
+	top = t;
+	bottom = b;
+	conditionExprTop = cETop;
+	conditionExprBottom = cEBottom;
+}
+
+
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
     ret=0;
@@ -124,6 +134,11 @@ bool ModeSyntexAnalysis::statement()
                     if(whileStat()) break;
                     else return 0;
 
+                }
+            case KEY_DO: //do until语句
+                {
+                    if(doStat()) break;
+                    else return 0;
                 }
             case KEY_IF:    //if语句块
                 {
@@ -182,7 +197,65 @@ bool ModeSyntexAnalysis::statement()
     }
     return 1;
 }
-
+bool ModeSyntexAnalysis::doStat() //do...until语句块
+{
+    match(KEY_DO);
+    if(!match(LBRACE))
+    {
+        getError(look->line,look->col,1);
+        return 0;
+    }
+    DoUntil *now=new DoUntil(it,it,-1,-1);
+    int cnt=1;
+    while(it!=subEnd+1)
+    {
+        if(match(LBRACE))
+            cnt++;
+        else if(match(RBRACE))
+            cnt--;
+        else
+            sMove();
+        if(cnt==0)
+            break;
+    }
+    if(it==subEnd+1)
+    {
+        delete now;
+        getError(look->line,look->col,1);
+        return 0;
+    }
+    now->bottom=it-2;
+    if(match(KEY_UNTIL))
+    {
+        now->conditionExprTop=it;
+        while(it!=subEnd+1)
+        {
+            if(look->tag!=SEMICO) sMove();
+            else
+            {
+                now->conditionExprBottom=it-1;
+                if((now->conditionExprTop)>(now->conditionExprBottom))
+                {
+                    getError(look->line,look->col,5);
+                    delete now;
+                    return 0;
+                }
+                match(SEMICO);
+                CodeStore.push_back(now);
+                return 1;
+            }
+        }
+        getError(look->line,look->col,2);
+        delete now;
+        return 0;
+    }
+    else
+    {
+        delete now;
+        getError(look->line,look->col,11);
+        return 0;
+    }
+}
 bool ModeSyntexAnalysis::distinguish()//区分该表达式是函数调用还是变量表达式
 {
     match(IDT);
@@ -711,11 +784,3 @@ bool ModeSyntexAnalysis::findSame(string name,SoFunc *func)
 	return 0;
 }
 
-DoUntil::DoUntil(int t, int b, int cETop, int cEBottom)
-{
-	tag = DOUNTIL;
-	top = t;
-	bottom = b;
-	conditionExprTop = cETop;
-	conditionExprBottom = cEBottom;
-}

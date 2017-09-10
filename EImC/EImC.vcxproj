@@ -146,6 +146,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugExecute.h" />
     <ClInclude Include="EImC.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="FuncType.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ModeRead.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DebugExecute.cpp" />
     <ClCompile Include="EImC.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="FuncType.cpp" />
@@ -175,7 +177,6 @@
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="VarType.cpp" />
     <ClCompile Include="ModeExecute.cpp" />
-    <ClCompile Include="ModeInPart.cpp" />
     <ClCompile Include="ModeRead.cpp" />
     <ClCompile Include="ModeSyntexAnalysis.cpp" />
     <ClCompile Include="ModeTokenAnalysis.cpp" />

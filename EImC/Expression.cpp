@@ -413,6 +413,121 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	return res;
 }
 
+//³Ë·½
+Token * ExprIR::pow_op(Token *a,Token *b)
+{
+    Token *res = new Token;
+    if(getType(a)==STRING&&getType(b)==STRING)
+    {
+        ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
+        res->tag=ERR;
+        return res;
+    }
+    else
+    {
+        if(isAssign(a)==0||isAssign(b)==0)
+        {
+            ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
+            res->tag=ERR;
+            return res;
+        }
+        if(getType(a)==NUM&&getType(b)==NUM)
+        {
+            if(getIntVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                res->tag=NUM;
+                SoInt *so_int=new SoInt;
+                so_int=(SoInt*) res;
+                so_int->val=(short) pow(getIntVal(a),getIntVal(b));
+            }
+        }
+        else if(getType(a)==RNUM&&getType(b)==NUM)
+        {
+            if(getRealVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getIntVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getRealVal(a),getIntVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getRealVal(a),getIntVal(b));
+            }
+        }
+        else if(getType(a)==NUM&&getType(b)==RNUM)
+        {
+            if(getIntVal(a)==0&&getRealVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getRealVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getIntVal(a),getRealVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getIntVal(a),getRealVal(b));
+            }
+        }
+        else if(getType(a)==RNUM&&getType(b)==RNUM)
+        {
+            if(getRealVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getRealVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getRealVal(a),getRealVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getRealVal(a),getRealVal(b));
+            }
+        }
+    }
+    return res;
+}
 
 //×Ö·û´®Á¬½Ó
 Token * ExprIR::connect_op(Token * s1, Token *s2)
@@ -1275,6 +1390,20 @@ int ExprIR::find_op(Token *op)
 			Token *b = operand_s.front();
 			operand_s.pop();
 			num= delete_spec(b,a);
+			operand_s.push(num);
+        }
+        else return -1;
+		break;
+    }
+    case POW:
+    {
+        if(operand_s.size()>=2)
+        {
+            Token *a = operand_s.front();
+			operand_s.pop();
+			Token *b = operand_s.front();
+			operand_s.pop();
+			num= pow_op(b,a);
 			operand_s.push(num);
         }
         else return -1;

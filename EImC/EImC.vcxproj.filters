@@ -69,6 +69,9 @@
     <ClInclude Include="ModeErrorReport.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DebugExecute.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -81,9 +84,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ModeRead.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ModeInPart.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SoOut.cpp">
@@ -120,6 +120,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ModeErrorReport.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugExecute.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

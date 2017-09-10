@@ -65,6 +65,7 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 		case IF:
 		case ELSE:
 		case WHILE:
+		case DOUNTIL:
 		case KEY_RET: {//return语句
 			ModeErrorReport mER(251, buffer[CodeStore[i]->bottom]->line, buffer[CodeStore[i]->bottom]->col);
 			mER.report();
@@ -253,6 +254,12 @@ void ModeExecute::commence(int top, int bottom)
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
 			mWhile.runWhile();
 			break;
+		}
+		case DOUNTIL: {//do-until式
+			Block *tmp = CodeStore[i];
+			DoUntil * baba = (DoUntil *)tmp;
+			ModeDo mDo(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
+			mDo.runDo();
 		}
 		case KEY_RET: {//return语句
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);

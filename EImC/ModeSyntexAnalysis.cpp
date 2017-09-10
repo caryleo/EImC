@@ -2,6 +2,7 @@
 #include "EImC.h"
 #include "ModeSyntexAnalysis.h"
 #include "ModeTokenAnalysis.h"
+#include "ModeErrorReport.h"
 #include "ModeExecute.h"
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//语句块存储区
@@ -96,8 +97,8 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
     {
         cout<<"Error in Syntex Analysis!"<<endl;
         code+=200;
-        //ModeErrorReport MER( code,  l,  r);
-        //MER.report();
+        ModeErrorReport MER( code,  l,  r);
+        MER.report();
         return 0;
     }
 
@@ -686,8 +687,7 @@ bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //函数定义与声明
 }
 
 bool ModeSyntexAnalysis::findSame(string name,SoFunc *func)
-{
-    int cnt=func->paralist.size();
+{    int cnt=func->paralist.size();
     for (int i = 0; i < FuncStore.size(); i++) {
 		if ((FuncStore[i]->paralist.size() == cnt) && (name.compare(FuncStore[i]->name) == 0))
 		{

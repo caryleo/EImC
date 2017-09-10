@@ -1265,14 +1265,7 @@ int ExprIR::find_op(Token *op)
     }
     case HASH:
     {
-        if(operand_s.size()>=1)
-        {
-            Token *a = operand_s.front();
-			operand_s.pop();
-			num= delete_tail(a);
-			operand_s.push(num);
-        }
-        else if(operand_s.size()>=2)
+        if(operand_s.size()>=2)
         {
             Token *a = operand_s.front();
 			operand_s.pop();

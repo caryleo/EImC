@@ -66,7 +66,6 @@ public:
     int cnt;
     int num[105];
 };
-babababana retPos,conPos,brkPos;
 
 #endif // !MODETOKENANALYSIS_H_
 #pragma once

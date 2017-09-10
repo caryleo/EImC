@@ -4,6 +4,8 @@
 using namespace std;
 
 extern vector<Token*>buffer;
+babababana retPos;
+
 
 Keywords::Keywords()/*关键字列表初始化*/ {
 	keywords.insert(pair<string, Tag>("int", KEY_INT));

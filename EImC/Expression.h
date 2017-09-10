@@ -52,7 +52,6 @@ public:
 	//定义$不改变原字符串的值，#删除字符对原字符串进行更改
 	Token * connect_op(Token *, Token *);
 	Token * delete_spec(Token *, Token *);
-	Token * delete_tail(Token *);
 
 	//关系运算:>,< ,>=,<=,==,<>
 	//GT, GE, LT, LE, EQU, NEQU

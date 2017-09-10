@@ -53,4 +53,5 @@ void ModeErrorReport::report()
 	cout << "发生错误" << endl;
 	cout << "行数：" << line << endl;
 	cout << "错误原因：" << ans << endl;
+	exit(0);
 }

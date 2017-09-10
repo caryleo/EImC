@@ -77,6 +77,7 @@ public:
 	bool elseStat();
 	bool altExprStat();
 	bool exp();
+	bool doStat();
 	bool brkStat();
 	bool conStat();
 	bool retStat();

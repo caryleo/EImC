@@ -58,6 +58,13 @@ public:
 	Caller(string n, vector<Token *> t);
 };
 
+class DoUntil : public Block {/*do until循环语句块类*/
+public:
+	int conditionExprTop;       //条件表达式开始位置
+	int conditionExprBottom;	//条件表达式结束位置
+	DoUntil(int top, int bottom, int cETop, int cEBottom);
+};
+
 //fun(a, 6);
 
 class ModeSyntexAnalysis {

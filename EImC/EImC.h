@@ -22,7 +22,9 @@ enum Tag {
 	KEY_BRK, KEY_RET, KEY_CON,				//break，return，continue
 	KEY_IN, KEY_OUT,						//in ,out
 	FUNC, WHILE, IF, ELSE,					//函数 循环 if-else
-	EXPR, STATE, PRT						//表达式，语句，指针
+	EXPR, STATE, PRT,						//表达式，语句，指针
+	POW,									//乘方运算
+	KEY_DO,KEY_UNTIL, DOUNTIL				//关键字do，until，dountil循环
 };
 
 class Token/*语素基类*/

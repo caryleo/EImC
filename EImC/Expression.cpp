@@ -27,9 +27,13 @@ bool ExprIR::isIDT(Token * t)
 //查询是否被赋值
 bool ExprIR::isAssign(Token *token)
 {
-	Idt *idt = (Idt*)token;
-	if (idt->t == NULL) return 0;
+	if (isIDT(token))
+	{
+		Idt *idt = (Idt*)token;
+		if ((idt->t == NULL)) return 0;
+	}
 	else return 1;
+
 }
 
 
@@ -106,8 +110,9 @@ int ExprIR::isp(Tag tag) {/*栈内*/
 	int ans = -1;
 	switch (tag) {
 	case LPAR: ans = 1; break;
-	case RPAR: ans = 16; break;
-	case NOT: ans = 15; break;
+	case RPAR: ans = 18; break;
+	case NOT: ans = 17; break;
+	case POW: ans = 14; break;
 	case MUL:
 	case DIV:
 	case MOD:
@@ -132,9 +137,10 @@ int ExprIR::isp(Tag tag) {/*栈内*/
 int ExprIR::icp(Tag tag) {/*栈外*/
 	int ans = -1;
 	switch (tag) {
-	case LPAR: ans = 16; break;
+	case LPAR: ans = 18; break;
 	case RPAR: ans = 1; break;
-	case NOT: ans = 14; break;
+	case NOT: ans = 16; break;
+	case POW: ans = 15; break;
 	case MUL:
 	case DIV:
 	case MOD:
@@ -407,6 +413,121 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	return res;
 }
 
+//乘方
+Token * ExprIR::pow_op(Token *a,Token *b)
+{
+    Token *res = new Token;
+    if(getType(a)==STRING&&getType(b)==STRING)
+    {
+        ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+        EXPR.report();
+        res->tag=ERR;
+        return res;
+    }
+    else
+    {
+        if(isAssign(a)==0||isAssign(b)==0)
+        {
+            ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+            EXPR.report();
+            res->tag=ERR;
+            return res;
+        }
+        if(getType(a)==NUM&&getType(b)==NUM)
+        {
+            if(getIntVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                res->tag=NUM;
+                SoInt *so_int=new SoInt;
+                so_int=(SoInt*) res;
+                so_int->val=(short) pow(getIntVal(a),getIntVal(b));
+            }
+        }
+        else if(getType(a)==RNUM&&getType(b)==NUM)
+        {
+            if(getRealVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getIntVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getRealVal(a),getIntVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getRealVal(a),getIntVal(b));
+            }
+        }
+        else if(getType(a)==NUM&&getType(b)==RNUM)
+        {
+            if(getIntVal(a)==0&&getRealVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getRealVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getIntVal(a),getRealVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getIntVal(a),getRealVal(b));
+            }
+        }
+        else if(getType(a)==RNUM&&getType(b)==RNUM)
+        {
+            if(getRealVal(a)==0&&getIntVal(b)==0)
+            {
+                ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                EXPR.report();
+                res->tag=ERR;
+                return res;
+            }
+            else
+            {
+                if(getRealVal(b)==0)
+                {
+                    res->tag=NUM;
+                    SoInt *so_int=new SoInt;
+                    so_int=(SoInt*) res;
+                    so_int->val=(short) pow(getRealVal(a),getRealVal(b));
+                    return res;
+                }
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getRealVal(a),getRealVal(b));
+            }
+        }
+    }
+    return res;
+}
 
 //字符串连接
 Token * ExprIR::connect_op(Token * s1, Token *s2)
@@ -436,35 +557,34 @@ Token * ExprIR::connect_op(Token * s1, Token *s2)
 //删除指定位置字符，对原字符串进行了更改
 Token * ExprIR::delete_spec(Token *s, Token *pos)
 {
-	Token *res = new Token;
+	SoString *res = new SoString;
 	if (getType(s) == STRING&&getType(pos) == NUM)
 	{
 		if (isAssign(s) == 0 && isAssign(pos) == 0)
 		{
-		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
-            EXPR.report();
+			ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
+			EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		if (getIntVal(pos) >= getStrVal(s).size())
 		{
-		    ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
-            EXPR.report();
+			ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+			EXPR.report();
 			res->tag = ERR;
 			return res;
 		}
 		res->tag = STRING;
-		SoString *so_string = new SoString;
-		so_string = (SoString*)res;
-		so_string->str = getStrVal(s).erase(getIntVal(pos), 1);
+		res->str = getStrVal(s).erase(getIntVal(pos), 1);
 	}
 	else
 	{
-	    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
-        EXPR.report();
+		ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
+		EXPR.report();
 		res->tag = ERR;
 	}
 	return res;
+
 }
 
 //大于
@@ -1011,12 +1131,10 @@ Token * ExprIR::calculate_expr(int head, int tail)
 				}
 				else if (getType(operand_s.front()) == STRING)
 				{
-					Idt *idt = new Idt;
-					idt = (Idt*)bababa;
 					SoString *temp = new SoString;
-					result->tag = STRING;
-					temp = (SoString*)result;
+					temp->tag = STRING;
 					temp->str = getStrVal(bababa);
+					return temp;
 				}
 			}
 			else result = operand_s.front();
@@ -1272,6 +1390,20 @@ int ExprIR::find_op(Token *op)
 			Token *b = operand_s.front();
 			operand_s.pop();
 			num= delete_spec(b,a);
+			operand_s.push(num);
+        }
+        else return -1;
+		break;
+    }
+    case POW:
+    {
+        if(operand_s.size()>=2)
+        {
+            Token *a = operand_s.front();
+			operand_s.pop();
+			Token *b = operand_s.front();
+			operand_s.pop();
+			num= pow_op(b,a);
 			operand_s.push(num);
         }
         else return -1;

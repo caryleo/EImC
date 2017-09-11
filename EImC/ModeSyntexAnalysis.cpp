@@ -80,7 +80,6 @@ DoUntil::DoUntil(int t, int b, int cETop, int cEBottom)
 
 bool ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
-    ret=0;
     int ss=CodeStore.size();
     if(h<0||t>=buffer.size())
     {

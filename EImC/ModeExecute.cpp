@@ -260,6 +260,7 @@ void ModeExecute::commence(int top, int bottom)
 			DoUntil * baba = (DoUntil *)tmp;
 			ModeDo mDo(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
 			mDo.runDo();
+			break;
 		}
 		case KEY_RET: {//returnÓï¾ä
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);

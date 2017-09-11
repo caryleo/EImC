@@ -206,6 +206,7 @@ bool ModeSyntexAnalysis::doStat() //do...untilÓï¾ä¿é
         return 0;
     }
     DoUntil *now=new DoUntil(it,it,-1,-1);
+    now->tag=DOUNTIL;
     int cnt=1;
     while(it!=subEnd+1)
     {

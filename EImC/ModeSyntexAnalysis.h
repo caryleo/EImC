@@ -98,7 +98,7 @@ public:
 	Token *look;
 private:
     int l,r,code;
-    bool ret;
+    //bool ret;
 };
 
 #endif // !MODESYNTEXANALYSIS_H_

@@ -444,10 +444,10 @@ Token * ExprIR::pow_op(Token *a,Token *b)
             }
             else
             {
-                res->tag=NUM;
-                SoInt *so_int=new SoInt;
-                so_int=(SoInt*) res;
-                so_int->val=(short) pow(getIntVal(a),getIntVal(b));
+                res->tag=RNUM;
+                SoReal *so_real=new SoReal;
+                so_real=(SoReal*) res;
+                so_real->val=(float) pow(getIntVal(a),getIntVal(b));
             }
         }
         else if(getType(a)==RNUM&&getType(b)==NUM)
@@ -461,14 +461,6 @@ Token * ExprIR::pow_op(Token *a,Token *b)
             }
             else
             {
-                if(getIntVal(b)==0)
-                {
-                    res->tag=NUM;
-                    SoInt *so_int=new SoInt;
-                    so_int=(SoInt*) res;
-                    so_int->val=(short) pow(getRealVal(a),getIntVal(b));
-                    return res;
-                }
                 res->tag=RNUM;
                 SoReal *so_real=new SoReal;
                 so_real=(SoReal*) res;
@@ -486,14 +478,6 @@ Token * ExprIR::pow_op(Token *a,Token *b)
             }
             else
             {
-                if(getRealVal(b)==0)
-                {
-                    res->tag=NUM;
-                    SoInt *so_int=new SoInt;
-                    so_int=(SoInt*) res;
-                    so_int->val=(short) pow(getIntVal(a),getRealVal(b));
-                    return res;
-                }
                 res->tag=RNUM;
                 SoReal *so_real=new SoReal;
                 so_real=(SoReal*) res;
@@ -511,14 +495,6 @@ Token * ExprIR::pow_op(Token *a,Token *b)
             }
             else
             {
-                if(getRealVal(b)==0)
-                {
-                    res->tag=NUM;
-                    SoInt *so_int=new SoInt;
-                    so_int=(SoInt*) res;
-                    so_int->val=(short) pow(getRealVal(a),getRealVal(b));
-                    return res;
-                }
                 res->tag=RNUM;
                 SoReal *so_real=new SoReal;
                 so_real=(SoReal*) res;

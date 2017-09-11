@@ -131,7 +131,15 @@ void ModeExecute::commence(int top, int bottom)
 			SoIf * baba = (SoIf *)tmp;
 			ExprIR eIR;
 			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);//为表达式寻找值
-			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
+			Token * ans;
+			if (buffer[baba->judgeExprTop]->tag == IDT && buffer[baba->judgeExprTop + 1]->tag == LPAR) {
+				FuncType test(baba->judgeExprTop, baba->judgeExprBottom);
+				ans = test.Func();
+			}
+			else
+			{
+				ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
+			}
 			switch (ans->tag)
 			{
 			case NUM:

@@ -610,6 +610,24 @@ bool ModeSyntexAnalysis::altExprStat() //Çø·Öº¯Êı¶¨ÒåÓëÉùÃ÷¡¢±äÁ¿ÉùÃ÷Óë¶¨ÒåÓï¾ä¿
 bool ModeSyntexAnalysis::exp()
 {
     int st=it-2;
+    while(it!=subEnd+1)
+    {
+        if(match(SEMICO))
+        {
+            int en=it-2;
+            AltExpr *now=new AltExpr(st,en);
+            now->tag=STATE;
+            CodeStore.push_back(now);
+            return 1;
+        }
+        else
+            sMove();
+    }
+    getError(look->line,look->col,2);
+    return 0;
+
+/*
+    int st=it-2;
     if(match(ASSIGN))
     {
         while(it!=subEnd+1)
@@ -662,7 +680,7 @@ bool ModeSyntexAnalysis::exp()
 
     }
     getError(look->line,look->col,2);
-    return 0;
+    return 0;*/
 }
 
 bool ModeSyntexAnalysis::funStat(Tag retType,string name)   //º¯Êı¶¨ÒåÓëÉùÃ÷

@@ -6,7 +6,7 @@ ModeRead::ModeRead()//≥ı ºªØ
 {
 	lineLen = 0;
 	readPos = -1;
-	lineNum = 1;
+	lineNum = 0;
 	colNum = 0;
 	file = NULL;
 	lastch = '\0';

@@ -85,7 +85,7 @@ public:
 	bool outStat();
 	bool distinguish();
 	bool funStat(Tag retType,string name);
-	bool getHeadAndTail(int h, int t);
+	int getHeadAndTail(int h, int t);
 	int subEnd, subStart, it;
 	bool findSame(string name, SoFunc * func);
 	void getError(int _l,int _r,int _code)
@@ -94,7 +94,7 @@ public:
 	    r=_r;
 	    code=_code;
 	}
-	bool hasRet();
+	//bool hasRet();
 	Token *look;
 private:
     int l,r,code;

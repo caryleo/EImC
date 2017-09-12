@@ -67,18 +67,43 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-
+				int flag=0;
 
 				// 读到分号 或者 结束
 				while (buffer[temp]->tag != COMMA&&temp <= bottom) //读到逗号或者语句结束的时候 说明赋值语句结束
 				{
+					if (buffer[temp]->tag == IDT&&buffer[temp+1]->tag == LPAR)
+					{
+						flag = 1;
+						temp++;
+						while (buffer[temp]->tag!=RPAR)
+						{
+							flag = 0;
+							temp++;
+						}
+					}
 					temp++;
 				}
+				
 				int end = temp - 1;		// 这个赋值语句的结束
-
+				/*if (flag == 1)
+				{
+					temp = start;
+					while (temp <= bottom)
+					{
+						if (buffer[temp]->tag == RPAR)
+							break;
+						temp++;
+					}
+					end = temp;
+				}*/
 				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
+				//有三
+				ModeExecute::assign(start, end);
 				ModeAssign test(start, end);
 				test.Fuzhi();
+				temp = end + 1;
+			
 			}
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
@@ -128,14 +153,32 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA && temp<=bottom) //读到为分号或者逗号 说明赋值语句结束
+				int flag = 0;
+
+				// 读到分号 或者 结束
+				while (buffer[temp]->tag != COMMA&&temp <= bottom) //读到逗号或者语句结束的时候 说明赋值语句结束
 				{
+					if (buffer[temp]->tag == IDT&&buffer[temp + 1]->tag == LPAR)
+					{
+						flag = 1;
+						temp++;
+						while (buffer[temp]->tag != RPAR)
+						{
+							flag = 0;
+							temp++;
+						}
+					}
 					temp++;
 				}
+
 				int end = temp - 1;		// 这个赋值语句的结束
-										//调用赋值语句 （start，end） 暂定调用方法
+				
+				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
+				//有三
+				ModeExecute::assign(start, end);
 				ModeAssign test(start, end);
 				test.Fuzhi();
+				temp = end + 1;	
 			}
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{
@@ -183,14 +226,31 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 			{
 				int start = temp - 1;  //向前读一个 开始是等号左边的变量
 				temp++;
-				while (buffer[temp]->tag != COMMA && temp<=bottom) //读到为分号或者逗号 说明赋值语句结束
+				int flag = 0;
+
+				// 读到分号 或者 结束
+				while (buffer[temp]->tag != COMMA&&temp <= bottom) //读到逗号或者语句结束的时候 说明赋值语句结束
 				{
+					if (buffer[temp]->tag == IDT&&buffer[temp + 1]->tag == LPAR)
+					{
+						flag = 1;
+						temp++;
+						while (buffer[temp]->tag != RPAR)
+						{
+							flag = 0;
+							temp++;
+						}
+					}
 					temp++;
 				}
 				int end = temp - 1;		// 这个赋值语句的结束
-										//调用赋值语句 （start，end） 暂定调用方法
+				
+				//调用赋值语句 ImpleAssign（start，end） 暂定调用方法
+				//有三
+				ModeExecute::assign(start, end);
 				ModeAssign test(start, end);
 				test.Fuzhi();
+				temp = end + 1;
 			}
 			if (buffer[temp]->tag == KEY_INT || buffer[temp]->tag == KEY_REAL || buffer[temp]->tag == KEY_STRING)
 			{

@@ -8,6 +8,7 @@ extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//语句块存储区
 extern vector<SoFunc *>FuncStore;
 extern babababana retPos;
+extern int inp;
 Block::Block()
 {
 }
@@ -78,7 +79,7 @@ DoUntil::DoUntil(int t, int b, int cETop, int cEBottom)
 }
 
 
-bool ModeSyntexAnalysis::getHeadAndTail(int h, int t)
+int ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 {
 	int ss = CodeStore.size();
 	if (h < 0 || t >= buffer.size())
@@ -88,39 +89,45 @@ bool ModeSyntexAnalysis::getHeadAndTail(int h, int t)
 	}
 	subStart = h;
 	subEnd = t;
-	it = h;
-	look = buffer[h];
-	if (statement())
-	{
-		cout << "Syntex Analysis sucess!" << endl;
+	it=h;
+	look=buffer[h];
+
+	if(statement())
+    {
+        int ans=0;
+        cout<<"Syntex Analysis sucess!"<<endl;
 		if (subStart == 0 && subEnd == buffer.size() - 1) {
 			ModeExecute::init(ss, CodeStore.size() - 1);
 		}
-		else {
-			ModeExecute::commence(ss, CodeStore.size() - 1);
+		else
+		{
+            if(inp==1)
+                ans=ModeExecute::commence(ss, CodeStore.size() - 1); //正常运行模式
+            if(inp==2)
+                ans=DebugExecute::commence(ss,CodeStore.size()-1); //debug模式
 		}
-
-		return 1;
-	}
-	else
-	{
-		cout << "Error in Syntex Analysis!" << endl;
-		code += 200;
-		ModeErrorReport MER(code, l, r);
-		MER.report();
-		return 0;
-	}
+        return ans;
+    }
+    else
+    {
+        cout<<"Error in Syntex Analysis!"<<endl;
+        code+=200;
+        ModeErrorReport MER( code,  l,  r);
+        MER.report();
+        return 0;
+    }
 
 }
+/*
 bool ModeSyntexAnalysis::hasRet()
 {
-	for (int i = 0; i < retPos.cnt; i++)
-	{
-		if (retPos.num[i] >= subStart&&retPos.num[i] <= subEnd)
-			return 1;
-	}
-	return 0;
-}
+    for(int i=0;i<retPos.cnt;i++)
+    {
+        if(retPos.num[i]>=subStart&&retPos.num[i]<=subEnd)
+            return 1;
+    }
+    return 0;
+}*/
 bool ModeSyntexAnalysis::statement()
 {
 	while (it != subEnd + 1)

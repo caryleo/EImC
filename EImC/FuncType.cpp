@@ -62,19 +62,22 @@ Token* FuncType::Func()
 			// 返回的 token 
 			if (ress->tag == NUM)  // 以下三种为参数列表中为数字的情况 
 			{
-				paralist.push_back(ress); // 将参数的token 放入paralist 中
+				SoInt *tmp = new SoInt(((SoInt*)ress)->val, ress->line, ress->col);
+				paralist.push_back(tmp); // 将参数的token 放入paralist 中
 				Token *type = new Token(NUM, 0, 0); // 将参数的类型 放入 paratype 中
 				paratype.push_back(type);
 			}
 			if (ress->tag == RNUM)
 			{
-				paralist.push_back(ress);
+				SoReal *tmp = new SoReal(((SoReal*)ress)->val, ress->line, ress->col);
+				paralist.push_back(tmp); // 将参数的token 放入paralist 中
 				Token *type = new Token(RNUM, 0, 0);
 				paratype.push_back(type);
 			}
 			if (ress->tag == STRING)
 			{
-				paralist.push_back(ress);
+				SoString *tmp = new SoString(((SoString*)ress)->str, ress->line, ress->col);
+				paralist.push_back(tmp); // 将参数的token 放入paralist 中
 				Token *type = new Token(STRING, 0, 0);
 				paratype.push_back(type);
 			}
@@ -117,19 +120,22 @@ Token* FuncType::Func()
 		}
 		if (buffer[para]->tag == NUM)  // 以下三种为参数列表中为数字的情况 
 		{
-			paralist.push_back(buffer[para]); // 将参数的token 放入paralist 中
+			SoInt *tmp = new SoInt(((SoInt*)buffer[para])->val,buffer[para]->line,buffer[para]->col);
+			paralist.push_back(tmp); // 将参数的token 放入paralist 中
 			Token *type = new Token(NUM, 0, 0); // 将参数的类型 放入 paratype 中
 			paratype.push_back(type);
 		}
 		if (buffer[para]->tag == RNUM)
 		{
-			paralist.push_back(buffer[para]);
+			SoReal *tmp = new SoReal(((SoReal*)buffer[para])->val, buffer[para]->line, buffer[para]->col);
+			paralist.push_back(tmp); // 将参数的token 放入paralist 中
 			Token *type = new Token(RNUM, 0, 0);
 			paratype.push_back(type);
 		}
 		if (buffer[para]->tag == STRING)
 		{
-			paralist.push_back(buffer[para]);
+			SoString *tmp = new SoString(((SoString*)buffer[para])->str, buffer[para]->line, buffer[para]->col);
+			paralist.push_back(tmp); // 将参数的token 放入paralist 中
 			Token *type = new Token(STRING, 0, 0);
 			paratype.push_back(type);
 		}

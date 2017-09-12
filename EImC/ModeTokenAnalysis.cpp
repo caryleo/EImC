@@ -102,7 +102,7 @@ void ModeTokenAnalysis::read(ModeRead& mRead)/*词义分析主控*/ {
 		buffer.push_back(t);
 		t = ModeTokenAnalysis::getToken(mRead, ch);
 	}
-	cout << "Token Analysis Completed." << endl;
+	//cout << "Token Analysis Completed." << endl;
 }
 Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模块*/
 	while (ch != -1) {

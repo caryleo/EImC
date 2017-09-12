@@ -16,9 +16,11 @@ class FuncType
 public:
 	FuncType(int a,int b);
 	Token* Func();
+	Token*Func(int location);
 private:
 	int top;
 	int bottom;
+
 };
 
 

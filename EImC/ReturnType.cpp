@@ -73,14 +73,49 @@ void ReturnType::startReturn() {
 				// 将函数的值 压入 buffer 
 				expr_len = expr_len - (funcend - funcstart);
 				Token *restemp;
-				FuncType a(funcstart, funcend);
-				restemp = a.Func();
-				buffer.push_back(restemp);
+				if ((funcend - funcstart) < (expr_bottom - expr_top))
+				{
+					int len = buffer.size();
+					FuncType a(funcstart, funcend);
+					buffer.push_back(buffer[temp]);
+					restemp = a.Func(len);
+				}
+				else
+				{
+					FuncType a(funcstart, funcend);
+                    restemp = a.Func();
+					buffer.push_back(restemp);
+				}
+				
+				
+				
 			}
 			else   // 其他变量 直接压入栈
 			{
-				Token *token = buffer[temp];
-				buffer.push_back(token);
+				
+				//Token *token = buffer[temp];
+				//buffer.push_back(token);
+				// 9.12 修改
+				if (buffer[temp]->tag == IDT)
+				{
+					Idt *id = (Idt*)buffer[temp];
+					if (id->assType == NUM)
+					{
+						Idt* numm=RunTime.query(id->name);
+					    
+						SoInt *number = (SoInt*)(numm->t);
+						short num = number->val;
+						SoInt *newint = new SoInt(num, 1, 1);
+						buffer.push_back(newint);
+						//cout << num << endl;
+					}
+				}
+				//9.12 修改
+				else
+				{
+					Token *token = buffer[temp];
+					buffer.push_back(token);
+				}
 			}
 			temp++;
 		}

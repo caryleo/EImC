@@ -79,8 +79,27 @@ void ReturnType::startReturn() {
 			}
 			else   // 其他变量 直接压入栈
 			{
+				
 				Token *token = buffer[temp];
 				buffer.push_back(token);
+				// 9.12 修改
+				//if (buffer[temp]->tag == IDT)
+				//{
+				//	Idt *id = (Idt*)buffer[temp];
+				//	if (id->assType == NUM)
+				//	{
+				//		SoInt *number = (SoInt*)buffer[temp];
+				//		short num = number->val;
+				//		SoInt *newint = new SoInt(num, 1, 1);
+				//		buffer.push_back(newint);
+				//	}
+				//}
+				////9.12 修改
+				//else
+				//{
+				//	Token *token = buffer[temp];
+				//	buffer.push_back(token);
+				//}
 			}
 			temp++;
 		}

@@ -26,11 +26,7 @@ extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
 void DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
-		string inp;
-		cin >> inp;
-		if (inp.compare("next") != 0) {
-			return;
-		}
+		DebugExecute::await(i);
 		Token * tmpn = buffer[CodeStore[i]->top];
 		ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 		switch (CodeStore[i]->tag)
@@ -213,6 +209,44 @@ void DebugExecute::commence(int top, int bottom) {
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+}
+
+void DebugExecute::await(int i) {
+	string inp;
+	cin >> inp;
+	if (inp.compare("next")) {
+		return;
+	}
+	else if (inp.compare("watch")) {
+		Idt * ans = RunTime.query(inp);
+		
+	}
+}
+
+void DebugExecute::print(int i) {
+	cout << "current statement: ";
+	for (int j = CodeStore[i]->top; j <= CodeStore[i]->bottom; j++) {
+		switch (buffer[j]->tag)
+		{
+		case IDT: {
+			Idt * tmp = (Idt *)buffer[i];
+			cout << tmp->name << " ";
+			break;
+		}
+		case NUM: {
+			SoInt * tmp = (SoInt *)buffer[i];
+			cout << tmp->val << " ";
+			break;
+		}
+		case RNUM: {
+			SoReal * tmp = (SoReal *)buffer[i];
+			cout << tmp->val << " ";
 			break;
 		}
 		default:

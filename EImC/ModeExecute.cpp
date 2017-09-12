@@ -22,7 +22,7 @@ vector <SoFunc *> FuncStore;	//函数语句块存储区
 Stack RunTime;					//运行栈
 Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
-void ModeExecute::init(int top, int bottom)		//首次进行执行管理
+int ModeExecute::init(int top, int bottom)		//首次进行执行管理
 {
 	for (int i = top; i <= bottom; i++) {
 		switch (CodeStore[i]->tag)
@@ -79,9 +79,10 @@ void ModeExecute::init(int top, int bottom)		//首次进行执行管理
 	tmp.clear();
 	Caller * main = new Caller("main", tmp);
 	ModeExecute::caller(main, tmp, 0);
+	return 0;
 }
 
-void ModeExecute::commence(int top, int bottom)
+int ModeExecute::commence(int top, int bottom)
 {
 	for (int i = top; i <= bottom; i++) {
 		Token * tmpn = buffer[CodeStore[i]->top];
@@ -126,6 +127,14 @@ void ModeExecute::commence(int top, int bottom)
 			fType.Func();
 			break;
 		}
+		case KEY_BRK: {
+			return 3;
+			break;
+		}
+		case KEY_CON: {
+			return 2;
+			break;
+		}
 		case IF: {//If式
 			Block * tmp = CodeStore[i];
 			SoIf * baba = (SoIf *)tmp;
@@ -152,10 +161,30 @@ void ModeExecute::commence(int top, int bottom)
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
-							i++;//执行else块 并跳至else块的下一个位置
-							if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+							switch (ans)
+							{
+							case 0: {
+								i++;
 								RunTime.desync();
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
 							}
 						}
 						else {
@@ -171,10 +200,30 @@ void ModeExecute::commence(int top, int bottom)
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							i++;
-							if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							switch (ans)
+							{
+							case 0: {
+								i++;
 								RunTime.desync();
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
 							}
 						}
 						else {
@@ -183,9 +232,29 @@ void ModeExecute::commence(int top, int bottom)
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							switch (ans)
+							{
+							case 0: {
 								RunTime.desync();
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
 							}
 						}
 					}
@@ -195,9 +264,29 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
 							RunTime.desync();
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
 						}
 					}
 				}
@@ -211,10 +300,30 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
-						i++;//执行else块 并跳至else块的下一个位置
-						if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+						switch (ans)
+						{
+						case 0: {
+							i++;
 							RunTime.desync();
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
 						}
 					}
 					else {
@@ -227,10 +336,30 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						i++;
-						if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
+							i++;
 							RunTime.desync();
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
 						}
 					}
 					else {
@@ -239,9 +368,29 @@ void ModeExecute::commence(int top, int bottom)
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
 							RunTime.desync();
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
 						}
 					}
 				}
@@ -274,6 +423,7 @@ void ModeExecute::commence(int top, int bottom)
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();
+			return 1;
 			break;
 		}
 		default:

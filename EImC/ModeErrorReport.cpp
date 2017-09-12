@@ -50,8 +50,8 @@ ModeErrorReport::ModeErrorReport(int code, int l, int c)
 void ModeErrorReport::report()
 {
 	string ans = content[errorCode];
-	cout << "发生错误" << endl;
-	cout << "行数：" << line << endl;
-	cout << "错误原因：" << ans << endl;
+	cout << "Error Detected" << endl;
+	cout << "Line：" << line << endl;
+	cout << "Cause：" << ans << endl;
 	exit(0);
 }

@@ -500,8 +500,13 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 	RunTime.sync();
 	for (int i = 0; i < a->paralist.size(); i++) {
 		Idt * idt = (Idt *)(a->paralist)[i];
-		idt->t = s[i];
-		idt->tag = IDT;
+		Idt * tmp = new Idt;
+		tmp->name = idt->name;
+		tmp->tag = idt->tag;
+		tmp->line = idt->line;
+		tmp->col = idt->col;
+		tmp->assType = idt->assType;
+		tmp->t = s[i];
 		RunTime.push(idt);
 		RunTime.sync();						//同步运行栈栈顶
 	}

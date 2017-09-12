@@ -95,7 +95,7 @@ int ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 	if(statement())
     {
         int ans=0;
-        cout<<"Syntex Analysis sucess!"<<endl;
+        //cout<<"Syntex Analysis sucess!"<<endl;
 		if (subStart == 0 && subEnd == buffer.size() - 1) {
 			ModeExecute::init(ss, CodeStore.size() - 1);
 		}
@@ -110,7 +110,7 @@ int ModeSyntexAnalysis::getHeadAndTail(int h,int t)
     }
     else
     {
-        cout<<"Error in Syntex Analysis!"<<endl;
+        //cout<<"Error in Syntex Analysis!"<<endl;
         code+=200;
         ModeErrorReport MER( code,  l,  r);
         MER.report();

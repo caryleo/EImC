@@ -409,14 +409,26 @@ int ModeExecute::commence(int top, int bottom)
 			Block * tmp = CodeStore[i];
 			SoWhile * baba = (SoWhile *)tmp;
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
-			mWhile.runWhile();
+			int ans = mWhile.runWhile();
+			if (ans == 0) {
+
+			}
+			else if (ans == 1) {
+				return 1;
+			}
 			break;
 		}
 		case DOUNTIL: {//do-until Ω
 			Block *tmp = CodeStore[i];
 			DoUntil * baba = (DoUntil *)tmp;
 			ModeDo mDo(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
-			mDo.runDo();
+			int ans = mDo.runDo();
+			if (ans == 0) {
+
+			}
+			else if (ans == 1) {
+				return 1;
+			}
 			break;
 		}
 		case KEY_RET: {//return”Ôæ‰
@@ -430,6 +442,7 @@ int ModeExecute::commence(int top, int bottom)
 			break;
 		}
 	}
+	return 0;
 }
 
 

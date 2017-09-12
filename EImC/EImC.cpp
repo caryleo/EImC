@@ -14,7 +14,7 @@ int main()
 {
 	//cout << "please select process mode" << endl;
 	//cout << "1.interpreter mode 2.debug mode" << endl;
-	//cin >> inp;
+	inp = 1;
 	ModeRead mRead;
 	mRead.readMode();
 	ModeTokenAnalysis::read(mRead);

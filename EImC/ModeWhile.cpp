@@ -25,23 +25,32 @@ bool ModeWhile::calcu()
         return 1;
 
 }
-void ModeWhile::runWhile()
+int ModeWhile::runWhile()
 {
 	ModeSyntexAnalysis mSA;
-    if(calcu())
-    {
-        PRTR *tmp=new PRTR(ebp);
-        RunTime.push(tmp);
-        RunTime.syncb();
-        RunTime.sync();
-		mSA.getHeadAndTail(top, bottom);
-    }
 	while (calcu()) {
-		mSA.getHeadAndTail(top, bottom);
+		PRTR *tmp = new PRTR(ebp);
+		RunTime.push(tmp);
+		RunTime.syncb();
+		RunTime.sync();
+		int ans = mSA.getHeadAndTail(top, bottom);
+		if (ans == 0) {
+			RunTime.desync();
+			continue;
+		}
+		else if (ans == 1) {
+			return 1;
+		}
+		else if (ans == 2) {
+			RunTime.desync();
+			continue;
+		}
+		else if (ans == 3) {
+			RunTime.desync();
+			break;
+		}
 	}
-	if (!mSA.hasRet()) {
-		RunTime.desync();
-	}
+	return 0;
 }
 
 ModeDo::ModeDo(int _s, int _t, int _x, int _y) {
@@ -62,20 +71,46 @@ bool ModeDo::calcu() {
 		return 1;
 }
 
-void ModeDo::runDo() {
+int ModeDo::runDo() {
 	ModeSyntexAnalysis mSA;
-	if (!calcu())
-	{
+	PRTR *tmp = new PRTR(ebp);
+	RunTime.push(tmp);
+	RunTime.syncb();
+	RunTime.sync();
+	int ans = mSA.getHeadAndTail(top, bottom);
+	if (ans == 0) {
+		RunTime.desync();
+	}
+	else if (ans == 1) {
+		return 1;
+	}
+	else if (ans == 2) {
+		RunTime.desync();
+	}
+	else if (ans == 3) {
+		RunTime.desync();
+		return 0;
+	}
+	while (!calcu()) {
 		PRTR *tmp = new PRTR(ebp);
 		RunTime.push(tmp);
 		RunTime.syncb();
 		RunTime.sync();
-		mSA.getHeadAndTail(top, bottom);
+		int ans = mSA.getHeadAndTail(top, bottom);
+		if (ans == 0) {
+			RunTime.desync();
+		}
+		else if (ans == 1) {
+			return 1;
+		}
+		else if (ans == 2) {
+			RunTime.desync();
+			continue;
+		}
+		else if (ans == 3) {
+			RunTime.desync();
+			break;
+		}
 	}
-	while (!calcu()) {
-		mSA.getHeadAndTail(top, bottom);
-	}
-	if (!mSA.hasRet()) {
-		RunTime.desync();
-	}
+	return 0;
 }

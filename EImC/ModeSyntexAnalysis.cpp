@@ -103,8 +103,8 @@ int ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 		{
             if(inp==1)
                 ans=ModeExecute::commence(ss, CodeStore.size() - 1); //正常运行模式
-            if(inp==2)
-                ans=DebugExecute::commence(ss,CodeStore.size()-1); //debug模式
+			if (inp == 2);
+                //ans=DebugExecute::commence(ss,CodeStore.size()-1); //debug模式
 		}
         return ans;
     }

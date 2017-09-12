@@ -89,9 +89,9 @@ void DebugExecute::commence(int top, int bottom) {
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 							i++;//执行else块 并跳至else块的下一个位置
-							if (!mSA.hasRet()) {
+							/*if (!mSA.hasRet()) {
 								RunTime.desync();
-							}
+							}*/
 						}
 						else {
 
@@ -108,9 +108,9 @@ void DebugExecute::commence(int top, int bottom) {
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 							i++;
-							if (!mSA.hasRet()) {
+							/*if (!mSA.hasRet()) {
 								RunTime.desync();
-							}
+							}*/
 						}
 						else {
 							PRTR * build = new PRTR(ebp);
@@ -119,9 +119,9 @@ void DebugExecute::commence(int top, int bottom) {
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
 							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							if (!mSA.hasRet()) {
+							/*if (!mSA.hasRet()) {
 								RunTime.desync();
-							}
+							}*/
 						}
 					}
 					else {
@@ -131,9 +131,9 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						if (!mSA.hasRet()) {
+						/*if (!mSA.hasRet()) {
 							RunTime.desync();
-						}
+						}*/
 					}
 				}
 				break;
@@ -148,9 +148,9 @@ void DebugExecute::commence(int top, int bottom) {
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
 						i++;//执行else块 并跳至else块的下一个位置
-						if (!mSA.hasRet()) {
+						/*if (!mSA.hasRet()) {
 							RunTime.desync();
-						}
+						}*/
 					}
 					else {
 					}
@@ -164,9 +164,9 @@ void DebugExecute::commence(int top, int bottom) {
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
 						i++;
-						if (!mSA.hasRet()) {
+						/*if (!mSA.hasRet()) {
 							RunTime.desync();
-						}
+						}*/
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
@@ -175,9 +175,9 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
 						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						if (!mSA.hasRet()) {
+						/*if (!mSA.hasRet()) {
 							RunTime.desync();
-						}
+						}*/
 					}
 				}
 				break;

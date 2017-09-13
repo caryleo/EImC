@@ -23,7 +23,7 @@ extern vector <Token *> ConstStore;	//常量存储区
 extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
-string order;
+string order="n";
 int debugLine;
 int bp[105]; // 存断点
 extern int sizen;

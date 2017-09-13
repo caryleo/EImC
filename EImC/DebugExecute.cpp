@@ -388,14 +388,37 @@ int DebugExecute::commence(int top, int bottom) {
 }
 
 void DebugExecute::stoprun(int i) {
-	string inp;
-	cin >> inp;
-	if (inp.compare("next")) {
-		return;
-	}
-	else if (inp.compare("watch")) {
-		Idt * ans = RunTime.query(inp);
+	cout << "current line: " << i << endl;
+	string order;
+	cout << "please input debug order : ";
+	cin >> order;
+	if (order != "n") {
+		while (order != "n") {
+			if (order == "b") {
+				int ans;
+				cout << "please input breakpoint: ";
+				cin >> ans;
+				DebugExecute::breakpoint(ans);
+			}
+			else if (order == "c") {
 
+			}
+			else if (order == "w") {
+
+			}
+			else if (order == "a") {
+
+			}
+			else if (order == "m") {
+
+			}
+			else if (order == "p") {
+
+			}
+		}
+	}
+	else {
+		cout << "commencing next line..." << endl;
 	}
 }
 void DebugExecute::add(string name)

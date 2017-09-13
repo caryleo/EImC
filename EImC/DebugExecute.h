@@ -8,7 +8,6 @@ class DebugExecute {
 public:
 	static int commence(int top, int bottom);
 	static void stoprun(int i);
-	//static void print(int i);
 	static void watch(string name);
 	static void add(string name);
 	static void move(string name);

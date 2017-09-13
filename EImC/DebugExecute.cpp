@@ -401,19 +401,29 @@ void DebugExecute::stoprun(int i) {
 				DebugExecute::breakpoint(ans);
 			}
 			else if (order == "c") {
-
+				DebugExecute::continueCommence();
+				return;
 			}
 			else if (order == "w") {
-
+				string name;
+				cout << "please input parameter name: ";
+				cin >> name;
+				DebugExecute::watch(name);
 			}
 			else if (order == "a") {
-
+				string name;
+				cout << "please input parameter name: ";
+				cin >> name;
+				DebugExecute::add(name);
 			}
 			else if (order == "m") {
-
+				string name;
+				cout << "please input parameter name: ";
+				DebugExecute::move(name);
 			}
 			else if (order == "p") {
-
+				cout << "here are the parameter value you added: " << endl;
+				DebugExecute::print();
 			}
 		}
 	}
@@ -442,7 +452,7 @@ void DebugExecute::print()
 }
 void DebugExecute::watch(string name)
 {
-    cout<<name<<"   ";
+    cout<<name<<"\t";
     Idt *now=RunTime.query(name);
     if(now==NULL)
         cout<<"no match for "<<name<<" in stack"<<endl;

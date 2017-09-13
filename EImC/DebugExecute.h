@@ -12,7 +12,8 @@ public:
 	static void add(string name);
 	static void move(string name);
 	static void print();
-
+	static void breakpoint(int line);
+	static void continueCommence();
 };
 static set<string> iset;
 #endif // !DEBUGEXECUTE_H_

@@ -62,9 +62,9 @@ int Stack::size()
 
 Idt * Stack::query(string n)
 {
-	Token ** p = top - 1;
+	Token ** p = top;
 	while (p != base) {
-
+		p--;
 		if ((p != NULL) && ((*p)->tag == IDT)) {
 			Idt * q = (Idt*)(*p);
 			string name = q->name;
@@ -72,7 +72,6 @@ Idt * Stack::query(string n)
 				return q;
 			}
 		}
-		p--;
 	}
 	return nullptr;
 }

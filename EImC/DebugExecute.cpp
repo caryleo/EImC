@@ -508,11 +508,11 @@ void DebugExecute::watch(string name)
         if(now->assType==ERR)
             cout<<"Variable uninitialized"<<endl;
         else if(now->assType==NUM)
-            cout<<((SoInt*)now)->val<<endl;
+            cout<<((SoInt*)(now->t))->val<<endl;
         else if(now->assType==RNUM)
-            cout<<((SoReal*)now)->val<<endl;
+            cout<<((SoReal*)(now->t))->val<<endl;
         else
-            cout<<((SoString*)now)->str<<endl;
+            cout<<((SoString*)(now->t))->str<<endl;
     }
     return ;
 }

@@ -33,7 +33,7 @@ bool ExprIR::isAssign(Token *token)
 		if ((idt->t == NULL)) return 0;
 	}
 	else return 1;
-
+	return 1;
 }
 
 

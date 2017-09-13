@@ -23,6 +23,8 @@ extern vector <Token *> ConstStore;	//常量存储区
 extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
+string order;
+int debugLine;
 
 int DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
@@ -388,47 +390,87 @@ int DebugExecute::commence(int top, int bottom) {
 }
 
 void DebugExecute::stoprun(int i) {
-	cout << "current line: " << i << endl;
-	string order;
-	cout << "please input debug order : ";
-	cin >> order;
-	if (order != "n") {
-		while (order != "n") {
-			if (order == "b") {
-				int ans;
-				cout << "please input breakpoint: ";
-				cin >> ans;
-				DebugExecute::breakpoint(ans);
+	cout << "current line: " << buffer[CodeStore[i]->top]->line << endl;
+	if (order == "n") {
+		cout << "please input debug order : ";
+		cin >> order;
+		if (order != "n") {
+			while (order != "n") {
+				if (order == "b") {
+					int ans;
+					cout << "please input breakpoint: ";
+					cin >> ans;
+					DebugExecute::breakpoint(ans);
+				}
+				else if (order == "c") {
+					DebugExecute::continueCommence();
+					return;
+				}
+				else if (order == "w") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::watch(name);
+				}
+				else if (order == "a") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::add(name);
+				}
+				else if (order == "m") {
+					string name;
+					cout << "please input parameter name: ";
+					DebugExecute::move(name);
+				}
+				else if (order == "p") {
+					cout << "here are the parameter value you added: " << endl;
+					DebugExecute::print();
+				}
 			}
-			else if (order == "c") {
-				DebugExecute::continueCommence();
-				return;
-			}
-			else if (order == "w") {
-				string name;
-				cout << "please input parameter name: ";
-				cin >> name;
-				DebugExecute::watch(name);
-			}
-			else if (order == "a") {
-				string name;
-				cout << "please input parameter name: ";
-				cin >> name;
-				DebugExecute::add(name);
-			}
-			else if (order == "m") {
-				string name;
-				cout << "please input parameter name: ";
-				DebugExecute::move(name);
-			}
-			else if (order == "p") {
-				cout << "here are the parameter value you added: " << endl;
-				DebugExecute::print();
-			}
+			return;
+		}
+		else {
+			cout << "commencing next line..." << endl;
 		}
 	}
-	else {
-		cout << "commencing next line..." << endl;
+	if (order == "c") {
+		if (buffer[CodeStore[i]->top]->line == debugLine) {
+			while (order != "n") {
+				if (order == "b") {
+					int ans;
+					cout << "please input breakpoint: ";
+					cin >> ans;
+					DebugExecute::breakpoint(ans);
+				}
+				else if (order == "c") {
+					DebugExecute::continueCommence();
+					return;
+				}
+				else if (order == "w") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::watch(name);
+				}
+				else if (order == "a") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::add(name);
+				}
+				else if (order == "m") {
+					string name;
+					cout << "please input parameter name: ";
+					DebugExecute::move(name);
+				}
+				else if (order == "p") {
+					cout << "here are the parameter value you added: " << endl;
+					DebugExecute::print();
+				}
+			}
+			return;
+		}
 	}
 }
 void DebugExecute::add(string name)

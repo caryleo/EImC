@@ -15,17 +15,19 @@ extern vector<Token*> ConstStore;
 extern vector<Block*>CodeStore;
 extern vector <SoFunc *> FuncStore;
 extern Token ** esp, **ebp;
+int sizen;
 
 int inp;//模式控制
 
 int main()
 {
-	//cout << "please select process mode" << endl;
-	//cout << "1.interpreter mode 2.debug mode" << endl;
-	inp = 1;
+	cout << "please select process mode" << endl;
+	cout << "1.interpreter mode 2.debug mode" << endl;
+	cin >> inp;
 	ModeRead mRead;
 	mRead.readMode();
 	ModeTokenAnalysis::read(mRead);
+	sizen = buffer.size();
 	ModeSyntexAnalysis mSA;
 	mSA.getHeadAndTail(0, buffer.size() - 1);
 	buffer.clear();

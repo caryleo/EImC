@@ -24,7 +24,6 @@ extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 string order="n";
-int debugLine;
 int bp[105]; // 存断点
 extern int sizen;
 int bp_len = 0;
@@ -432,15 +431,20 @@ void DebugExecute::stoprun(int i) {
 					cout << "here are the parameter value you added: " << endl;
 					DebugExecute::print();
 				}
+				cout << "please input debug order : ";
+				cin >> order;
 			}
 			return;
 		}
 		else {
 			cout << "commencing next line..." << endl;
+			return;
 		}
 	}
 	if (order == "c") {
-		if (buffer[CodeStore[i]->top]->line == debugLine) {
+		if (buffer[CodeStore[i]->top]->line == debugline) {
+			cout << "please input debug order : ";
+			cin >> order;
 			while (order != "n") {
 				if (order == "b") {
 					int ans;
@@ -473,6 +477,8 @@ void DebugExecute::stoprun(int i) {
 					cout << "here are the parameter value you added: " << endl;
 					DebugExecute::print();
 				}
+				cout << "please input debug order : ";
+				cin >> order;
 			}
 			return;
 		}
@@ -549,9 +555,12 @@ void DebugExecute::breakpoint(int ans)  // ans 行号
 	{
 		cout << "Error!!!" << endl;
 	}
-	bp[bp_len] = ans;
-	bp_len++;
-	sort(bp,bp+bp_len);//默认从大到小
+	else {
+		bp[bp_len] = ans;
+		bp_len++;
+		sort(bp, bp + bp_len);//默认从大到小
+	}
+	return;
 }
 
 void DebugExecute::continueCommence()
@@ -560,6 +569,9 @@ void DebugExecute::continueCommence()
 	{
 		cout << "Error!!!" << endl;
 	}
-	debugline = bp[debugtime]; // 修改debugline
-	debugtime++;			// debugtime +1
+	else {
+		debugline = bp[debugtime]; // 修改debugline
+		debugtime++;			// debugtime +1
+	}
+	return;
 }

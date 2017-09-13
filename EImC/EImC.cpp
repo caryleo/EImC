@@ -34,8 +34,6 @@ int main()
 	ConstStore.clear();
 	CodeStore.clear();
 	FuncStore.clear();
-	delete esp;
-	delete ebp;
     return 0;
 }
 

@@ -13,6 +13,7 @@ Stack::Stack() {
 	stacksize = STACK_INIT_SIZE;
 	top = base;
 	cnt = 0;
+	esp = ebp = top = base;
 }
 
 void Stack::push(Token * t) {/*将元素压入栈中*/

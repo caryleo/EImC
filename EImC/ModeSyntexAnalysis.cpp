@@ -4,6 +4,7 @@
 #include "ModeTokenAnalysis.h"
 #include "ModeErrorReport.h"
 #include "ModeExecute.h"
+#include "DebugExecute.h"
 extern std::vector<Token*>buffer;
 vector <Block*> CodeStore;//语句块存储区
 extern vector<SoFunc *>FuncStore;
@@ -103,8 +104,8 @@ int ModeSyntexAnalysis::getHeadAndTail(int h,int t)
 		{
             if(inp==1)
                 ans=ModeExecute::commence(ss, CodeStore.size() - 1); //正常运行模式
-			if (inp == 2);
-                //ans=DebugExecute::commence(ss,CodeStore.size()-1); //debug模式
+			if (inp == 2)
+                ans=DebugExecute::commence(ss,CodeStore.size()-1); //debug模式
 		}
         return ans;
     }

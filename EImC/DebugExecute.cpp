@@ -14,7 +14,7 @@
 #include "ReturnType.h"
 #include "ModeErrorReport.h"
 #include "DebugExecute.h"
-
+#include<algorithm>
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -23,6 +23,11 @@ extern vector <Token *> ConstStore;	//常量存储区
 extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
+int bp[105]; // 存断点
+extern int sizen;
+int bp_len = 0;
+int debugline = 0;
+int debugtime = 0;
 
 int DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
@@ -495,19 +500,24 @@ void DebugExecute::watch(string name)
 		}
 	}
 }
-
-void DebugExecute::breakpoint(int i)
+*/
+void DebugExecute::breakpoint(int ans)  // ans 行号
 {
-	int line;
-	cin >> line;
-	getchar();
-	int size = CodeStore.size();
-	
-	int temp = CodeStore[i]->top;
-	int i;
-	for (i = 0; i < size; i++)
+	if (ans > sizen)
 	{
-
+		cout << "Error!!!" << endl;
 	}
+	bp[bp_len] = ans;
+	bp_len++;
+	sort(bp,bp+bp_len);//默认从大到小
+}
 
+void DebugExecute::c()
+{
+	if (debugtime > bp_len)
+	{
+		cout << "Error!!!" << endl;
+	}
+	debugline = bp[debugtime]; // 修改debugline
+	debugtime++;			// debugtime +1
 }

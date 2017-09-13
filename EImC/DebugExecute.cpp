@@ -388,41 +388,56 @@ int DebugExecute::commence(int top, int bottom) {
 }
 
 void DebugExecute::stoprun(int i) {
-	cout << "current line: " << i << endl;
-	string order;
-	cout << "please input debug order : ";
-	cin >> order;
-	if (order != "n") {
-		while (order != "n") {
-			if (order == "b") {
-				int ans;
-				cout << "please input breakpoint: ";
-				cin >> ans;
-				DebugExecute::breakpoint(ans);
-			}
-			else if (order == "c") {
-
-			}
-			else if (order == "w") {
-
-			}
-			else if (order == "a") {
-
-			}
-			else if (order == "m") {
-
-			}
-			else if (order == "p") {
-
-			}
-		}
+	string inp;
+	cin >> inp;
+	if (inp.compare("next")) {
+		return;
 	}
-	else {
-		cout << "commencing next line..." << endl;
+	else if (inp.compare("watch")) {
+		Idt * ans = RunTime.query(inp);
+
 	}
 }
+void DebugExecute::add(string name)
+{
+    iset.insert(name);
+    return ;
+}
+void DebugExecute::move(string name)
+{
+    iset.erase(name);
+    return ;
+}
+void DebugExecute::print()
+{
+    set<string>::iterator it;
+    for(it=iset.begin();it!=iset.end();it++)
+    {
+        watch(*it);
+    }
+    return ;
+}
+void DebugExecute::watch(string name)
+{
+    cout<<name<<"   ";
+    Idt *now=RunTime.query(name);
+    if(now==NULL)
+        cout<<"no match for "<<name<<" in stack"<<endl;
+    else
+    {
+        if(now->assType==ERR)
+            cout<<"Variable uninitialized"<<endl;
+        else if(now->assType==NUM)
+            cout<<((SoInt*)now)->val<<endl;
+        else if(now->assType==RNUM)
+            cout<<((SoReal*)now)->val<<endl;
+        else
+            cout<<((SoString*)now)->str<<endl;
+    }
+    return ;
+}
 
-void DebugExecute::print(int i) {
+/*void DebugExecute::print(int i) {
 	cout << "current statement: ";
 	for (int j = CodeStore[i]->top; j <= CodeStore[i]->bottom; j++) {
 		switch (buffer[j]->tag)
@@ -446,4 +461,4 @@ void DebugExecute::print(int i) {
 			break;
 		}
 	}
-}
+}*/

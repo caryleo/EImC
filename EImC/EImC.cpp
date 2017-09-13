@@ -1,12 +1,20 @@
 // EImC.cpp: 定义控制台应用程序的入口点。
 //
 #include "stdafx.h"
-#include"EImC.h"
-#include"ModeRead.h"
-#include"ModeTokenAnalysis.h"
+#include "EImC.h"
+#include "ModeRead.h"
+#include "ModeTokenAnalysis.h"
 #include "ModeSyntexAnalysis.h"
+#include "Stack.h"
+using namespace std;
 
-std::vector<Token*>buffer;
+vector<Token*>buffer;
+extern Stack RunTime;
+extern vector<Token*>buffer;
+extern vector<Token*> ConstStore;
+extern vector<Block*>CodeStore;
+extern vector <SoFunc *> FuncStore;
+extern Token ** esp, **ebp;
 
 int inp;//模式控制
 
@@ -20,6 +28,12 @@ int main()
 	ModeTokenAnalysis::read(mRead);
 	ModeSyntexAnalysis mSA;
 	mSA.getHeadAndTail(0, buffer.size() - 1);
+	buffer.clear();
+	ConstStore.clear();
+	CodeStore.clear();
+	FuncStore.clear();
+	delete esp;
+	delete ebp;
     return 0;
 }
 

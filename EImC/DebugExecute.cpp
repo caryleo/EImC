@@ -26,6 +26,7 @@ extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
 int DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
+		DebugExecute::stoprun(i);
 		Token * tmpn = buffer[CodeStore[i]->top];
 		ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 		switch (CodeStore[i]->tag)
@@ -387,14 +388,37 @@ int DebugExecute::commence(int top, int bottom) {
 }
 
 void DebugExecute::stoprun(int i) {
-	string inp;
-	cin >> inp;
-	if (inp.compare("next")) {
-		return;
+	cout << "current line: " << i << endl;
+	string order;
+	cout << "please input debug order : ";
+	cin >> order;
+	if (order != "n") {
+		while (order != "n") {
+			if (order == "b") {
+				int ans;
+				cout << "please input breakpoint: ";
+				cin >> ans;
+				DebugExecute::breakpoint(ans);
+			}
+			else if (order == "c") {
+
+			}
+			else if (order == "w") {
+
+			}
+			else if (order == "a") {
+
+			}
+			else if (order == "m") {
+
+			}
+			else if (order == "p") {
+
+			}
+		}
 	}
-	else if (inp.compare("watch")) {
-		Idt * ans = RunTime.query(inp);
-		
+	else {
+		cout << "commencing next line..." << endl;
 	}
 }
 

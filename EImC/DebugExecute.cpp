@@ -254,3 +254,19 @@ void DebugExecute::print(int i) {
 		}
 	}
 }
+
+void DebugExecute::breakpoint(int i)
+{
+	int line;
+	cin >> line;
+	getchar();
+	int size = CodeStore.size();
+	
+	int temp = CodeStore[i]->top;
+	int i;
+	for (i = 0; i < size; i++)
+	{
+
+	}
+
+}

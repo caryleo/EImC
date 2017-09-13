@@ -105,7 +105,10 @@ int DebugExecute::commence(int top, int bottom) {
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -144,7 +147,10 @@ int DebugExecute::commence(int top, int bottom) {
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -208,7 +214,10 @@ int DebugExecute::commence(int top, int bottom) {
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -244,7 +253,10 @@ int DebugExecute::commence(int top, int bottom) {
 				if (((SoReal *)ans)->val == 0.0) {//if不可执行，或跳过，或无条件执行紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -280,7 +292,10 @@ int DebugExecute::commence(int top, int bottom) {
 				else {//if可执行，执行，并无条件跳过紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -312,7 +327,10 @@ int DebugExecute::commence(int top, int bottom) {
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;

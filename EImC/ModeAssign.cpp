@@ -249,7 +249,10 @@ void ModeAssign::Fuzhi()
 						Idt* newidt = (Idt*)token;
 						newidt->assType = NUM;  
 						newidt->t = NULL;		//此时未赋值 修改 t 指针 指向空
-						RunTime.push(newidt);   // 放入栈中
+						if (RunTime.push(newidt)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}   // 放入栈中
 						RunTime.sync();	 // 修改ESP
 						SoInt*intt = new SoInt(num, 0, 0);
 						ConstStore.push_back(intt);

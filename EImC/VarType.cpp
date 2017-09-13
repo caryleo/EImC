@@ -53,7 +53,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				idt->assType = NUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;		//此时未赋值 修改 t 指针 指向空
-				RunTime.push(idt);   // 放入栈中
+				if (RunTime.push(idt)) {
+					RunTime.sync();
+					RunTime.desyncb();
+				}   // 放入栈中
 				RunTime.sync();	 // 修改ESP
 				temp++;
 				continue;
@@ -139,7 +142,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				idt->assType = RNUM;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;
-				RunTime.push(idt);   // 放入栈中
+				if (RunTime.push(idt)) {
+					RunTime.sync();
+					RunTime.desyncb();
+				}   // 放入栈中
 				RunTime.sync();	 // 修改ESP
 				temp++;
 				continue;
@@ -212,7 +218,10 @@ void VarType::input()  //给我的是 int/real/string 开头 以分号为结束的一段话
 				}
 				idt->assType = STRING;  // 在idt类里的asstype 标注这个变量 属于的类型
 				idt->t = NULL;
-				RunTime.push(idt);		// 放入栈中
+				if (RunTime.push(idt)) {
+					RunTime.sync();
+					RunTime.desyncb();
+				}		// 放入栈中
 				RunTime.sync();	 // 修改ESP
 				temp++;
 				continue;

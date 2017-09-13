@@ -77,7 +77,7 @@ void ReturnType::startReturn() {
 				{
 					int len = buffer.size();
 					FuncType a(funcstart, funcend);
-					buffer.push_back(buffer[temp]);
+					buffer.push_back(buffer[temp-1]);//ÐÞ¸Ä
 					restemp = a.Func(len);
 				}
 				else

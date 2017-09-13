@@ -6,6 +6,7 @@
 #include "ModeTokenAnalysis.h"
 #include "ModeSyntexAnalysis.h"
 #include "Stack.h"
+#include <time.h>
 using namespace std;
 
 vector<Token*>buffer;
@@ -26,14 +27,22 @@ int main()
 	cin >> inp;
 	ModeRead mRead;
 	mRead.readMode();
+	clock_t start, finish;
+	double totaltime;
+	start = clock();
 	ModeTokenAnalysis::read(mRead);
 	sizen = buffer.size();
+	RunTime.sync();
+	RunTime.syncb();
 	ModeSyntexAnalysis mSA;
 	mSA.getHeadAndTail(0, buffer.size() - 1);
 	buffer.clear();
 	ConstStore.clear();
 	CodeStore.clear();
 	FuncStore.clear();
+	finish = clock();
+	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
+	cout << endl << "processing time: " << totaltime << "s" << endl;
     return 0;
 }
 

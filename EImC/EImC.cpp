@@ -5,8 +5,9 @@
 #include"ModeRead.h"
 #include"ModeTokenAnalysis.h"
 #include "ModeSyntexAnalysis.h"
+using namespace std;
 
-std::vector<Token*>buffer;
+vector<Token*>buffer;
 
 int inp;//模式控制
 

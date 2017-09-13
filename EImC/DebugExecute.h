@@ -5,8 +5,8 @@ using namespace std;
 
 class DebugExecute {
 public:
-	static void commence(int top, int bottom);
-	static void await(int i);
+	static int commence(int top, int bottom);
+	static void stoprun(int i);
 	static void print(int i);
 };
 

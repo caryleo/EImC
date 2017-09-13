@@ -24,9 +24,8 @@ extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
 
-void DebugExecute::commence(int top, int bottom) {
+int DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
-		DebugExecute::await(i);
 		Token * tmpn = buffer[CodeStore[i]->top];
 		ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 		switch (CodeStore[i]->tag)
@@ -69,12 +68,28 @@ void DebugExecute::commence(int top, int bottom) {
 			fType.Func();
 			break;
 		}
+		case KEY_BRK: {
+			return 3;
+			break;
+		}
+		case KEY_CON: {
+			return 2;
+			break;
+		}
 		case IF: {//If式
 			Block * tmp = CodeStore[i];
 			SoIf * baba = (SoIf *)tmp;
 			ExprIR eIR;
 			ModeExecute::assign(baba->judgeExprTop, baba->judgeExprBottom);//为表达式寻找值
-			Token * ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
+			Token * ans;
+			if (buffer[baba->judgeExprTop]->tag == IDT && buffer[baba->judgeExprTop + 1]->tag == LPAR) {
+				FuncType test(baba->judgeExprTop, baba->judgeExprBottom);
+				ans = test.Func();
+			}
+			else
+			{
+				ans = eIR.calculate_expr(baba->judgeExprTop, baba->judgeExprBottom); //获得条件表达式的结果
+			}
 			switch (ans->tag)
 			{
 			case NUM:
@@ -87,11 +102,31 @@ void DebugExecute::commence(int top, int bottom) {
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
-							i++;//执行else块 并跳至else块的下一个位置
-							/*if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+							switch (ans)
+							{
+							case 0: {
+								i++;
 								RunTime.desync();
-							}*/
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
+							}
 						}
 						else {
 
@@ -106,11 +141,31 @@ void DebugExecute::commence(int top, int bottom) {
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							i++;
-							/*if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							switch (ans)
+							{
+							case 0: {
+								i++;
 								RunTime.desync();
-							}*/
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
+							}
 						}
 						else {
 							PRTR * build = new PRTR(ebp);
@@ -118,10 +173,30 @@ void DebugExecute::commence(int top, int bottom) {
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
-							mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-							/*if (!mSA.hasRet()) {
+							int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+							switch (ans)
+							{
+							case 0: {
 								RunTime.desync();
-							}*/
+								break;
+							}
+							case 1: {//return
+								return 1;
+								break;
+							}
+							case 2: {//continue
+								RunTime.desync();
+								return 2;
+								break;
+							}
+							case 3: {//break;
+								RunTime.desync();
+								return 3;
+								break;
+							}
+							default:
+								break;
+							}
 						}
 					}
 					else {
@@ -130,10 +205,30 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						/*if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
 							RunTime.desync();
-						}*/
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
+						}
 					}
 				}
 				break;
@@ -146,11 +241,31 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
-						i++;//执行else块 并跳至else块的下一个位置
-						/*if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i + 1]->top, CodeStore[i + 1]->bottom);
+						switch (ans)
+						{
+						case 0: {
+							i++;
 							RunTime.desync();
-						}*/
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
+						}
 					}
 					else {
 					}
@@ -162,11 +277,31 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						i++;
-						/*if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
+							i++;
 							RunTime.desync();
-						}*/
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
+						}
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
@@ -174,10 +309,30 @@ void DebugExecute::commence(int top, int bottom) {
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
-						mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
-						/*if (!mSA.hasRet()) {
+						int ans = mSA.getHeadAndTail(CodeStore[i]->top, CodeStore[i]->bottom);
+						switch (ans)
+						{
+						case 0: {
 							RunTime.desync();
-						}*/
+							break;
+						}
+						case 1: {//return
+							return 1;
+							break;
+						}
+						case 2: {//continue
+							RunTime.desync();
+							return 2;
+							break;
+						}
+						case 3: {//break;
+							RunTime.desync();
+							return 3;
+							break;
+						}
+						default:
+							break;
+						}
 					}
 				}
 				break;
@@ -195,29 +350,43 @@ void DebugExecute::commence(int top, int bottom) {
 			Block * tmp = CodeStore[i];
 			SoWhile * baba = (SoWhile *)tmp;
 			ModeWhile mWhile(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
-			mWhile.runWhile();
+			int ans = mWhile.runWhile();
+			if (ans == 0) {
+
+			}
+			else if (ans == 1) {
+				return 1;
+			}
 			break;
 		}
 		case DOUNTIL: {//do-until式
 			Block *tmp = CodeStore[i];
 			DoUntil * baba = (DoUntil *)tmp;
 			ModeDo mDo(CodeStore[i]->top, CodeStore[i]->bottom, baba->conditionExprTop, baba->conditionExprBottom);
-			mDo.runDo();
+			int ans = mDo.runDo();
+			if (ans == 0) {
+
+			}
+			else if (ans == 1) {
+				return 1;
+			}
 			break;
 		}
 		case KEY_RET: {//return语句
 			ModeExecute::assign(CodeStore[i]->top, CodeStore[i]->bottom);
 			ReturnType rType(CodeStore[i]->top, CodeStore[i]->bottom);
 			rType.startReturn();
+			return 1;
 			break;
 		}
 		default:
 			break;
 		}
 	}
+	return 0;
 }
 
-void DebugExecute::await(int i) {
+void DebugExecute::stoprun(int i) {
 	string inp;
 	cin >> inp;
 	if (inp.compare("next")) {

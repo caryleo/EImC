@@ -554,7 +554,7 @@ void DebugExecute::breakpoint(int ans)  // ans 行号
 	sort(bp,bp+bp_len);//默认从大到小
 }
 
-void DebugExecute::c()
+void DebugExecute::continueCommence()
 {
 	if (debugtime > bp_len)
 	{

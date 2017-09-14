@@ -489,6 +489,7 @@ void DebugExecute::stoprun(int i) {
 				else if (order == "m") {
 					string name;
 					cout << "please input parameter name: ";
+					cin >> name;
 					DebugExecute::move(name);
 				}
 				else if (order == "p") {

@@ -22,6 +22,7 @@ int inp;//模式控制
 
 int main()
 {
+	//最终版1.5
 	cout << "please select process mode" << endl;
 	cout << "1.interpreter mode 2.debug mode" << endl;
 	cin >> inp;

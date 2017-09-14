@@ -293,6 +293,10 @@ Token* ModeTokenAnalysis::getToken(ModeRead& mRead, char & ch) {/*识别语素控制模
 			ch = mRead.scan();
 			return new Token(POW, l, c);
 		}
+		int l = mRead.getLine();
+		int c = mRead.getCol();
+		ModeErrorReport mER(155, l, c);
+		mER.report();
 	}
 	return NULL;
 }

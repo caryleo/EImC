@@ -14,6 +14,7 @@ ModeErrorReport::ModeErrorReport(int code, int l, int c)
 	content.insert(pair<int, string>(152, "incorrect numeric formation"));
 	content.insert(pair<int, string>(153, "incorrect formation of escape character"));
 	content.insert(pair<int, string>(154, "irregular end of string"));
+	content.insert(pair<int, string>(155, "illegal charactor"));
 	content.insert(pair<int, string>(250, "mismatch of Else statements block"));
 	content.insert(pair<int, string>(251, "incorrect statement")); 
 	content.insert(pair<int, string>(201, "mismatch of brace"));

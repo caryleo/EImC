@@ -14,7 +14,7 @@
 #include "ReturnType.h"
 #include "ModeErrorReport.h"
 #include "DebugExecute.h"
-
+#include<algorithm>
 using namespace std;
 
 extern vector<Token*>buffer;
@@ -23,9 +23,16 @@ extern vector <Token *> ConstStore;	//常量存储区
 extern vector <SoFunc *> FuncStore;	//函数语句块存储区
 extern Stack RunTime;					//运行栈
 extern Token ** esp, **ebp;			//运行栈的栈顶和栈底
+string order="n";
+int bp[105]; // 存断点
+extern int sizen;
+int bp_len = 0;
+int debugline = 0;
+int debugtime = 0;
 
 int DebugExecute::commence(int top, int bottom) {
 	for (int i = top; i <= bottom; i++) {
+		DebugExecute::stoprun(i);
 		Token * tmpn = buffer[CodeStore[i]->top];
 		ModeErrorReport mEP(250, tmpn->line, tmpn->col);
 		switch (CodeStore[i]->tag)
@@ -98,7 +105,10 @@ int DebugExecute::commence(int top, int bottom) {
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -137,7 +147,10 @@ int DebugExecute::commence(int top, int bottom) {
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -201,7 +214,10 @@ int DebugExecute::commence(int top, int bottom) {
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -237,7 +253,10 @@ int DebugExecute::commence(int top, int bottom) {
 				if (((SoReal *)ans)->val == 0.0) {//if不可执行，或跳过，或无条件执行紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -273,7 +292,10 @@ int DebugExecute::commence(int top, int bottom) {
 				else {//if可执行，执行，并无条件跳过紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -305,7 +327,10 @@ int DebugExecute::commence(int top, int bottom) {
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -387,14 +412,94 @@ int DebugExecute::commence(int top, int bottom) {
 }
 
 void DebugExecute::stoprun(int i) {
-	string inp;
-	cin >> inp;
-	if (inp.compare("next")) {
-		return;
+	cout << "current line: " << buffer[CodeStore[i]->top]->line << endl;
+	if (order == "n") {
+		cout << "please input debug order : ";
+		cin >> order;
+		if (order != "n") {
+			while (order != "n") {
+				if (order == "b") {
+					int ans;
+					cout << "please input breakpoint: ";
+					cin >> ans;
+					DebugExecute::breakpoint(ans);
+				}
+				else if (order == "c") {
+					DebugExecute::continueCommence();
+					return;
+				}
+				else if (order == "w") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::watch(name);
+				}
+				else if (order == "a") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::add(name);
+				}
+				else if (order == "m") {
+					string name;
+					cout << "please input parameter name: ";
+					DebugExecute::move(name);
+				}
+				else if (order == "p") {
+					cout << "here are the parameter value you added: " << endl;
+					DebugExecute::print();
+				}
+				cout << "please input debug order : ";
+				cin >> order;
+			}
+			return;
+		}
+		else {
+			cout << "commencing next line..." << endl;
+			return;
+		}
 	}
-	else if (inp.compare("watch")) {
-		Idt * ans = RunTime.query(inp);
-
+	if (order == "c") {
+		if (buffer[CodeStore[i]->top]->line == debugline) {
+			cout << "please input debug order : ";
+			cin >> order;
+			while (order != "n") {
+				if (order == "b") {
+					int ans;
+					cout << "please input breakpoint: ";
+					cin >> ans;
+					DebugExecute::breakpoint(ans);
+				}
+				else if (order == "c") {
+					DebugExecute::continueCommence();
+					return;
+				}
+				else if (order == "w") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::watch(name);
+				}
+				else if (order == "a") {
+					string name;
+					cout << "please input parameter name: ";
+					cin >> name;
+					DebugExecute::add(name);
+				}
+				else if (order == "m") {
+					string name;
+					cout << "please input parameter name: ";
+					DebugExecute::move(name);
+				}
+				else if (order == "p") {
+					cout << "here are the parameter value you added: " << endl;
+					DebugExecute::print();
+				}
+				cout << "please input debug order : ";
+				cin >> order;
+			}
+			return;
+		}
 	}
 }
 void DebugExecute::add(string name)
@@ -418,7 +523,7 @@ void DebugExecute::print()
 }
 void DebugExecute::watch(string name)
 {
-    cout<<name<<"   ";
+    cout<<name<<"\t";
     Idt *now=RunTime.query(name);
     if(now==NULL)
         cout<<"no match for "<<name<<" in stack"<<endl;
@@ -427,11 +532,11 @@ void DebugExecute::watch(string name)
         if(now->assType==ERR)
             cout<<"Variable uninitialized"<<endl;
         else if(now->assType==NUM)
-            cout<<((SoInt*)now)->val<<endl;
+            cout<<((SoInt*)(now->t))->val<<endl;
         else if(now->assType==RNUM)
-            cout<<((SoReal*)now)->val<<endl;
+            cout<<((SoReal*)(now->t))->val<<endl;
         else
-            cout<<((SoString*)now)->str<<endl;
+            cout<<((SoString*)(now->t))->str<<endl;
     }
     return ;
 }
@@ -460,4 +565,31 @@ void DebugExecute::watch(string name)
 			break;
 		}
 	}
-}*/
+}
+*/
+void DebugExecute::breakpoint(int ans)  // ans 行号
+{
+	if (ans > sizen)
+	{
+		cout << "Error!!!" << endl;
+	}
+	else {
+		bp[bp_len] = ans;
+		bp_len++;
+		sort(bp, bp + bp_len);//默认从大到小
+	}
+	return;
+}
+
+void DebugExecute::continueCommence()
+{
+	if (debugtime > bp_len)
+	{
+		cout << "Error!!!" << endl;
+	}
+	else {
+		debugline = bp[debugtime]; // 修改debugline
+		debugtime++;			// debugtime +1
+	}
+	return;
+}

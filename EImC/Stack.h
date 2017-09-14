@@ -7,12 +7,12 @@
 #include <cstdlib>
 
 const int STACK_INIT_SIZE = 100;	//初始大小
-const int STACK_INCREMENT = 10;		//增量大小
+const int STACK_INCREMENT = 50;		//增量大小
 
 class Stack {
 public:
 	Stack();
-	void push(Token * t);		//插入元素
+	int push(Token * t);		//插入元素
 	void pop();					//删除栈顶元素
 	Token * front();			//取出栈顶元素
 	bool empty();				//检查栈是否为空
@@ -20,6 +20,7 @@ public:
 	Idt * query(string n);		//查询指定的标识符
 	void sync();				//同步esp指针
 	void syncb();				//同步ebp指针
+	void desyncb();
 	void desync();				//重置运行栈
 	void desync_func();			//重置函数运行栈
 	void ret(Token * s);		//控制返回值的赋值

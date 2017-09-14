@@ -30,7 +30,10 @@ int ModeWhile::runWhile()
 	ModeSyntexAnalysis mSA;
 	while (calcu()) {
 		PRTR *tmp = new PRTR(ebp);
-		RunTime.push(tmp);
+		if (RunTime.push(tmp)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.syncb();
 		RunTime.sync();
 		int ans = mSA.getHeadAndTail(top, bottom);
@@ -74,7 +77,10 @@ bool ModeDo::calcu() {
 int ModeDo::runDo() {
 	ModeSyntexAnalysis mSA;
 	PRTR *tmp = new PRTR(ebp);
-	RunTime.push(tmp);
+	if (RunTime.push(tmp)) {
+		RunTime.sync();
+		RunTime.desyncb();
+	}
 	RunTime.syncb();
 	RunTime.sync();
 	int ans = mSA.getHeadAndTail(top, bottom);
@@ -93,7 +99,10 @@ int ModeDo::runDo() {
 	}
 	while (!calcu()) {
 		PRTR *tmp = new PRTR(ebp);
-		RunTime.push(tmp);
+		if (RunTime.push(tmp)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.syncb();
 		RunTime.sync();
 		int ans = mSA.getHeadAndTail(top, bottom);

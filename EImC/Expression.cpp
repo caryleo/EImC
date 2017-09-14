@@ -33,7 +33,7 @@ bool ExprIR::isAssign(Token *token)
 		if ((idt->t == NULL)) return 0;
 	}
 	else return 1;
-
+	return 1;
 }
 
 
@@ -176,7 +176,7 @@ Token * ExprIR::add_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -227,7 +227,7 @@ Token * ExprIR::sub_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -279,7 +279,7 @@ Token * ExprIR::mul_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -338,7 +338,7 @@ Token * ExprIR::div_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -384,7 +384,7 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	Token *res = new Token;
 	if (getType(a) == NUM&&getType(b) == NUM&&getIntVal(b) != 0)
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -536,7 +536,7 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 	SoString *res = new SoString;
 	if (getType(s) == STRING&&getType(pos) == NUM)
 	{
-		if (isAssign(s) == 0 && isAssign(pos) == 0)
+		if (isAssign(s) == 0 || isAssign(pos) == 0)
 		{
 			ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
 			EXPR.report();
@@ -567,7 +567,7 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 Token * ExprIR::is_greater(Token * a, Token * b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -660,7 +660,7 @@ Token * ExprIR::not_less(Token *a, Token *b)
 Token * ExprIR::is_less(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -753,7 +753,7 @@ Token * ExprIR::not_greater(Token *a, Token *b)
 Token * ExprIR::is_equal(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -841,7 +841,7 @@ Token * ExprIR::not_equal(Token *a, Token *b)
 Token * ExprIR::and_lop(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -872,7 +872,7 @@ Token * ExprIR::and_lop(Token *a, Token *b)
 Token * ExprIR::or_lop(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -967,11 +967,12 @@ Token * ExprIR::calculate_expr(int head, int tail)
 				}
 				if (solve_op(ex_op) == -1)
 				{
-				    ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
+				    ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
                     EXPR.report();
 					result->tag = ERR;
 					return result;
 				}
+				//operator_s.pop();
 			}
 		}
 		//操作数
@@ -986,12 +987,11 @@ Token * ExprIR::calculate_expr(int head, int tail)
 			else
 			{
 				//正负号处理加零
-				if ((getType(now) == ADD || getType(now) == SUB) && (pos == head || getType(buffer[pos - 1]) == LPAR))
+				if ((getType(now) == ADD || getType(now) == SUB) && (pos == head || getType(buffer[pos - 1]) == LPAR||getType(buffer[pos - 1]) ==GE||getType(buffer[pos - 1]) ==GT||getType(buffer[pos - 1]) ==LE||getType(buffer[pos - 1]) ==LT||getType(buffer[pos - 1]) ==EQU||getType(buffer[pos - 1]) ==NEQU))
 				{
-					Token *zero = new Token;
+					SoInt *zero = new SoInt;
 					zero->tag = NUM;
-					SoInt *so_int = (SoInt*)zero;
-					so_int->val = 0;
+					zero->val = 0;
 					operand_s.push(zero);
 				}
 				if (getType(now) == NOT)
@@ -1008,75 +1008,53 @@ Token * ExprIR::calculate_expr(int head, int tail)
 						return result;
 					}
 				}
-
-				//优先级高，直接入栈
-				if (oper_priority(now, operator_s.front()) == 1) operator_s.push(now);
-				//否则先处理前面的那个
-				else
-				{
-					if (getType(now) == RPAR || getType(now) == END)
-					{
-						while (operator_s.size() > 0)
-						{
-							Token * ex_op = new Token;
-							ex_op = operator_s.front();
-							if (oper_priority(ex_op, now) == 0)
-							{
-								operator_s.pop();
-								break;
-							}
-							if (solve_op(ex_op) == -1)
-							{
-							    ModeErrorReport EXPR(304, buffer[term]->line, buffer[term]->col);
-                                EXPR.report();
-								result->tag = ERR;
-								return result;
-							}
-						}
-					}
-					else
-					{
-						if (solve_op(operator_s.front()) == -1)
-						{
-						    ModeErrorReport EXPR(301, buffer[term]->line, buffer[term]->col);
-                            EXPR.report();
-							result->tag = ERR;
-							return result;
-						}
-						operator_s.push(now);
-					}
-				}
-				if (getType(now) == HASH)
+                Token *ex_op=new Token;
+                while(operator_s.size()>0)
                 {
-
-                    if (pos > start && (getType(buffer[pos - 1]) == STRING || getType(buffer[pos - 1]) == RPAR || getType(buffer[pos - 1]) == HASH))
-					{
-					    if(pos<tail&&getType(buffer[pos+1])==NUM)
+                    ex_op=operator_s.front();
+                    if(oper_priority(now, ex_op) == 1)
+                    {
+                        operator_s.push(now);
+                        if (getType(now) == HASH)
                         {
-                            int i=1;
-                        }
-                        else
-                        {
-                            SoInt *last = new SoInt;
-                            last->tag = NUM;
-                            Token *temp=operand_s.front();
-                            if(getType(temp)==STRING)
+                            if (pos > start && (getType(buffer[pos - 1]) == STRING || getType(buffer[pos - 1]) == RPAR || getType(buffer[pos - 1]) == HASH))
                             {
-                                last->val=getStrVal(temp).size()-1;
+                                if(pos<tail&&getType(buffer[pos+1])==NUM)
+                                {
+                                    int i=1;
+                                }
+                                else
+                                {
+                                    SoInt *last = new SoInt;
+                                    last->tag = NUM;
+                                    Token *temp=operand_s.front();
+                                    if(getType(temp)==STRING)
+                                    {
+                                        last->val=getStrVal(temp).size()-1;
+                                    }
+                                    operand_s.push(last);
+                                }
                             }
-                            operand_s.push(last);
                         }
-					}
-					else
-					{
-					    ModeErrorReport EXPR(303, buffer[term]->line, buffer[term]->col);
-                        EXPR.report();
-						result->tag = ERR;
-						return result;
-					}
+                        break;
+                    }
+                    else if(oper_priority(now, ex_op) == 0)
+                    {
+                        operator_s.pop();
+                        break;
+                    }
+                    else if(oper_priority(now,ex_op)==-1)
+                    {
+                        if(solve_op(ex_op)==-1)
+                        {
+                            ModeErrorReport EXPR(302, buffer[term]->line, buffer[term]->col);
+                            EXPR.report();
+                            result->tag = ERR;
+                        }
+                    }
                 }
-			}
-		}
+            }
+        }
 		pos++;
 	}
 

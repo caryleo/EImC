@@ -157,7 +157,10 @@ int ModeExecute::commence(int top, int bottom)
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -196,7 +199,10 @@ int ModeExecute::commence(int top, int bottom)
 					if (i < CodeStore.size() - 1) {
 						if (CodeStore[i + 1]->tag == ELSE) {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -228,7 +234,10 @@ int ModeExecute::commence(int top, int bottom)
 						}
 						else {
 							PRTR * build = new PRTR(ebp);
-							RunTime.push(build);
+							if (RunTime.push(build)) {
+								RunTime.sync();
+								RunTime.desyncb();
+							}
 							RunTime.syncb();
 							RunTime.sync();
 							ModeSyntexAnalysis mSA;
@@ -260,7 +269,10 @@ int ModeExecute::commence(int top, int bottom)
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -296,7 +308,10 @@ int ModeExecute::commence(int top, int bottom)
 				if (((SoReal *)ans)->val == 0.0) {//if不可执行，或跳过，或无条件执行紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -332,7 +347,10 @@ int ModeExecute::commence(int top, int bottom)
 				else {//if可执行，执行，并无条件跳过紧邻的else
 					if (CodeStore[i + 1]->tag == ELSE) {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -364,7 +382,10 @@ int ModeExecute::commence(int top, int bottom)
 					}
 					else {
 						PRTR * build = new PRTR(ebp);
-						RunTime.push(build);
+						if (RunTime.push(build)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}
 						RunTime.syncb();
 						RunTime.sync();
 						ModeSyntexAnalysis mSA;
@@ -478,24 +499,36 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 	{
 	case KEY_INT:
 		t = new SoInt(0, 0, 0);
-		RunTime.push(t);
+		if (RunTime.push(t)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.sync();
 		break;
 	case KEY_REAL:
 		t = new SoReal(0.0, 0, 0);
-		RunTime.push(t);
+		if (RunTime.push(t)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.sync();
 		break;
 	case KEY_STRING:
 		t = new SoString("", 0, 0);
-		RunTime.push(t);
+		if (RunTime.push(t)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.sync();
 		break;
 	default:
 		break;
 	}
 	PRTR * prt = new PRTR(ebp);					//将当前层运行栈指针保存
-	RunTime.push(prt);
+	if (RunTime.push(prt)) {
+		RunTime.sync();
+		RunTime.desyncb();
+	}
 	RunTime.syncb();
 	RunTime.sync();
 	for (int i = 0; i < a->paralist.size(); i++) {
@@ -505,7 +538,10 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 		tmp->t = s[i];
 		idt->t = s[i];
 		idt->tag = IDT;
-		RunTime.push(tmp);
+		if (RunTime.push(tmp)) {
+			RunTime.sync();
+			RunTime.desyncb();
+		}
 		RunTime.sync();						//同步运行栈栈顶
 	}
 	ModeSyntexAnalysis mSA;						//分析执行

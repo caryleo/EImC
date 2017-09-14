@@ -30,7 +30,10 @@ void SoIn::judgeIdt(int m)
 		{
 			a->assType = NUM;
 			a->t = NULL;
-			RunTime.push(a);
+			if (RunTime.push(a)) {
+				RunTime.sync();
+				RunTime.desyncb();
+			}
 			p = a;
 			
 		}
@@ -92,7 +95,10 @@ void SoIn::judgeIdt(int m)
 		{
 			a->assType = NUM;
 			a->t = NULL;
-			RunTime.push(a);
+			if (RunTime.push(a)) {
+				RunTime.sync();
+				RunTime.desyncb();
+			}
 			p = a;
 			if (buffer[len]->tag == NUM)
 			{

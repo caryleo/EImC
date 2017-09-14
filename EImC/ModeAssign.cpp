@@ -249,7 +249,10 @@ void ModeAssign::Fuzhi()
 						Idt* newidt = (Idt*)token;
 						newidt->assType = NUM;  
 						newidt->t = NULL;		//此时未赋值 修改 t 指针 指向空
-						RunTime.push(newidt);   // 放入栈中
+						if (RunTime.push(newidt)) {
+							RunTime.sync();
+							RunTime.desyncb();
+						}   // 放入栈中
 						RunTime.sync();	 // 修改ESP
 						SoInt*intt = new SoInt(num, 0, 0);
 						ConstStore.push_back(intt);
@@ -305,7 +308,7 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag != ASSIGN)
 				{
-					cout << "Error!!!" << endl;
+					//cout << "Error!!!" << endl;
 					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
 					error.report();
 					return;
@@ -325,7 +328,7 @@ void ModeAssign::Fuzhi()
 					}
 					else 
 					{
-						cout << "Error!!!" << endl;
+						//cout << "Error!!!" << endl;
 						ModeErrorReport error(404, buffer[temp]->line, buffer[temp]->col);
 						error.report();
 
@@ -334,7 +337,7 @@ void ModeAssign::Fuzhi()
 				}
 				else
 				{
-					cout << "Error!!!" << endl;
+					//cout << "Error!!!" << endl;
 					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
 					error.report();
 					return;
@@ -352,7 +355,7 @@ void ModeAssign::Fuzhi()
 			{
 				if (buffer[temp]->tag != ASSIGN)
 				{
-					cout << "Error!!!" << endl;
+					//cout << "Error!!!" << endl;
 					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
 					error.report();
 					return;
@@ -374,14 +377,14 @@ void ModeAssign::Fuzhi()
 					}
 					else 
 					{
-						cout << "Error!!!" << endl;
+						//cout << "Error!!!" << endl;
 						ModeErrorReport error(404, buffer[temp]->line, buffer[temp]->col);
 						error.report();
 					}
 				}
 				else
 				{
-					cout << "Error!!!" << endl;
+					//cout << "Error!!!" << endl;
 					ModeErrorReport error(401, buffer[temp]->line, buffer[temp]->col);
 					error.report();
 					return;

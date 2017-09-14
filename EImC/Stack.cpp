@@ -15,19 +15,20 @@ Stack::Stack() {
 	cnt = 0;
 }
 
-void Stack::push(Token * t) {/*将元素压入栈中*/
-	if (top - base >= stacksize) {/*栈已满建立新栈*/
-		if (!(base = (Token **)realloc(base, (STACK_INIT_SIZE + STACK_INCREMENT) * sizeof(Token *)))) {
-			top = base + stacksize;
-			stacksize += STACK_INCREMENT;
-		}
-	}
-	else {
+int Stack::push(Token * t) {/*将元素压入栈中*/
+	if (top - base >= stacksize - 1) {/*栈已满建立新栈*/
+		base = (Token **)realloc(base, (stacksize + STACK_INCREMENT) * sizeof(Token *));
+		top = base + stacksize - 1;
+		stacksize += STACK_INCREMENT;
 		*top = t;
 		top++;
+		cnt++;
+		return 1;
 	}
+	*top = t;
+	top++;
 	cnt++;
-	return;
+	return 0;
 }
 
 void Stack::pop() {/*删除栈顶元素，实际操作是控制指针*/
@@ -64,7 +65,7 @@ Idt * Stack::query(string n)
 	Token ** p = top;
 	while (p != base) {
 		p--;
-		if ((*p)->tag == IDT) {
+		if ((p != NULL) && ((*p)->tag == IDT)) {
 			Idt * q = (Idt*)(*p);
 			string name = q->name;
 			if (n.compare(name) == 0) {
@@ -85,6 +86,17 @@ void Stack::syncb()
 {
 	ebp = top;
 	return;
+}
+
+void Stack::desyncb()
+{
+	Token **tmp = top;
+	tmp--;
+	while (((*tmp)->tag) != PRT) {
+		tmp--;
+	}
+	tmp++;
+	ebp = tmp;
 }
 
 void Stack::desync()
@@ -124,7 +136,7 @@ void Stack::desync_func()
 
 void Stack::ret(Token * s) {
 	Token ** tmp = top - 1;
-	while (((*tmp)->tag != NUM ) && ((*tmp)->tag != RNUM) && ((*tmp)->tag != STRING)) {
+	while (((*tmp)->tag != NUM) && ((*tmp)->tag != RNUM) && ((*tmp)->tag != STRING)) {
 		tmp--;
 	}
 	*tmp = s;

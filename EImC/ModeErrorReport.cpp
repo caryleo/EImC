@@ -36,6 +36,7 @@ ModeErrorReport::ModeErrorReport(int code, int l, int c)
 	content.insert(pair<int, string>(401, "illegal assignment"));
 	content.insert(pair<int, string>(402, "undefined variable in assignment"));
 	content.insert(pair<int, string>(403, "uninitialized variable in assignment"));
+	content.insert(pair<int, string>(404, "mismatch of parameter type"));
 	content.insert(pair<int, string>(451, "illegal parameter"));
 	content.insert(pair<int, string>(501, "mismatch of function signature"));
 	content.insert(pair<int, string>(750, "more than one input"));

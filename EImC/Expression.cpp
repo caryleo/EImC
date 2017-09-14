@@ -176,7 +176,7 @@ Token * ExprIR::add_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -227,7 +227,7 @@ Token * ExprIR::sub_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -279,7 +279,7 @@ Token * ExprIR::mul_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -338,7 +338,7 @@ Token * ExprIR::div_op(Token * a, Token * b)
 	}
 	else
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -384,7 +384,7 @@ Token * ExprIR::mod_op(Token *a, Token *b)
 	Token *res = new Token;
 	if (getType(a) == NUM&&getType(b) == NUM&&getIntVal(b) != 0)
 	{
-		if (isAssign(a) == 0 && isAssign(b) == 0)
+		if (isAssign(a) == 0 || isAssign(b) == 0)
 		{
 		    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
             EXPR.report();
@@ -536,7 +536,7 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 	SoString *res = new SoString;
 	if (getType(s) == STRING&&getType(pos) == NUM)
 	{
-		if (isAssign(s) == 0 && isAssign(pos) == 0)
+		if (isAssign(s) == 0 || isAssign(pos) == 0)
 		{
 			ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
 			EXPR.report();
@@ -567,7 +567,7 @@ Token * ExprIR::delete_spec(Token *s, Token *pos)
 Token * ExprIR::is_greater(Token * a, Token * b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -660,7 +660,7 @@ Token * ExprIR::not_less(Token *a, Token *b)
 Token * ExprIR::is_less(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -753,7 +753,7 @@ Token * ExprIR::not_greater(Token *a, Token *b)
 Token * ExprIR::is_equal(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -841,7 +841,7 @@ Token * ExprIR::not_equal(Token *a, Token *b)
 Token * ExprIR::and_lop(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();
@@ -872,7 +872,7 @@ Token * ExprIR::and_lop(Token *a, Token *b)
 Token * ExprIR::or_lop(Token *a, Token *b)
 {
 	Token *res = new Token;
-	if (isAssign(a) == 0 && isAssign(b) == 0)
+	if (isAssign(a) == 0 || isAssign(b) == 0)
 	{
 	    ModeErrorReport EXPR(300, buffer[term]->line, buffer[term]->col);
         EXPR.report();

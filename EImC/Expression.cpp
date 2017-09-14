@@ -987,7 +987,7 @@ Token * ExprIR::calculate_expr(int head, int tail)
 			else
 			{
 				//正负号处理加零
-				if ((getType(now) == ADD || getType(now) == SUB) && (pos == head || getType(buffer[pos - 1]) == LPAR))
+				if ((getType(now) == ADD || getType(now) == SUB) && (pos == head || getType(buffer[pos - 1]) == LPAR||getType(buffer[pos - 1]) ==GE||getType(buffer[pos - 1]) ==GT||getType(buffer[pos - 1]) ==LE||getType(buffer[pos - 1]) ==LT||getType(buffer[pos - 1]) ==EQU||getType(buffer[pos - 1]) ==NEQU))
 				{
 					SoInt *zero = new SoInt;
 					zero->tag = NUM;

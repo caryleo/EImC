@@ -8,30 +8,54 @@ extern vector<Token*>buffer;
 
 bool SoOut::isValid(int top, int bottom)
 {
-	for (int i = top; i < bottom; i++)//如果中间有变量未声明过
-	{
-		Idt *p = (Idt*)buffer.at(i);
-		if (p==NULL||p->t == NULL)//如果变量之前未声明过
-			return 0;
-	}
-	if (bottom - top <= 1 || bottom - top > 5 || bottom - top == 3)//out与;之间没东西或者之间的东西多了
+    if (bottom - top <= 1 || bottom - top > 5 || bottom - top == 3)//out与;之间没东西或者之间的东西多了
 		return 0;
+	for (int i = top + 1; i < bottom; i++)//如果中间有变量未声明过
+	{
+	    Token *now=buffer[i];
+	    if(now->tag==IDT)   //如果变量之前未声明过
+        {
+            if(((Idt*)now)->t==NULL)
+                return 0;
+        }
+	}
+
 	for (int i = top + 1; i < bottom; i++)
 	{
 		if (!(buffer[i]->tag == COMMA || buffer[i]->tag == STRING || buffer[i]->tag == NUM || buffer[i]->tag == RNUM || buffer[i]->tag == IDT|| buffer[i]->tag == ADD))//如果出现非常量、变量名、加号或者逗号的情况视为有错
 			return 0;
 	}
-	if (bottom - top == 2 && buffer[top + 1]->tag != STRING &&buffer[top + 1]->tag != IDT)//如果out与;之间只有一个逗号
-		return 0;
-	if (bottom - top == 4 && (buffer[top + 2]->tag != COMMA || buffer[top + 1]->tag == COMMA || buffer[top + 3]->tag == COMMA))//只能在第二个位置是，
-		return 0;
-	if (bottom - top == 5 && !(buffer[top + 3]->tag == COMMA && buffer[top + 1]->tag == ADD && buffer[top + 2]->tag == NUM))//+5
-		return 0;
-	else return 1;
+	if (bottom - top == 2 )//out a; out "string";
+    {
+        if(buffer[top + 1]->tag != STRING &&buffer[top + 1]->tag != IDT)
+            return 0;
+    }
+	if (bottom - top == 4 )//out 5,5.5; out a,5.5; out a,a; out "string",a;
+    {
+        if(buffer[top + 1]->tag == COMMA||buffer[top+1]->tag==ADD||buffer[top+1]->tag==RNUM)
+            return 0;
+        if(buffer[top + 2]->tag != COMMA )
+            return 0;
+        if(buffer[top+3]->tag==COMMA||buffer[top+3]->tag==ADD)
+            return 0;
+    }
+	if (bottom - top == 5 )
+    {
+        if(buffer[top+1]->tag!=ADD)
+            return 0;
+        if(buffer[top+2]->tag!=NUM)
+            return 0;
+        if(buffer[top+3]->tag!=COMMA)
+            return 0;
+        Token *tmp=buffer[top+4];
+        if(tmp->tag==COMMA||tmp->tag==ADD)
+            return 0;
+    }
+	return 1;
 }
 void SoOut::judgeIdt(int m)
 {
-	Idt *p = (Idt*)buffer.at(m);	
+	Idt *p = (Idt*)buffer.at(m);
 	if (p->t->tag == NUM)//如果是个整型
 	{
 		SoInt *q = (SoInt*)p->t;
@@ -115,11 +139,11 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 					ModeErrorReport mER(756, buffer[bottom]->line, buffer[bottom]->col);
 					mER.report();
 				}
-				else 
-				{					
+				else
+				{
 					if (p->t->tag == NUM)//如果是个整型
 					{
-						SoInt *s = (SoInt*)p->t;						
+						SoInt *s = (SoInt*)p->t;
 						if (s->val > 0)
 						{
 							for (int i = 0; i < s->val; i++)
@@ -147,7 +171,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 						mER.report();
 					}
 				}
-				
+
 			}
 			else if (buffer[top + 1]->tag == NUM)//第一部分输出整数的情况
 			{
@@ -172,7 +196,7 @@ void SoOut::print(int top, int bottom)//top是buffer数组的out语句开始词的位置，bo
 					mER.report();
 				}
 			}
-			
+
 			else {
 				ModeErrorReport mER(755, buffer[bottom]->line, buffer[bottom]->col);
 				mER.report();

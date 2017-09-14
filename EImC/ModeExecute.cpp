@@ -29,7 +29,7 @@ int ModeExecute::init(int top, int bottom)		//首次进行执行管理
 		{
 		case STATE: {
 			int st = CodeStore[i]->top;
-			int ed = CodeStore[i]->bottom;
+			//int ed = CodeStore[i]->bottom;
 			switch (buffer[st]->tag)
 			{
 			case KEY_IN: {//输入式
@@ -101,7 +101,7 @@ int ModeExecute::commence(int top, int bottom)
 		}
 		case STATE: {
 			int st = CodeStore[i]->top;
-			int ed = CodeStore[i]->bottom;
+			//int ed = CodeStore[i]->bottom;
 			switch (buffer[st]->tag)
 			{
 			case KEY_INT:																//三种类型关键字，默认是定义式
@@ -476,12 +476,12 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 	Token *t = new Token;
 	switch (a->retType)							//将函数返回值入栈
 	{
-	case KEY_INT: 
+	case KEY_INT:
 		t = new SoInt(0, 0, 0);
 		RunTime.push(t);
 		RunTime.sync();
 		break;
-	case KEY_REAL: 
+	case KEY_REAL:
 		t = new SoReal(0.0, 0, 0);
 		RunTime.push(t);
 		RunTime.sync();
@@ -491,7 +491,7 @@ Token * ModeExecute::caller(Caller * func, vector <Token *> s, int line)/*寻找对
 		RunTime.push(t);
 		RunTime.sync();
 		break;
-	default: 
+	default:
 		break;
 	}
 	PRTR * prt = new PRTR(ebp);					//将当前层运行栈指针保存
@@ -530,12 +530,12 @@ void ModeExecute::assign(int top, int bottom)
 				case NUM: {
 					SoInt * comecome = (SoInt *)(ret->t);
 					SoInt * gogo;
-					if (comecome != nullptr) {
+					if (comecome != NULL) {
 						gogo = new SoInt(comecome->val, 0, 0);
 						ConstStore.push_back(gogo);
 					}
 					else {
-						gogo = nullptr;
+						gogo = NULL;
 					}
 					tmp->t = gogo;
 					break;
@@ -543,12 +543,12 @@ void ModeExecute::assign(int top, int bottom)
 				case RNUM: {
 					SoReal * comecome = (SoReal *)(ret->t);
 					SoReal * gogo;
-					if (comecome != nullptr) {
+					if (comecome != NULL) {
 						gogo = new SoReal(comecome->val, 0, 0);
 						ConstStore.push_back(gogo);
 					}
 					else {
-						gogo = nullptr;
+						gogo = NULL;
 					}
 					tmp->t = gogo;
 					break;
@@ -556,12 +556,12 @@ void ModeExecute::assign(int top, int bottom)
 				case STRING: {
 					SoString * comecome = (SoString *)(ret->t);
 					SoString * gogo;
-					if (comecome != nullptr) {
+					if (comecome != NULL) {
 						gogo = new SoString(comecome->str, 0, 0);
 						ConstStore.push_back(gogo);
 					}
 					else {
-						gogo = nullptr;
+						gogo = NULL;
 					}
 					tmp->t = gogo;
 					break;
